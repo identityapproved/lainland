@@ -1,0 +1,8 @@
+betterbird
+thunderbird
+signal-desktop
+lyrics-in-terminal
+obsidian
+redshift
+translate-shell
+zk

@@ -1,0 +1,111 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 22,
+    "spacing": 6,
+    "output": ["HDMI-A-1"],
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "custom/media",
+        "custom/spotify"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "custom/weather",
+        "custom/storage",
+        "cpu",
+        "memory",
+        "custom/temperature",
+        "wireplumber",
+        "tray",
+        "clock",
+        "custom/power"
+    ],
+
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "sort-by-number": true,
+        "format": "{name}"
+    },
+    "hyprland/window": {
+        "max-length": 80,
+        "separate-outputs": true
+    },
+
+    "custom/media": {
+        "format": "{0}",
+        "return-type": "json",
+        "max-length": 40,
+        "exec": "~/.config/waybar/mediaplayer.py",
+        "tooltip": false
+    },
+    "custom/spotify": {
+        "exec": "~/.config/waybar/modules/spotify.sh",
+        "return-type": "json",
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/weather": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1800,
+        "exec": "~/.config/waybar/modules/weather.sh"
+    },
+    "custom/storage": {
+        "format": " {}",
+        "format-alt": "{percentage}% ",
+        "format-alt-click": "click-right",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/storage.sh"
+    },
+    "custom/mail": {
+        "format": " {}",
+        "format-alt": " {alt}",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/mail.py",
+        "exec-if": "test -f ~/.config/waybar/modules/mailsecrets.py"
+    },
+
+    "cpu": {
+        "format": "CPU {usage}%",
+        "tooltip": false,
+        "on-click": "kitty --title termfloat -e htop -s PERCENT_CPU"
+    },
+    "memory": {
+        "format": "RAM {percentage}%",
+        "tooltip": false,
+        "on-click": "kitty --title termfloat -e htop -s PERCENT_MEM"
+    },
+    "custom/temperature": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/temperature.sh",
+        "interval": 10,
+        "tooltip": true
+    },
+    "wireplumber": {
+        "format": "VOL {volume}%",
+        "tooltip": false,
+        "on-click": "pavucontrol"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 6
+    },
+    "clock": {
+        "format": "{:%H:%M 󰃭 %d.%m.%Y}",
+        "tooltip": true,
+        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>"
+    },
+    "custom/power": {
+        "format": " 󰐥 ",
+        "tooltip": false,
+        "on-click": "wlogout"
+    }
+}

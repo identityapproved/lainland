@@ -1,0 +1,24 @@
+[[plugin.deps]]
+use = "dedukun/bookmarks"
+rev = "9ef1254"
+hash = "92fbb5483657fa7976cdf4e0104e18e0"
+
+[[plugin.deps]]
+use = "ktunprasert/git-files"
+rev = "c7289ad"
+hash = "cdb1a69bed63211c75b72521bbab875d"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:full-border"
+rev = "1962818"
+hash = "6fa6a05a81c98dd000fbca3cca6e9682"
+
+[[plugin.deps]]
+use = "GianniBYoung/rsync"
+rev = "14d2828"
+hash = "7394430ba473dce1023721622438bf3d"
+
+[[flavor.deps]]
+use = "identityapproved/lain"
+rev = "5d0da57"
+hash = "9bda2eca6f5fb4c9638cb5bbd6084bf3"

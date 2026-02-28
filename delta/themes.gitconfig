@@ -1,0 +1,53 @@
+[delta "lain"]
+    syntax-theme = OneHalfDark
+    navigate = true
+    line-numbers = true
+    side-by-side = true
+
+    # Lain palette from lain-colors.md
+    commit-style = "#C1B48E"
+    file-style = "bold #CE7688"
+    hunk-header-style = "file line-number syntax #965363"
+    hunk-header-file-style = "bold #CE7688"
+    hunk-header-line-number-style = "#C1B48E"
+
+    minus-style = "syntax #2A171B"
+    minus-emph-style = "syntax #381E24"
+    plus-style = "syntax #1A1A1A"
+    plus-emph-style = "syntax #2A2A2A"
+    zero-style = "syntax #000000"
+
+    line-numbers-left-style = "#804654"
+    line-numbers-right-style = "#804654"
+    line-numbers-minus-style = "#A05969"
+    line-numbers-plus-style = "#C1B48E"
+    line-numbers-zero-style = "#6A6A6A"
+
+    whitespace-error-style = "reverse #930006"
+
+[delta "lain-lazygit"]
+    features = lain
+    side-by-side = false
+
+    # Dark Lain-toned highlights for lazygit diff pane.
+    plus-style = "#C1B48E #1A1A1A"
+    plus-emph-style = "#C1B48E #2A2A2A"
+    minus-style = "#A05969 #1D0F12"
+    minus-emph-style = "#CE7688 #2A171B"
+    zero-style = "#804654"
+
+    # Keep line numbers but remove default separator glyphs.
+    line-numbers-left-format = "{nm} "
+    line-numbers-right-format = "{np} "
+
+[delta "lain-lazygit-compact"]
+    features = lain
+    side-by-side = false
+    line-numbers = false
+
+    # Ultra-minimal single-column diff for lazygit.
+    plus-style = "#C1B48E"
+    plus-emph-style = "bold #C1B48E"
+    minus-style = "#A05969"
+    minus-emph-style = "bold #CE7688"
+    zero-style = "#804654"

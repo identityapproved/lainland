@@ -1,0 +1,26 @@
+alias zshconfig="nvim ~/.zshrc"
+alias aliasconfig="nvim ~/.aliases"
+alias tmuxconfig="nvim ~/.config/tmux/tmux.conf"
+
+alias q="exit"
+alias rf="rm -rf"
+
+alias fman="compgen -c | fzf --height 40% --layout reverse --border --no-preview |  xargs man"
+alias ftldr="compgen -c | fzf --height 40% --layout reverse --border --no-preview |  xargs tldr"
+
+alias fcd="cd ~ && cd \$(fzf | sed 's/\/[^\/]*$//')"
+
+alias v='nvim' # default Neovim config
+alias vn='NVIM_APPNAME=nvim-neobean nvim' # NvChad
+alias fv="nvim \$(fzf)"
+alias em="emacsclient -c -a 'emacs'"
+alias dmt="doom run -nw"
+
+alias yz='yazi'
+alias lz='lazygit'
+alias tl='task list'
+alias t='trans'
+
+alias mpvpl='find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-'
+
+alias fbook='find ~/* -type d \( -name "books" \) -exec find {} -type f \( -name "*.pdf" -o -name "*.epub" -o -name "*.mobi" -o -name "*.cbz" -o -name "*.cbr" \) \; | fzf --height 40% --layout reverse --border --no-preview | xargs -r -I {} sh -c "zathura \"{}\" &"'
