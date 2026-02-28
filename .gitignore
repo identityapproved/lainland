@@ -1,0 +1,20 @@
+./tmux/plugins
+tmux/plugins
+yay
+wallpapers/*
+AGENTS.md
+agents/
+lain-colors.md
+DONT_FORGET.md
+
+# Not themed yet (keep local until Lain pass is done)
+alacritty/
+ghostty/
+bat/
+tmux/
+task/
+zathura/
+mpv/
+cmus/
+translate-shell/
+wpaperd/

@@ -1,0 +1,80 @@
+{
+    "layer": "top",
+    "position": "top",
+    "output": "HDMI-A-1",
+    "height": 26,
+    "spacing": 3,
+
+    "modules-left": ["hyprland/workspaces", "group/usage"],
+    "modules-center": ["clock"],
+    "modules-right": ["todo", "wireplumber", "group/net"],
+
+    "group/usage": {
+        "orientation": "horizontal",
+        "modules": ["memory", "temperature"]
+    },
+
+    "group/net": {
+        "orientation": "horizontal",
+        "modules": ["hyprland/language", "network"]
+    },
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "1": "\uf489",
+            "2": "\udb80\ude39",
+            "3": "\udb82\ude1e",
+            "4": "\uf001",
+            "5": "\ue217",
+        },
+        "icon-size": 50,
+        "sort-by-number": true,
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+        }
+    },
+
+    "clock": {
+        "format": "{:%d.%m.%Y | %H:%M}"
+    },
+
+    "wireplumber": {
+        "format": "\udb81\udd7e  {volume}%",
+        "max-volume": 100,
+        "scroll-step": 5
+    },
+
+    "backlight": {
+        "format": "\udb80\udcdf  {percent}%"
+    },
+
+    "memory": {
+        "interval": 30,
+        "format": "\uf4bc  {used:0.1f}G"
+    },
+
+    "temperature": {
+        "format": " {temperatureC}°C"
+    },
+
+    "network": {
+        "format": "",
+        "format-ethernet": "\udb83\udc9d ",
+        "format-wifi": "{icon} ",
+        "format-disconnected": "\udb83\udc9c ",
+        "format-icons": ["\udb82\udd2f", "\udb82\udd1f", "\udb82\udd22", "\udb82\udd25", "\udb82\udd28"],
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format-disconnected": "Disconnected",
+    },
+
+    "hyprland/language": {
+        "format": "{short}"
+    }
+}

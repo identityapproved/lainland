@@ -1,0 +1,74 @@
+@define-color lain-bg #000000;
+@define-color lain-bg-2 #1A1A1A;
+@define-color lain-fg #CE7688;
+@define-color lain-accent #C1B48E;
+@define-color lain-fg-dim #965363;
+
+* {
+    font-family: "Iosevka", "Font Awesome 6 Free", FontAwesome, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+}
+
+#waybar {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: @lain-fg;
+    border-bottom: 2px solid @lain-fg;
+}
+
+#workspaces {
+    background-color: @lain-bg;
+    padding: 2px 0 2px 0;
+    margin: 4px 6px;
+    border-radius: 0;
+}
+
+#workspaces button {
+    padding: 2px 6px;
+    margin: 2px 3px;
+    color: @lain-fg-dim;
+    background-color: @lain-bg;
+    border: 1px solid @lain-fg-dim;
+    border-radius: 0;
+}
+
+#workspaces button.active {
+    color: @lain-bg;
+    background-color: @lain-fg;
+    border: 1px solid @lain-fg;
+    border-radius: 0;
+}
+
+#workspaces button.urgent {
+    color: @lain-bg;
+    background-color: @lain-accent;
+    border-radius: 0;
+}
+
+#window,
+#custom-media,
+#cpu,
+#memory,
+#temperature,
+#wireplumber,
+#tray,
+#clock,
+#custom-power {
+    background-color: @lain-bg-2;
+    border: 1px solid @lain-fg-dim;
+    padding: 2px 8px;
+    margin: 4px 3px;
+    border-radius: 0;
+}
+
+#tray {
+    padding: 2px 6px;
+}
+
+#custom-power {
+    padding: 2px 10px;
+}
