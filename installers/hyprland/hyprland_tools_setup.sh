@@ -46,7 +46,7 @@ install_pkg waybar
 install_pkg wl-clipboard
 install_pkg clipse
 install_pkg wlogout
-install_pkg wofi
+install_pkg tofi
 install_pkg mako
 install_pkg libnotify
 install_pkg hypridle
@@ -58,7 +58,7 @@ install_pkg polkit-gnome
 
 link_config_dir "$ROOT_DIR/waybar" "$HOME/.config/waybar"
 link_config_dir "$ROOT_DIR/wlogout" "$HOME/.config/wlogout"
-link_config_dir "$ROOT_DIR/wofi" "$HOME/.config/wofi"
+link_config_dir "$ROOT_DIR/tofi" "$HOME/.config/tofi"
 link_config_dir "$ROOT_DIR/mako" "$HOME/.config/mako"
 link_config_dir "$ROOT_DIR/hypr" "$HOME/.config/hypr"
 link_config_dir "$ROOT_DIR/wallpapers" "$HOME/.config/wallpapers"
