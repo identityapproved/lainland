@@ -69,7 +69,9 @@ while IFS= read -r tool; do
 done < "$BASE_LIST"
 
 if grep -Eq '^[[:space:]]*task[[:space:]]*$' "$BASE_LIST"; then
-  cat <<'EOF'
+  install_pkg "taskwarrior-tui"
+
+  cat <<'EON'
 
 Taskwarrior note:
   If your task data lives outside the default path, update:
@@ -77,7 +79,7 @@ Taskwarrior note:
   Example:
     data.location=$HOME/drives/kodak/taskwarrior/task
 
-EOF
+EON
 fi
 
 if [ -f "$OPTIONAL_LIST" ]; then

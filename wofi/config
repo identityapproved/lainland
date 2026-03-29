@@ -1,5 +1,5 @@
-xoffset=6
-yoffset=6
+xoffset=14
+yoffset=14
 show=drun
 width=11%
 always_parse_args=true

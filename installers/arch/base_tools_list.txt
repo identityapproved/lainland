@@ -9,6 +9,7 @@ gdb
 gtk4
 htop
 iftop
+lazyjournal
 lxappearance
 make
 man-db
@@ -22,6 +23,8 @@ ripgrep
 rsync
 task
 tealdeer
+man-pages
+man-pages-utils
 tmux
 unzip
 yazi

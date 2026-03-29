@@ -50,12 +50,14 @@
 #custom-spotify,
 #custom-weather,
 #custom-storage,
+#custom-tasks,
 #custom-mail,
 #custom-temperature,
 #cpu,
 #memory,
 #temperature,
 #wireplumber,
+#custom-mic,
 #tray,
 #clock,
 #custom-power {
@@ -68,6 +70,14 @@
 
 #tray {
     padding: 2px 6px;
+}
+
+#custom-mic.muted {
+    color: @lain-fg-dim;
+}
+
+#custom-mic.unmuted {
+    color: @lain-accent;
 }
 
 #custom-power {

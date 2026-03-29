@@ -15,12 +15,41 @@ fi
 
 ensure_helper
 
+link_config_file() {
+  local src="$1"
+  local dest="$2"
+
+  if [ ! -f "$src" ]; then
+    echo "Warning: $src not found. Skipping."
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  if [ -L "$dest" ]; then
+    local current
+    current="$(readlink -f "$dest" || true)"
+    if [ "$current" = "$src" ]; then
+      echo "Config file already linked: $dest -> $src"
+      return 0
+    fi
+  fi
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    local backup="${dest}.bak.$(date +%Y%m%d%H%M%S)"
+    mv "$dest" "$backup"
+    echo "Backed up existing config file: $dest -> $backup"
+  fi
+  ln -s "$src" "$dest"
+  echo "Linked config file: $dest -> $src"
+}
+
 install_pkg waybar
 install_pkg wl-clipboard
+install_pkg clipse
 install_pkg wlogout
 install_pkg wofi
 install_pkg mako
 install_pkg libnotify
+install_pkg hypridle
 install_pkg hyprlock
 install_pkg swappy
 install_pkg rmatrix
@@ -33,6 +62,9 @@ link_config_dir "$ROOT_DIR/wofi" "$HOME/.config/wofi"
 link_config_dir "$ROOT_DIR/mako" "$HOME/.config/mako"
 link_config_dir "$ROOT_DIR/hypr" "$HOME/.config/hypr"
 link_config_dir "$ROOT_DIR/wallpapers" "$HOME/.config/wallpapers"
+mkdir -p "$HOME/.config/clipse"
+link_config_file "$ROOT_DIR/clipse/config.json" "$HOME/.config/clipse/config.json"
+link_config_file "$ROOT_DIR/clipse/custom_theme.json" "$HOME/.config/clipse/custom_theme.json"
 
 wallpaper_options=("hyprpaper" "wpaperd" "skip")
 wallpaper_choice=""

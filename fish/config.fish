@@ -26,10 +26,12 @@ if status is-interactive
     fish_vi_key_bindings
 
     set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS \
-        --color=fg:#7f7094,bg:-1,hl:#b9b1bc \
-        --color=fg+:#00986c,bg+:#241b30,hl+:#0ae4a4 \
-        --color=info:#aa54f9,prompt:#0ae4a4,pointer:#241b30 \
-        --color=marker:#ff00f6,spinner:#aa54f9,header:#f9f972"
+        --color=fg:#CE7688,bg:#000000,hl:#C1B48E \
+        --color=fg+:#FFB1C3,bg+:#1A1A1A,hl+:#C1B48E \
+        --color=info:#804654,prompt:#FFB1C3,pointer:#C1B48E \
+        --color=marker:#FFB1C3,spinner:#C1B48E,header:#B5A985 \
+        --color=border:#3A3A3A,gutter:#000000,separator:#2A2A2A \
+        --color=preview-fg:#CE7688,preview-bg:#000000,preview-border:#3A3A3A"
 
     set -gx ZK_NOTEBOOK_DIR $HOME/drives/kodak/zettelnotes
 
@@ -73,12 +75,20 @@ if status is-interactive
     alias .....="cd ../../../../"
 
     function fman
-        compgen -c | fzf --height 40% --layout reverse --border --no-preview | xargs man
+        set -l cmd (complete -C "" | string replace -r '\t.*' '' | sort -u | fzf --height 40% --layout reverse --border --no-preview)
+        test -n "$cmd"; and man $cmd
     end
 
     function ftldr
-        compgen -c | fzf --height 40% --layout reverse --border --no-preview | xargs tldr
+        if test (count $argv) -gt 0
+            tldr $argv
+            return
+        end
+
+        set -l cmd (complete -C "" | string replace -r '\t.*' '' | sort -u | fzf --height 40% --layout reverse --border --no-preview)
+        test -n "$cmd"; and tldr $cmd
     end
+
 
     function fcd
         cd ~
@@ -112,9 +122,39 @@ if status is-interactive
 
     alias yz="yazi"
     alias lz="lazygit"
-    alias tl="task list"
+    alias twl="task list"
+    alias auds="sudo auditctl -s"
+    alias audl="sudo auditctl -l"
+    alias audroot="sudo ausearch -k root_action -i"
+    alias audmods="sudo ausearch -k kernel_modules -i"
+    alias audnet="sudo ausearch -k network_outbound -i"
+    alias audjson="sudo ausearch --format json -ts recent | jq | bat -l json"
+
+    function tws
+        if not type -q fzf
+            echo "tws requires fzf"
+            return 1
+        end
+
+        set -l query (string join ' ' -- $argv)
+        set -l selected (
+            task rc.color=off rc._forcecolor=no rc.defaultwidth=1000 list | awk '
+                NR <= 3 { next }
+                /^[[:space:]]*$/ { next }
+                /^[[:space:]]*[0-9]+ tasks?[[:space:]]*$/ { next }
+                { print }
+            ' | fzf --query="$query" --height 80% --layout=reverse --border \
+                --header="Taskwarrior search"
+        )
+        or return
+
+        set -l id (printf '%s\n' "$selected" | awk '{print $1}')
+        test -n "$id"; and task "$id" info
+    end
+
     alias t="trans"
     alias cr="codex resume"
+    alias kssh="kitty +kitten ssh"
 
     function mpvpl
         find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-
@@ -126,6 +166,55 @@ if status is-interactive
             | xargs -r -I {} sh -c "zathura \"{}\" &"
     end
 
+    function wptui-default-sink
+        set -l candidates
+
+        for line in (wpctl status --name \
+            | awk '
+                /Sinks:/   { in_audio_sinks=1; next }
+                /Sources:/ { in_audio_sinks=0 }
+                /Filters:/ { in_filters=1; next }
+                /Streams:/ { in_filters=0 }
+
+                (in_audio_sinks || in_filters) && /[0-9]+\./
+            ' \
+            | sed -E 's/.* ([0-9]+)\.[[:space:]]+(.*)/\1 \2/')
+
+            set -l id (string split -m1 ' ' -- $line)[1]
+
+            if wpctl inspect $id 2>/dev/null | rg -q 'media.class = "Audio/Sink"'
+                set candidates $candidates $line
+            end
+        end
+
+        set -l selected (printf '%s\n' $candidates | fzf --prompt='Select sink > ')
+        or return
+
+        set -l id (string split -m1 ' ' -- $selected)[1]
+        test -n "$id"; and wpctl set-default $id
+    end
+
+    function fzf-history-preview
+        if not type -q fzf
+            return 1
+        end
+
+        set -l cmd (
+            history | fzf --tac \
+                --height 80% \
+                --layout=reverse \
+                --border \
+                --preview 'echo {}' \
+                --preview-window=down:3:wrap
+        )
+        or return
+
+        test -n "$cmd"; and commandline --replace -- "$cmd"
+        commandline -f repaint
+    end
+
+    bind \cr fzf-history-preview
+
     alias rmpkg="sudo pacman -Rsn"
     alias cleanch="sudo pacman -Scc"
     alias fixpacman="sudo rm /var/lib/pacman/db.lck"
@@ -135,6 +224,28 @@ if status is-interactive
 
     alias wlpn="wpaperctl next"
     alias clipc="wl-copy </dev/null"
+
+    # Podman + fzf helpers
+    function pstart
+        set -l selected (podman ps -a --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" | \
+            fzf --height 40% --reverse --border --header "select container to start")
+        test -z "$selected"; and return
+        podman start (echo "$selected" | awk '{print $1}')
+    end
+
+    function pstop
+        set -l selected (podman ps --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" | \
+            fzf --height 40% --reverse --border --header "select container to stop")
+        test -z "$selected"; and return
+        podman stop (echo "$selected" | awk '{print $1}')
+    end
+
+    function prm
+        set -l selected (podman ps -a --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" | \
+            fzf --height 40% --reverse --border --header "select container to remove")
+        test -z "$selected"; and return
+        podman rm (echo "$selected" | awk '{print $1}')
+    end
 
     # ls replacement
     if type -q eza

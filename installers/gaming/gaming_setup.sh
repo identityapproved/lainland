@@ -133,11 +133,19 @@ case "${gpu_vendor:-skip}" in
 esac
 
 echo "[3/6] Installing extra compatibility libraries/tools..."
-install_many wine winetricks vulkan-tools goverlay
+if ask_yes "Install lutris?"; then
+  install_many lutris wine-staging dxvk-bin winetricks vulkan-tools goverlay
+else
+  install_many wine winetricks vulkan-tools goverlay
+fi
 
 echo "[4/6] Optional apps"
 if ask_yes "Install obs-studio?"; then
   install_pkg obs-studio
+fi
+
+if ask_yes "Install itch-bin?"; then
+  install_pkg itch-bin
 fi
 
 chat_choice="$(choose_option "Select one chat app (Discord family)" "vesktop" "discord" "vencord" "skip")"

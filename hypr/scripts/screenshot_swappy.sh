@@ -52,15 +52,15 @@ capture_region() {
 
 case "$mode" in
   full)
-    outfile="$dir/<$tag>_full.png"
+    outfile="$dir/${tag}_full.png"
     capture_full
     ;;
   output)
-    outfile="$dir/<$tag>_output.png"
+    outfile="$dir/${tag}_output.png"
     capture_output
     ;;
   region)
-    outfile="$dir/<$tag>_region.png"
+    outfile="$dir/${tag}_region.png"
     capture_region
     ;;
   *)

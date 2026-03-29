@@ -1,0 +1,62 @@
+unmap f
+map f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen
+map v toggle_selection
+
+set font                      "Iosevka 10"
+set render-loading            true
+
+# Copy selection to system clipboard
+set selection-clipboard       "clipboard"
+
+# Stop at page boundries
+set scroll-page-aware         "true"
+set scroll-step               232
+
+# Startup options
+set adjust-open               width
+set recolor                   true
+set page-padding              0.2
+set pages-per-row             2
+set first-page-column         1:2
+
+# Lain palette (lain-colors.md)
+set default-fg                "#C1B48E"
+set default-bg                "#000000"
+
+set completion-bg             "#1A1A1A"
+set completion-fg             "#CE7688"
+set completion-highlight-bg   "#2A2A2A"
+set completion-highlight-fg   "#C1B48E"
+set completion-group-bg       "#000000"
+set completion-group-fg       "#BA6A7B"
+
+set statusbar-fg              "#CE7688"
+set statusbar-bg              "#1A1A1A"
+set statusbar-h-padding       10
+set statusbar-v-padding       10
+
+set notification-bg           "#2A2A2A"
+set notification-fg           "#CE7688"
+set notification-error-bg     "#930006"
+set notification-error-fg     "#FFB1C3"
+set notification-warning-bg   "#60401D"
+set notification-warning-fg   "#FFDCB9"
+set selection-notification    "false"
+
+set inputbar-fg               "#C1B48E"
+set inputbar-bg               "#000000"
+
+set recolor-lightcolor        "#000000"
+set recolor-darkcolor         "#C1B48E"
+
+set index-fg                  "#CE7688"
+set index-bg                  "#000000"
+set index-active-fg           "#C1B48E"
+set index-active-bg           "#2A2A2A"
+
+set render-loading-bg         "#000000"
+set render-loading-fg         "#CE7688"
+
+set highlight-color           "#BA6A7B"
+set highlight-active-color    "#FFB1C3"

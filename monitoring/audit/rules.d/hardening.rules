@@ -1,0 +1,23 @@
+# Root exec
+-a always,exit -F arch=b64 -F euid=0 -S execve -k root_action
+
+# Sensitive files
+-a always,exit -F arch=b64 -F path=/etc/shadow -F perm=rwa -k shadow_file
+-a always,exit -F arch=b64 -F path=/etc/passwd -F perm=rwa -k passwd_file
+-a always,exit -F arch=b64 -F path=/etc/sudoers -F perm=rwa -k sudoers_file
+-a always,exit -F arch=b64 -F dir=/root/ -F perm=rwa -k root_home
+-a always,exit -F arch=b64 -F dir=/boot/ -F perm=wa -k boot_changes
+
+# Kernel modules and tooling
+-a always,exit -F arch=b64 -S init_module -S delete_module -k kernel_modules
+-a always,exit -F arch=b64 -F path=/sbin/insmod -F perm=x -k module_tools
+-a always,exit -F arch=b64 -F path=/sbin/rmmod -F perm=x -k module_tools
+-a always,exit -F arch=b64 -F path=/sbin/modprobe -F perm=x -k module_tools
+-a always,exit -F arch=b64 -F dir=/lib/modules/ -F perm=wa -k modules_dir
+-a always,exit -F arch=b64 -F dir=/dev/ -F perm=wa -k dev_changes
+
+# Broad syscall indicators
+-a always,exit -F arch=b64 -S connect -k network_outbound
+-a always,exit -F arch=b64 -S ptrace -k ptrace_abuse
+-a always,exit -F arch=b64 -S kill -k signal_abuse
+-a always,exit -F arch=b64 -S setuid -S setgid -k cred_changes

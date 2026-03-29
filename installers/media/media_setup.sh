@@ -10,6 +10,7 @@ MPV_SRC="$ROOT_DIR/mpv"
 AUDACIOUS_SRC="$ROOT_DIR/audacious"
 VESKTOP_SRC="$ROOT_DIR/vesktop"
 SPOTIFY_CFG_SRC="$ROOT_DIR/spotify"
+XDG_MIMEAPPS_SRC="$ROOT_DIR/xdg/mimeapps.list"
 
 if [ -f "$COMMON_LIB" ]; then
   # shellcheck source=/dev/null
@@ -72,8 +73,14 @@ if ask_yes "Install audacious?"; then
 fi
 
 if ask_yes "Install spotify?"; then
+  install_pkg libayatana-appindicator
+  install_pkg libayatana-appindicator-glib
+
   install_pkg spotify
   install_pkg spicetify-cli
+  if [ -f "$XDG_MIMEAPPS_SRC" ]; then
+    link_config_file "$XDG_MIMEAPPS_SRC" "$HOME/.config/mimeapps.list"
+  fi
   if [ -d "$SPOTIFY_CFG_SRC" ]; then
     link_config_dir "$SPOTIFY_CFG_SRC" "$HOME/.config/spicetify"
     echo "Spicetify theme attribution: adapted from https://github.com/Ascaniolamp/Hyprlain"
