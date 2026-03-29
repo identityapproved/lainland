@@ -4,6 +4,9 @@ Let's all love Lain.
 
 Lainland is an Arch + Hyprland dotfiles/setup repo focused on a cohesive Lain palette, modular installers, and practical defaults.
 
+> [!WARNING]
+> These dotfiles are still in progress. Use at your own risk.
+
 ## Requirements
 Install these first:
 - `git`
@@ -53,4 +56,3 @@ Current repo-managed Lain theming is applied for:
 - `spotify` (spicetify `lain` theme)
 - `vesktop` (`lain.theme.css`)
 - `sioyek` (single fixed `lain.config`)
-

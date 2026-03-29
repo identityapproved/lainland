@@ -38,7 +38,7 @@ obsidian = [
 	{ run = "flatpak run md.obsidian.Obsidian %s", desc = "Obsidian", for = "unix", orphan = true },
 ]
 pdf = [
-	{ run = "sioyek %s", desc = "Sioyek", for = "unix", orphan = true },
+	{ run = "zathura %s", desc = "Zathura", for = "unix", orphan = true },
 ]
 image = [
 	{ run = "imv %s", desc = "imv", for = "unix", orphan = true },

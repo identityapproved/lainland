@@ -1,8 +1,8 @@
 window {
     margin: 0px;
-    border: 2px solid #414868;
-    border-radius: 6px;
-    background-color: #24283b;
+    border: 2px solid #ce7688;
+    border-radius: 0px;
+    background-color: #000000;
     font: Iosevka Fixed;
     font-size: 13px;
 }
@@ -11,12 +11,12 @@ window {
     margin: 5px;
     border: none;
     outline: none;
-    color: #c0caf5;
-    background-color: #24283b;
+    color: #ce7688;
+    background-color: #000000;
 }
 
 #input image {
-    color: #c0caf5;
+    color: #c1b48e;
 }
 
 #input:focus {
@@ -28,38 +28,46 @@ window {
 #inner-box {
     margin: 0px;
     border: none;
-    background-color: #24283b;
+    background-color: #000000;
 }
 
 #outer-box {
     margin: 6px;
     border: none;
-    background-color: #24283b;
+    background-color: #000000;
 }
 
 #scroll {
     margin: 0px;
     border: none;
+    background-color: #000000;
 }
 
 #text {
-    margin: 5px;
+    margin: 0px;
     border: none;
-    color: #c0caf5;
-} 
+    color: #ce7688;
+}
 
 #entry {
     padding: 0px 0px 0px 6px;
+    background-color: #000000;
+    border: none;
+}
+
+#entry image {
+    margin-right: 10px;
 }
 
 #entry:selected {
-    background-color: #414868;
+    background-color: #1a1a1a;
     font-weight: normal;
-    border-radius: 6px;
+    border-radius: 0px;
     outline: none;
 }
 
 #text:selected {
-    background-color: #414868;
+    background-color: transparent;
+    color: #ffb1c3;
     font-weight: normal;
 }

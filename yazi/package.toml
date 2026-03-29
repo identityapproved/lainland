@@ -13,11 +13,6 @@ use = "yazi-rs/plugins:full-border"
 rev = "1962818"
 hash = "6fa6a05a81c98dd000fbca3cca6e9682"
 
-[[plugin.deps]]
-use = "GianniBYoung/rsync"
-rev = "14d2828"
-hash = "7394430ba473dce1023721622438bf3d"
-
 [[flavor.deps]]
 use = "identityapproved/lain"
 rev = "5d0da57"

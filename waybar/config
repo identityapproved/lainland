@@ -16,10 +16,12 @@
     "modules-right": [
         "custom/weather",
         "custom/storage",
+        "custom/tasks",
         "cpu",
         "memory",
         "custom/temperature",
         "wireplumber",
+        "custom/mic",
         "tray",
         "clock",
         "custom/power"
@@ -63,6 +65,13 @@
         "interval": 60,
         "exec": "~/.config/waybar/modules/storage.sh"
     },
+    "custom/tasks": {
+        "format": "{}",
+        "interval": 20,
+        "exec": "task rc.color=off rc.verbose=nothing +PENDING count | tr -dc '0-9' | xargs -I{} echo ' {}'",
+        "on-click": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/open_taskwarrior_tui.sh",
+        "tooltip": false
+    },
     "custom/mail": {
         "format": " {}",
         "format-alt": " {alt}",
@@ -93,6 +102,14 @@
         "format": "VOL {volume}%",
         "tooltip": false,
         "on-click": "pavucontrol"
+    },
+    "custom/mic": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/mic.sh",
+        "interval": 2,
+        "signal": 8,
+        "tooltip": false
     },
     "tray": {
         "icon-size": 16,

@@ -2,7 +2,6 @@
 set -euo pipefail
 
 monitor="${1:-DVI-D-1}"
-fallback_spec="${2:-preferred,auto,1}"
 
 notify() {
   if command -v notify-send >/dev/null 2>&1; then
@@ -28,21 +27,12 @@ get_monitor_block() {
 block="$(get_monitor_block)"
 
 if [[ -z "$block" ]]; then
-  if hyprctl keyword monitor "$monitor,$fallback_spec" >/dev/null 2>&1; then
-    notify "Monitor enabled" "$monitor ($fallback_spec)"
-    exit 0
-  fi
-  notify "Monitor toggle failed" "Monitor '$monitor' not found"
+  notify "Monitor disable skipped" "$monitor is already disabled"
   exit 1
 fi
 
 if printf '%s\n' "$block" | grep -Eq '^[[:space:]]*disabled:[[:space:]]*(true|yes)'; then
-  if hyprctl keyword monitor "$monitor,$fallback_spec" >/dev/null 2>&1; then
-    notify "Monitor enabled" "$monitor ($fallback_spec)"
-  else
-    notify "Monitor toggle failed" "Could not enable $monitor"
-    exit 1
-  fi
+  notify "Monitor disable skipped" "$monitor is already disabled"
 else
   if hyprctl keyword monitor "$monitor,disable" >/dev/null 2>&1; then
     notify "Monitor disabled" "$monitor"
