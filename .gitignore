@@ -12,8 +12,32 @@ alacritty/
 ghostty/
 bat/
 tmux/
-task/
 mpv/
 cmus/
 translate-shell/
 wpaperd/
+
+# Vesktop: keep only the curated repo config/theme, ignore runtime/cache noise
+vesktop/*
+!vesktop/README.md
+!vesktop/settings/
+!vesktop/settings/settings.json
+!vesktop/themes/
+!vesktop/themes/lain.theme.css
+vesktop/Crashpad/
+vesktop/sessionData/
+vesktop/SingletonCookie
+vesktop/SingletonLock
+vesktop/SingletonSocket
+vesktop/settings.json
+vesktop/state.json
+vesktop/settings/quickCss.css
+
+# Clipse: keep config/theme, ignore runtime state
+clipse/clipboard_history.json
+clipse/clipse.log
+clipse/tmp_files/
+
+# Spotify/Spicetify: keep theme + config, ignore runtime/user state
+spotify/prefs
+spotify/Users/

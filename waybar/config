@@ -23,6 +23,7 @@
         "wireplumber",
         "custom/mic",
         "tray",
+        "hyprland/language",
         "clock",
         "custom/power"
     ],
@@ -115,14 +116,19 @@
         "icon-size": 16,
         "spacing": 6
     },
+    "hyprland/language": {
+        "format": "{short}",
+        "tooltip": false
+    },
     "clock": {
         "format": "{:%H:%M 󰃭 %d.%m.%Y}",
         "tooltip": true,
-        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>"
+        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>",
+        "on-click": "~/.config/waybar/scripts/popup_calendar.sh"
     },
     "custom/power": {
         "format": " 󰐥 ",
         "tooltip": false,
-        "on-click": "wlogout"
+        "on-click": "wlogout -b 6 -T 340 -B 340"
     }
 }
