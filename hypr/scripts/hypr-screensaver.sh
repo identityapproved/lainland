@@ -13,6 +13,23 @@ is_running() {
   pgrep -f 'kitty .*--class screensaver' >/dev/null 2>&1
 }
 
+newest_screensaver_age() {
+  local pid=""
+  local youngest=999999
+  local age=""
+
+  while IFS= read -r pid; do
+    [[ -z "$pid" ]] && continue
+    age="$(ps -o etimes= -p "$pid" 2>/dev/null | tr -d '[:space:]')"
+    [[ -z "$age" ]] && continue
+    if (( age < youngest )); then
+      youngest="$age"
+    fi
+  done < <(pgrep -f 'kitty .*--class screensaver' || true)
+
+  printf '%s\n' "$youngest"
+}
+
 resolve_art_command() {
   local mode="$1"
   local colors=(green red blue white yellow cyan magenta)
@@ -30,11 +47,10 @@ resolve_art_command() {
       printf '%s\n' "$(command -v rbonsai) -S -s $bonsai_seed"
       ;;
     random)
-      if (( RANDOM % 2 )); then
-        resolve_art_command matrix
-      else
-        resolve_art_command bonsai
-      fi
+      case $(( RANDOM % 2 )) in
+        0) resolve_art_command matrix ;;
+        *) resolve_art_command bonsai ;;
+      esac
       ;;
     *)
       return 1
@@ -58,7 +74,7 @@ launch_on_monitor() {
   local wrapped_cmd=""
 
   printf -v wrapped_cmd "%s; status=\$?; %s stop >/dev/null 2>&1 || true; exit \$status" "$cmd" "$self_path"
-  printf -v launch_cmd 'kitty --start-as=fullscreen --class screensaver --title screensaver-%s sh -lc %q' \
+  printf -v launch_cmd 'kitty --start-as=fullscreen --class screensaver --title screensaver-%s --override font_size=9.0 --override window_padding_width=0 sh -lc %q' \
     "$monitor" "$wrapped_cmd"
 
   hyprctl dispatch exec "$launch_cmd" >/dev/null 2>&1
@@ -105,6 +121,22 @@ stop_screensaver() {
   pkill -f 'kitty .*--class screensaver' 2>/dev/null || true
 }
 
+stop_screensaver_guarded() {
+  local min_age="${1:-3}"
+  local youngest=""
+
+  if ! is_running; then
+    exit 0
+  fi
+
+  youngest="$(newest_screensaver_age)"
+  if [[ -n "$youngest" ]] && (( youngest < min_age )); then
+    exit 0
+  fi
+
+  stop_screensaver
+}
+
 case "${1:-}" in
   matrix|bonsai|random)
     start_kitty_art "$1"
@@ -112,8 +144,11 @@ case "${1:-}" in
   stop)
     stop_screensaver
     ;;
+  stop-guarded)
+    stop_screensaver_guarded "${2:-3}"
+    ;;
   *)
-    echo "usage: $0 {matrix|bonsai|random|stop}" >&2
+    echo "usage: $0 {matrix|bonsai|random|stop|stop-guarded [seconds]}" >&2
     exit 2
     ;;
 esac

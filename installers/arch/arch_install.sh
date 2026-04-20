@@ -14,7 +14,7 @@ else
 fi
 BASE_LIST="$SCRIPT_DIR/base_tools_list.txt"
 OPTIONAL_LIST="$SCRIPT_DIR/optional_tools_list.txt"
-ADDITIONAL_PKGS=("git" "base-devel")
+ADDITIONAL_PKGS=("git" "base-devel" "translate-shell")
 
 if [ ! -f "/etc/arch-release" ]; then
   echo "Error: This script is intended for Arch Linux. Exiting."

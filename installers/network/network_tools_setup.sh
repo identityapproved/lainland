@@ -14,6 +14,8 @@ fi
 
 ensure_helper
 
+install_pkg ldns
+
 if ask_yes "Install nmap?"; then
   install_pkg nmap
 fi

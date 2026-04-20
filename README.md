@@ -8,27 +8,33 @@ Lainland is an Arch + Hyprland dotfiles/setup repo focused on a cohesive Lain pa
 > These dotfiles are still in progress. Use at your own risk.
 
 ## Requirements
+
 Install these first:
+
 - `git`
 - `base-devel`
 
 If gaming is needed (Steam + Proton), enable `multilib` first.
 
 Preferred during install:
+
 - In `archinstall` -> `Additional repositories` -> enable `multilib`
 
 Manual way:
+
 ```bash
 sudo nano /etc/pacman.conf
 ```
 
 Uncomment:
+
 ```ini
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 ```
 
 Then sync:
+
 ```bash
 sudo pacman -Syu
 ```
@@ -38,14 +44,18 @@ sudo pacman -Syu
 This repo follows a modular installer structure under `installers/`.
 
 Run:
+
 ```bash
 bash installers/installer_menu.sh
 ```
 
 ## Themed Tools (Lain Palette)
+
 Current repo-managed Lain theming is applied for:
+
 - `hypr` (colors, borders, shadows, animations, scripts)
 - `waybar`
+  - reference used: `https://github.com/Ascaniolamp/Hyprlain/tree/main`
 - `mako`
 - `kitty`
 - `wofi`

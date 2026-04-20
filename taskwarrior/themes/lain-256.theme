@@ -1,0 +1,74 @@
+rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,tagged,uda.
+
+# Lain-inspired dark theme: black background, rose accents, ochre metadata.
+
+# General decoration
+color.label=
+color.label.sort=
+color.alternate=on color233
+color.header=color180
+color.footnote=color174
+color.warning=bold color217
+color.error=color255 on color88
+color.debug=color60
+
+# Task state
+color.completed=color240
+color.deleted=color238
+color.active=color224 on color53
+color.recurring=color180
+color.scheduled=on color234
+color.until=
+color.blocked=color255 on color239
+color.blocking=color232 on color180
+
+# Project
+color.project.none=color240
+
+# Priority
+color.uda.priority.H=bold color217
+color.uda.priority.M=color180
+color.uda.priority.L=color245
+
+# Tags
+color.tag.next=bold color180
+color.tag.none=
+color.tagged=color174
+
+# Due
+color.due.today=bold color217
+color.due=color174
+color.overdue=bold color203
+
+# Report: burndown
+color.burndown.done=on color29
+color.burndown.pending=on color88
+color.burndown.started=on color180
+
+# Report: history
+color.history.add=color232 on color174
+color.history.delete=color232 on color180
+color.history.done=color232 on color65
+
+# Report: summary
+color.summary.background=color224 on color233
+color.summary.bar=color232 on color174
+
+# Command: calendar
+color.calendar.due.today=color255 on color217
+color.calendar.due=color232 on color174
+color.calendar.holiday=color232 on color180
+color.calendar.scheduled=on color234
+color.calendar.overdue=color255 on color203
+color.calendar.today=color232 on color181
+color.calendar.weekend=on color233
+color.calendar.weeknumber=color174
+
+# Command: sync
+color.sync.added=color65
+color.sync.changed=color180
+color.sync.rejected=color203
+
+# Command: undo
+color.undo.after=color65
+color.undo.before=color203

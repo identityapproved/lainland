@@ -1,0 +1,37 @@
+appearance.compactpanels=yes
+appearance.defaultpanel=appointments
+appearance.calendarview=monthly
+appearance.todoview=hide-completed
+appearance.headerline=yes
+appearance.eventseparator=yes
+appearance.dayseparator=yes
+appearance.emptyline=no
+appearance.emptyday=no
+appearance.notifybar=yes
+appearance.sidebarwidth=32
+appearance.theme=yellow on magenta
+
+general.autosave=yes
+general.autogc=yes
+general.periodicsave=10
+general.systemevents=no
+general.confirmquit=no
+general.confirmdelete=yes
+general.firstdayofweek=monday
+general.multipledays=yes
+
+format.outputdate=%F
+format.notifydate=%a %F
+format.notifytime=%H:%M
+format.dayheading=%a %d %b %Y
+format.appointmenttime=%H:%M
+
+notification.warning=900
+notification.command=$HOME/.config/calcurse/notify.sh
+notification.notifyall=unflagged-only
+
+daemon.enable=yes
+daemon.log=no
+appearance.layout=1
+appearance.headingpos=right-justified
+format.inputdate=1

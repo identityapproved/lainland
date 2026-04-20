@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CONFIG_DIR="$HOME/.config"
-# Get the current directory
-DOTFILES_DIR=$(pwd)
 
 # Check if the script is being run from the dotfiles directory
 # if [ "$(basename "$DOTFILES_DIR")" != "dotfiles" ]; then
@@ -24,9 +25,30 @@ directories=("${directories[@]%/}")
 # Create symbolic links for .zshrc and .aliases
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.aliases" "$HOME/.aliases"
-ln -sf "$DOTFILES_DIR/.taskrc" "$HOME/.taskrc"
+
+task_config_dir="$DOTFILES_DIR/taskwarrior"
+if [ -d "$task_config_dir" ]; then
+  target_dir="$CONFIG_DIR/task"
+
+  if [ -L "$target_dir" ]; then
+    if [ "$(readlink -f "$target_dir")" = "$(readlink -f "$task_config_dir")" ]; then
+      rm -f "$target_dir"
+      echo "Removed existing symbolic link: $target_dir"
+    fi
+  elif [ -d "$target_dir" ]; then
+    mv "$target_dir" "$target_dir.bak"
+    echo "Existing directory '$target_dir' renamed to '$target_dir.bak'"
+  fi
+
+  ln -sfn "$task_config_dir" "$target_dir"
+  echo "Created symlink: $target_dir"
+  ln -sf "$target_dir/taskrc" "$HOME/.taskrc"
+fi
 
 for dir in "${directories[@]}"; do
+  if [ "$(basename "$dir")" = "taskwarrior" ]; then
+    continue
+  fi
   target_dir="$CONFIG_DIR/$(basename "$dir")"
 
   # Check if the target directory is a symbolic link

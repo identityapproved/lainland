@@ -1,43 +1,93 @@
+@define-color backprimary #000000;
+@define-color backsecondary #1A1A1A;
+@define-color foreprimary #CE7688;
+@define-color highprimary #C1B48E;
+
 * {
-	background-image: none;
-	box-shadow: none;
-  text-shadow: none;
+	all: unset;
+	font-family: "AdwaitaMono Nerd Font";
+	font-size: 14px;
+	font-weight: bold;
 }
 
 window {
-  font-family: Iosevka Nerd Font;
-  font-size: 13pt;
-	background-color: rgba(0, 0, 0, 0.6);
+	background-color: rgba(0, 0, 0, 0.68);
 }
 
 button {
-  border-radius: 23px;
-  margin: 3px;
-  border-color: #1f2335;
-	text-decoration-color: #9d7cd8;
-  color: #bb9af7;
-	background-color: #1f2335;
-	border-style: solid;
-	border-width: 1px;
+	color: @highprimary;
+	background-color: transparent;
+	border: 2px solid transparent;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: 60%;
-  transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	background-size: 90%;
+	min-width: 224px;
+	min-height: 188px;
+	padding: 0;
+	margin: 0;
+	transition:
+		background-color 0.18s ease-in-out,
+		border-color 0.18s ease-in-out,
+		color 0.18s ease-in-out;
 }
 
-button:focus, button:active, button:hover {
-	background-color: #3b4261;
-	outline-style: none;
+button:focus,
+button:active,
+button:hover {
+	background-color: rgba(26, 26, 26, 0.45);
+	border: 2px solid @foreprimary;
 }
 
-#suspend {
-    background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+#lock {
+	background-image: image(
+		url("assets/laintrain.gif"),
+		url("assets/laintrain.gif")
+	);
+}
+
+#logout {
+	background-image: image(
+		url("assets/VisLain.gif"),
+		url("assets/VisLain.gif")
+	);
 }
 
 #shutdown {
-    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+	background-image: image(
+		url("assets/acid.gif"),
+		url("assets/acid.gif")
+	);
 }
 
 #reboot {
-    background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+	background-image: image(
+		url("assets/aether-preview-02.gif"),
+		url("assets/aether-preview-02.gif")
+	);
+}
+
+#dummy {
+	background-image: none;
+	background-color: transparent;
+	border: 0;
+	min-width: 0;
+	min-height: 0;
+	padding: 0;
+	margin: 0;
+	color: transparent;
+	font-size: 0;
+	opacity: 0;
+}
+
+#dummy-end {
+	background-image: none;
+	background-color: transparent;
+	border: 0;
+	min-width: 0;
+	min-height: 0;
+	padding: 0;
+	margin: 0;
+	color: transparent;
+	font-size: 0;
+	opacity: 0;
 }

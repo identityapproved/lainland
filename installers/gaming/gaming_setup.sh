@@ -82,102 +82,163 @@ install_many() {
   done
 }
 
+remove_pkg() {
+  local pkg="$1"
+  if command -v paru >/dev/null 2>&1; then
+    paru -Rns --noconfirm "$pkg" || true
+  elif command -v yay >/dev/null 2>&1; then
+    yay -Rns --noconfirm "$pkg" || true
+  else
+    echo "Error: No AUR helper available."
+    exit 1
+  fi
+}
+
+remove_many() {
+  local pkg
+  for pkg in "$@"; do
+    remove_pkg "$pkg"
+  done
+}
+
 ensure_helper
 
-echo "Gaming setup (Arch)."
-echo "If you need Steam/Proton, make sure multilib is enabled (preferably in archinstall -> Additional repositories -> multilib)."
-if ! ask_yes "Continue with gaming setup?"; then
-  exit 0
-fi
+mode="$(choose_option "Gaming action" "install gaming" "quit gaming" "cancel")"
 
-echo "[1/6] Installing Steam + core gaming stack..."
-install_many \
-  steam \
-  gamemode \
-  mangohud \
-  gamescope \
-  lib32-gamemode \
-  lib32-mangohud
-
-echo "[2/6] GPU driver stack"
-gpu_vendor="$(detect_gpu_vendor || true)"
-gpu_info="$(detect_gpu_info || true)"
-if [ -n "${gpu_vendor:-}" ]; then
-  echo "Detected via lspci:"
-  [ -n "${gpu_info:-}" ] && printf '  %s\n' "$gpu_info"
-  echo "Detected GPU vendor: $gpu_vendor"
-  echo "Will install packages:"
-  gpu_packages_for_vendor "$gpu_vendor" | sed 's/^/  - /'
-  if ! ask_yes "OK to install detected GPU stack?"; then
-    gpu_vendor=""
-  fi
-fi
-
-if [ -z "${gpu_vendor:-}" ]; then
-  gpu_vendor="$(choose_option "Select GPU vendor" "amd" "nvidia" "intel" "skip")"
-fi
-
-case "${gpu_vendor:-skip}" in
-  amd)
-    install_many $(gpu_packages_for_vendor amd)
-    ;;
-  nvidia)
-    install_many $(gpu_packages_for_vendor nvidia)
-    ;;
-  intel)
-    install_many $(gpu_packages_for_vendor intel)
-    ;;
-  *)
-    echo "Skipping GPU driver stack installation."
-    ;;
-esac
-
-echo "[3/6] Installing extra compatibility libraries/tools..."
-if ask_yes "Install lutris?"; then
-  install_many lutris wine-staging dxvk-bin winetricks vulkan-tools goverlay
-else
-  install_many wine winetricks vulkan-tools goverlay
-fi
-
-echo "[4/6] Optional apps"
-if ask_yes "Install obs-studio?"; then
-  install_pkg obs-studio
-fi
-
-if ask_yes "Install itch-bin?"; then
-  install_pkg itch-bin
-fi
-
-chat_choice="$(choose_option "Select one chat app (Discord family)" "vesktop" "discord" "vencord" "skip")"
-case "${chat_choice:-skip}" in
-  discord)
-    install_pkg discord
-    ;;
-  vesktop)
-    install_pkg vesktop
-    ;;
-  vencord)
-    if ! install_pkg vencord; then
-      echo "Package 'vencord' failed. Try your preferred package manually (e.g. a *-bin variant)."
+case "${mode:-cancel}" in
+  "install gaming")
+    echo "Gaming setup (Arch)."
+    echo "If you need Steam/Proton, make sure multilib is enabled (preferably in archinstall -> Additional repositories -> multilib)."
+    if ! ask_yes "Continue with gaming setup?"; then
+      exit 0
     fi
+
+    echo "[1/6] Installing Steam + core gaming stack..."
+    install_many \
+      steam \
+      gamemode \
+      mangohud \
+      gamescope \
+      lib32-gamemode \
+      lib32-mangohud
+
+    echo "[2/6] GPU driver stack"
+    gpu_vendor="$(detect_gpu_vendor || true)"
+    gpu_info="$(detect_gpu_info || true)"
+    if [ -n "${gpu_vendor:-}" ]; then
+      echo "Detected via lspci:"
+      [ -n "${gpu_info:-}" ] && printf '  %s\n' "$gpu_info"
+      echo "Detected GPU vendor: $gpu_vendor"
+      echo "Will install packages:"
+      gpu_packages_for_vendor "$gpu_vendor" | sed 's/^/  - /'
+      if ! ask_yes "OK to install detected GPU stack?"; then
+        gpu_vendor=""
+      fi
+    fi
+
+    if [ -z "${gpu_vendor:-}" ]; then
+      gpu_vendor="$(choose_option "Select GPU vendor" "amd" "nvidia" "intel" "skip")"
+    fi
+
+    case "${gpu_vendor:-skip}" in
+      amd)
+        install_many $(gpu_packages_for_vendor amd)
+        ;;
+      nvidia)
+        install_many $(gpu_packages_for_vendor nvidia)
+        ;;
+      intel)
+        install_many $(gpu_packages_for_vendor intel)
+        ;;
+      *)
+        echo "Skipping GPU driver stack installation."
+        ;;
+    esac
+
+    echo "[3/6] Installing extra compatibility libraries/tools..."
+    if ask_yes "Install lutris?"; then
+      install_many lutris wine-staging dxvk-bin winetricks vulkan-tools goverlay
+    else
+      install_many wine winetricks vulkan-tools goverlay
+    fi
+
+    echo "[4/6] Optional apps"
+    if ask_yes "Install obs-studio?"; then
+      install_pkg obs-studio
+    fi
+
+    if ask_yes "Install itch-bin?"; then
+      install_pkg itch-bin
+    fi
+
+    chat_choice="$(choose_option "Select one chat app (Discord family)" "vesktop" "discord" "vencord" "skip")"
+    case "${chat_choice:-skip}" in
+      discord)
+        install_pkg discord
+        ;;
+      vesktop)
+        install_pkg vesktop
+        ;;
+      vencord)
+        if ! install_pkg vencord; then
+          echo "Package 'vencord' failed. Try your preferred package manually (e.g. a *-bin variant)."
+        fi
+        ;;
+      *)
+        echo "Skipping Discord-family app installation."
+        ;;
+    esac
+
+    echo "[5/6] Proton + compatibility tools"
+    if ask_yes "Install proton-ge-custom?"; then
+      install_pkg proton-ge-custom
+      echo "Installed proton-ge-custom (AUR) for Steam compatibility tools."
+    fi
+
+    echo "[6/6] Optional performance kernel tweaks"
+    if ask_yes "Install linux-zen and linux-zen-headers?"; then
+      install_many linux-zen linux-zen-headers
+      echo "Select linux-zen in your bootloader after installation."
+    fi
+
+    echo
+    echo "Gaming setup complete."
+    echo "Suggested: reboot after installations (especially GPU drivers / kernel changes)."
+    ;;
+  "quit gaming")
+    echo "Quit gaming mode."
+    echo "This removes gaming-focused apps and compatibility tools."
+    echo "It does not remove GPU drivers or kernel packages."
+    if ! ask_yes "Continue with gaming package removal?"; then
+      exit 0
+    fi
+
+    remove_many \
+      steam \
+      gamemode \
+      mangohud \
+      gamescope \
+      lib32-gamemode \
+      lib32-mangohud \
+      lutris \
+      wine \
+      wine-staging \
+      dxvk-bin \
+      winetricks \
+      vulkan-tools \
+      goverlay \
+      obs-studio \
+      itch-bin \
+      discord \
+      vesktop \
+      vencord \
+      proton-ge-custom
+
+    echo
+    echo "Gaming package removal complete."
+    echo "Skipped intentionally: GPU drivers and linux-zen packages."
     ;;
   *)
-    echo "Skipping Discord-family app installation."
+    exit 0
     ;;
 esac
-
-echo "[5/6] Proton + compatibility tools"
-if ask_yes "Install proton-ge-custom?"; then
-  install_pkg proton-ge-custom
-  echo "Installed proton-ge-custom (AUR) for Steam compatibility tools."
-fi
-
-echo "[6/6] Optional performance kernel tweaks"
-if ask_yes "Install linux-zen and linux-zen-headers?"; then
-  install_many linux-zen linux-zen-headers
-  echo "Select linux-zen in your bootloader after installation."
-fi
-
-echo
-echo "Gaming setup complete."
-echo "Suggested: reboot after installations (especially GPU drivers / kernel changes)."

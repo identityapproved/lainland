@@ -1,0 +1,11 @@
+# [Created by task 3.1.0 8/21/2024 17:21:43]
+data.location=~/drives/kodak/taskwarrior/task
+news.version=3.4.2
+
+# XDG-style Taskwarrior config location
+# hooks.location=~/.config/task/hooks
+
+pager=bat --paging=always
+editor=nvim -f
+
+include ~/.config/task/themes/lain-256.theme

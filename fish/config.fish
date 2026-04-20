@@ -153,8 +153,22 @@ if status is-interactive
     end
 
     alias t="trans"
+
+    function endict
+        trans -d en: $argv
+    end
+
+    function en2uk
+        trans en:uk $argv
+    end
+
+    function uk2en
+        trans uk:en $argv
+    end
+
     alias cr="codex resume"
     alias kssh="kitty +kitten ssh"
+    alias obsrec="nice -n -5 obs"
 
     function mpvpl
         find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-
