@@ -7,6 +7,7 @@
 
     "modules-left": [
         "hyprland/workspaces",
+        "custom/timer",
         "custom/media",
         "custom/spotify"
     ],
@@ -37,6 +38,18 @@
     "hyprland/window": {
         "max-length": 80,
         "separate-outputs": true
+    },
+    "custom/timer": {
+        "exec": "~/.config/waybar/scripts/pomodoro_timer.sh",
+        "return-type": "json",
+        "format": "{}",
+        "on-click": "~/.config/waybar/scripts/pomodoro_timer.sh click",
+        "on-click-right": "~/.config/waybar/scripts/pomodoro_timer.sh right",
+        "on-click-middle": "~/.config/waybar/scripts/pomodoro_timer.sh middle",
+        "on-scroll-up": "~/.config/waybar/scripts/pomodoro_timer.sh down",
+        "on-scroll-down": "~/.config/waybar/scripts/pomodoro_timer.sh up",
+        "tooltip": true,
+        "escape": true
     },
 
     "custom/media": {
@@ -83,12 +96,12 @@
     },
 
     "cpu": {
-        "format": "CPU {usage}%",
+        "format": " {usage}%",
         "tooltip": false,
         "on-click": "kitty --title termfloat -e htop -s PERCENT_CPU"
     },
     "memory": {
-        "format": "RAM {percentage}%",
+        "format": " {percentage}%",
         "tooltip": false,
         "on-click": "kitty --title termfloat -e htop -s PERCENT_MEM"
     },
@@ -100,7 +113,7 @@
         "tooltip": true
     },
     "wireplumber": {
-        "format": "VOL {volume}%",
+        "format": " {volume}%",
         "tooltip": false,
         "on-click": "pavucontrol"
     },

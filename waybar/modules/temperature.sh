@@ -2,14 +2,14 @@
 set -euo pipefail
 
 if ! command -v sensors >/dev/null 2>&1; then
-  printf '{"text":"T?","tooltip":"lm_sensors not installed"}\n'
+  printf '{"text":" ?","tooltip":"lm_sensors not installed"}\n'
   exit 0
 fi
 
 raw="$(sensors 2>/dev/null || true)"
 
 if [[ -z "$raw" ]]; then
-  printf '{"text":"T?","tooltip":"No sensors output"}\n'
+  printf '{"text":" ?","tooltip":"No sensors output"}\n'
   exit 0
 fi
 
@@ -35,4 +35,4 @@ tooltip="$(
     }'
 )"
 
-printf '{"text":"T%s","tooltip":"%s"}\n' "$temp" "$tooltip"
+printf '{"text":" %s","tooltip":"%s"}\n' "$temp" "$tooltip"

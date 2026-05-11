@@ -86,8 +86,8 @@ border  = { fg = "#A49978" }
 title   = { fg = "#CE7688", bold = true }
 content = { fg = "#C1B48E" }
 list    = {}
-btn_yes = { fg = "#FFDCB9", underline = true, bold = true }
-btn_no  = { fg = "#930006", underline = true, bold = true }
+btn_yes = { fg = "#000000", bg = "#C1B48E", bold = true }
+btn_no  = { fg = "#CE7688", bold = true }
 # : }}}
 
 
@@ -156,15 +156,12 @@ rules = [
 	{ mime = "image/*", fg = "#C1B48E" },
 	{ mime = "{audio,video}/*", fg = "#FFDCB9" },
 	{ mime = "application/{pdf,doc,rtf,odt,docx,xlsx,pptx}", fg = "#CE7688" },
-	{ name = "*.{txt,md,rst,csv,*json*,toml,yml,yaml,xml,html,ini,cfg,conf,log}", fg = "#BA6A7B" },
-	{ name = "*.{pdf,doc,docx,odt,xls,xlsx,ppt,pptx}", fg = "#CE7688" },
+	{ url = "*.{txt,md,rst,csv,*json*,toml,yml,yaml,xml,html,ini,cfg,conf,log}", fg = "#BA6A7B" },
+	{ url = "*.{pdf,doc,docx,odt,xls,xlsx,ppt,pptx}", fg = "#CE7688" },
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#A49978" },
-	{ name = "*.{zip,rar,7z,tar,gz,bz2,xz,zst,lz,lzma,iso,img}", fg = "#A49978" },
+	{ url = "*.{zip,rar,7z,tar,gz,bz2,xz,zst,lz,lzma,iso,img}", fg = "#A49978" },
 	{ url = "*", fg = "#A05969" },
 	{ url = "*/", fg = "#C1B48E", bold = true },
-	# Backward-compatible name fallbacks for older Yazi versions.
-	{ name = "*", fg = "#A05969" },
-	{ name = "*/", fg = "#C1B48E", bold = true },
 ]
 # : }}}
 
