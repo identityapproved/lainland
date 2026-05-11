@@ -19,6 +19,8 @@ end
 # end
 # To include configuration only for interactive shells, use
 # if status is-interactive
+    set -gx CODEX_HOME "$HOME/.codex"
+
 #   ...
 # end
 

@@ -56,6 +56,7 @@ Current repo-managed Lain theming is applied for:
 - `hypr` (colors, borders, shadows, animations, scripts)
 - `waybar`
   - reference used: `https://github.com/Ascaniolamp/Hyprlain/tree/main`
+  - pomodoro/timer module adapted from: `https://github.com/niraletter/waybar-timer`
 - `mako`
 - `kitty`
 - `wofi`

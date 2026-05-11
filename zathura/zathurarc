@@ -1,7 +1,34 @@
 unmap f
 map f toggle_fullscreen
 map [fullscreen] f toggle_fullscreen
+map r rotate rotate-cw
+map R rotate rotate-ccw
+map i recolor
 map v toggle_selection
+map s toggle_statusbar
+map I toggle_inputbar
+map J scroll down
+map K scroll up
+map H scroll left
+map L scroll right
+map <Left> scroll left
+map <Right> scroll right
+map <Up> scroll up
+map <Down> scroll down
+map <PageDown> scroll half-down
+map <PageUp> scroll half-up
+map <Space> scroll full-down
+map <BackSpace> scroll full-up
+map / search forward
+map ? search backward
+map n search forward
+map N search backward
+map o index
+map [fullscreen] o index
+map p page_mode
+map <C-0> zoom 100
+map <C-=> zoom in
+map <C--> zoom out
 
 set font                      "Iosevka 10"
 set render-loading            true
