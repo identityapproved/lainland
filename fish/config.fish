@@ -1,7 +1,3 @@
-if test -f /usr/share/cachyos-fish-config/cachyos-config.fish
-    source /usr/share/cachyos-fish-config/cachyos-config.fish
-end
-
 # overwrite greeting
 # potentially disabling fastfetch
 function fish_greeting
@@ -19,7 +15,7 @@ end
 # end
 # To include configuration only for interactive shells, use
 # if status is-interactive
-    set -gx CODEX_HOME "$HOME/.codex"
+set -gx CODEX_HOME "$HOME/.codex"
 
 #   ...
 # end
@@ -34,6 +30,9 @@ if status is-interactive
         --color=marker:#FFB1C3,spinner:#C1B48E,header:#B5A985 \
         --color=border:#3A3A3A,gutter:#000000,separator:#2A2A2A \
         --color=preview-fg:#CE7688,preview-bg:#000000,preview-border:#3A3A3A"
+
+    set -gx VISUAL nvim
+    set -gx EDITOR nvim
 
     set -gx ZK_NOTEBOOK_DIR $HOME/drives/kodak/zettelnotes
 
@@ -90,7 +89,6 @@ if status is-interactive
         set -l cmd (complete -C "" | string replace -r '\t.*' '' | sort -u | fzf --height 40% --layout reverse --border --no-preview)
         test -n "$cmd"; and tldr $cmd
     end
-
 
     function fcd
         cd ~
@@ -237,6 +235,7 @@ if status is-interactive
     alias update="sudo pacman -Syu"
     alias cleanup="sudo pacman -Rsn (pacman -Qtdq)"
     alias virsh="virsh -c qemu:///system"
+    alias lsblko="lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINT,MODEL"
 
     alias wlpn="wpaperctl next"
     alias clipc="wl-copy </dev/null"
