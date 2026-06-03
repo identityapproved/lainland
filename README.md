@@ -97,7 +97,7 @@ bash installers/installer_menu.sh
 |------|-------|
 | `delta` | Diff pager, lain syntax coloring |
 | `lazygit` | Git TUI styled to match |
-| `bat` | Cat replacement, lain theme |
+| `bat` | Cat replacement, custom `Lain.tmTheme` (rose/ochre palette) |
 | `dircolors` | `ls` colors to match palette |
 
 ### Media
