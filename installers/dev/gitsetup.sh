@@ -58,6 +58,10 @@ if ! git config --global --get-all include.path | grep -Fxq "~/.config/delta/the
   git config --global --add include.path "~/.config/delta/themes.gitconfig"
 fi
 
+# Wire up repo-local hooks
+git -C "$ROOT_DIR" config core.hooksPath .githooks
+echo "Repo hooks wired: .githooks/pre-commit active."
+
 echo "Git + delta configuration has been updated."
 echo "Lazygit is configured to use delta for diff paging if delta is installed."
 echo "SSH key generation skipped in this script."
