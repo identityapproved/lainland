@@ -67,20 +67,22 @@ slider,
   padding: 8px;
 }
 
-/* The prompt is lain-eye -- EGYPTIAN HIEROGLYPH D005 (U+1307A), outlined into
+/* The prompt is lain-eye -- U+1F441 EYE, outlined into
    ~/.icons/lainicons/scalable/actions/lain-eye.svg. It carries its own fill
    (highprimary) rather than following `color` here, because it is a plain
    scalable icon, not a -symbolic one; GTK only recolors the latter. `color`
-   stays set for the same value so the two cannot drift.
+   stays set to the same value so the two cannot drift.
 
-   The clear glyph next to it IS symbolic and does follow `color`. Both were
-   originally edit-find / edit-clear, which resolve to stock grey AdwaitaLegacy
-   PNGs and ignore CSS entirely. opacity was 0.2, a smudge. */
+   Full opacity, and a solid glyph: this started at opacity 0.2 on a stock grey
+   AdwaitaLegacy PNG, then briefly used the D005 hieroglyph, whose fine strokes
+   put only 15% ink in an 18px box and read as a smudge. The eye is 38%.
+
+   The clear glyph next to it IS symbolic and does follow `color`. */
 #prompt {
   margin-left: 4px;
   margin-right: 12px;
   color: @color1;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 #clear {
