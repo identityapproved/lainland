@@ -16,9 +16,13 @@ Everything else is upstream, unmodified.
 
 ## Added here
 
-- `scalable/actions/lain-eye.svg` — EGYPTIAN HIEROGLYPH D005 (U+1307A), the
-  walker search prompt. Not from upstream: outlined from Noto Sans Egyptian
-  Hieroglyphs with Pango/cairo and stored as flattened path data, so the icon
-  needs no font at runtime and renders on a machine without that font
-  installed. Regenerate by re-running the outline step if the glyph or size
-  ever changes; there is no build system for it.
+- `scalable/actions/lain-eye.svg` — U+1F441 EYE, the walker search prompt. Not
+  from upstream: outlined from Noto Emoji Bold with Pango/cairo and stored as
+  flattened path data, so the icon needs no font at runtime and renders on a
+  machine without that font installed. Regenerate by re-running the outline step
+  if the glyph or size ever changes; there is no build system for it.
+
+  It briefly used EGYPTIAN HIEROGLYPH D005 (U+1307A) instead. That glyph is fine
+  strokes and put only 15% ink in an 18px box, so it read as a smudge; the eye
+  is 38%. If more weight is ever wanted, Font Awesome 6 Free Solid carries the
+  same codepoint as a filled eye at 59%.
