@@ -1,0 +1,19 @@
+# .zshrc — interactive shells only. Thin loader.
+#
+# zsh load order: .zshenv (all shells) -> .zprofile (login: PATH, mango exec)
+#                 -> .zshrc (this file) -> .zlogin.
+#
+# Real config lives in $XDG_CONFIG_HOME/zsh/rc.d/*.zsh, sourced below in filename
+# order (00, 10, 20 …). The old loader resolved this file's own path with
+# ${(%):-%x}:A to find rc.d beside it in the repo; under chezmoi the repo layout
+# no longer mirrors $HOME, so rc.d is addressed by its XDG target path instead.
+# To extend, drop a NN-name.zsh into rc.d/ — no edit here needed.
+
+_rcd="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/rc.d"
+for _f in "$_rcd"/*.zsh(N); do
+  source "$_f"
+done
+unset _rcd _f
+
+# opencode
+export PATH=$HOME/.opencode/bin:$PATH

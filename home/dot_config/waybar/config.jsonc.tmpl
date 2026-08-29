@@ -1,0 +1,210 @@
+// Waybar. chezmoi template -- edit config.jsonc.tmpl, not ~/.config/waybar/config.jsonc.
+//
+// Three modules have no portable name, so they are switched on .wm:
+//   workspaces  mango: ext/workspaces (mango implements ext-workspace)
+//               hyprland: hyprland/workspaces   sway: sway/workspaces
+//   window      mango has no waybar module; scripts/mango-ipc.py feeds
+//               custom/window over mmsg. hyprland/sway have native ones.
+//   language    same story -- custom/language via mango-ipc on mango.
+//
+// Everything else below is compositor-agnostic and shared by every host.
+{
+    "layer": "top",
+    "position": "top",
+    "height": 22,
+    "spacing": 6,
+
+    "modules-left": [
+        {{ if eq .wm "mango" }}"ext/workspaces"{{ else if eq .wm "hyprland" }}"hyprland/workspaces"{{ else }}"sway/workspaces"{{ end }},
+        "custom/timer",
+        "custom/timewarrior",
+        "custom/media",
+        "custom/spotify",
+        "custom/cava"
+    ],
+    "modules-center": [
+        {{ if eq .wm "mango" }}"custom/window"{{ else if eq .wm "hyprland" }}"hyprland/window"{{ else }}"sway/window"{{ end }}
+    ],
+    "modules-right": [
+        "custom/weather",
+        "custom/storage",
+        "custom/tasks",
+        "custom/nb",
+        "cpu",
+        "memory",
+        "custom/temperature",
+        "wireplumber",
+        "custom/mic",
+        "tray",
+        {{ if eq .wm "mango" }}"custom/language"{{ else if eq .wm "hyprland" }}"hyprland/language"{{ else }}"sway/language"{{ end }},
+        "clock",
+        "custom/power"
+    ],
+
+{{ if eq .wm "mango" }}    "ext/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "sort-by-id": true
+    },
+{{ else if eq .wm "hyprland" }}    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "sort-by-number": true
+    },
+{{ else }}    "sway/workspaces": {
+        "format": "{name}",
+        "disable-scroll": true
+    },
+{{ end }}{{ if eq .wm "mango" }}    "custom/window": {
+        "exec": "~/.config/scripts/mango-ipc.py title --max 80",
+        "escape": false,
+        "tooltip": false
+    },
+    "custom/language": {
+        "exec": "~/.config/scripts/mango-ipc.py layout",
+        "tooltip": false
+    },
+{{ else if eq .wm "hyprland" }}    "hyprland/window": {
+        "max-length": 80,
+        "separate-outputs": true
+    },
+    "hyprland/language": {
+        "format": "{short}"
+    },
+{{ else }}    "sway/window": {
+        "max-length": 80
+    },
+    "sway/language": {
+        "format": "{short}"
+    },
+{{ end }}    "custom/timer": {
+        "exec": "~/.config/waybar/scripts/pomodoro_timer.sh",
+        "return-type": "json",
+        "format": "{}",
+        "on-click": "~/.config/waybar/scripts/pomodoro_timer.sh click",
+        "on-click-right": "~/.config/waybar/scripts/pomodoro_timer.sh right",
+        "on-click-middle": "~/.config/waybar/scripts/pomodoro_timer.sh middle",
+        "on-scroll-up": "~/.config/waybar/scripts/pomodoro_timer.sh down",
+        "on-scroll-down": "~/.config/waybar/scripts/pomodoro_timer.sh up",
+        "tooltip": true,
+        "escape": true
+    },
+    "custom/timewarrior": {
+        "exec": "~/.config/waybar/modules/timewarrior.py",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 5,
+        "on-click": "~/.config/waybar/modules/timewarrior.py toggle",
+        "on-click-middle": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/timewarrior.py prompt",
+        "on-click-right": "kitty --title termfloat --hold --override tab_bar_style=hidden -e ~/.config/waybar/modules/timewarrior.py dashboard",
+        "tooltip": true
+    },
+
+    "custom/media": {
+        "format": "{}",
+        "return-type": "json",
+        "max-length": 40,
+        "exec": "~/.config/waybar/modules/media.sh",
+        "tooltip": false
+    },
+    "custom/spotify": {
+        "exec": "~/.config/waybar/modules/spotify.sh",
+        "return-type": "json",
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/cava": {
+        "exec": "~/.config/waybar/scripts/cava.sh",
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/weather": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1800,
+        "exec": "~/.config/waybar/modules/weather.sh"
+    },
+    "custom/storage": {
+        "format": "  {}",
+        "format-alt": "{percentage}% ",
+        "format-alt-click": "click-right",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/storage.sh"
+    },
+    "custom/tasks": {
+        "format": "🗒{}",
+        "interval": 20,
+        "exec": "task rc.color=off rc.verbose=nothing +PENDING count | tr -dc '0-9' | xargs -I{} echo ' {}'",
+        "on-click": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/open_taskwarrior_tui.sh",
+        "tooltip": false
+    },
+    "custom/nb": {
+        "format": "󰄬 {}",
+        "return-type": "json",
+        "interval": 300,
+        "signal": 9,
+        "exec": "~/.config/waybar/modules/nb.sh",
+        "on-click": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/nb-picker.sh",
+        "on-click-right": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/nb-capture.sh",
+        "tooltip": true
+    },
+    "custom/mail": {
+        "format": " {}",
+        "format-alt": " {alt}",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/mail.py",
+        "exec-if": "test -f ~/.config/waybar/modules/mailsecrets.py"
+    },
+
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": false,
+        "on-click": "kitty --title termfloat -e htop -s PERCENT_CPU"
+    },
+    "memory": {
+        "format": "  {percentage}%",
+        "tooltip": false,
+        "on-click": "kitty --title termfloat -e htop -s PERCENT_MEM"
+    },
+    "custom/temperature": {
+        "format": "🌡{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/temperature.sh",
+        "interval": 10,
+        "tooltip": true
+    },
+    "wireplumber": {
+        "format": "  {volume}%",
+        "tooltip": true,
+        "tooltip-format": "{node_name}",
+        "on-click": "~/.config/waybar/scripts/audio-switch.sh next",
+        "on-click-middle": "~/.config/waybar/scripts/audio-switch.sh mute",
+        "on-click-right": "pavucontrol",
+        "scroll-step": 5
+    },
+    "custom/mic": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/toggle_mic.sh waybar",
+        "interval": 2,
+        "signal": 8,
+        "tooltip": false
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 6
+    },
+    "clock": {
+        "format": "{:%H:%M 󰃭 %d.%m.%Y}",
+        "tooltip": true,
+        "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>",
+        "on-click": "~/.config/waybar/scripts/popup_calendar.sh"
+    },
+    "custom/power": {
+        "format": " 󰐥 ",
+        "tooltip": false,
+        "on-click": "wlogout -b 6 -T 340 -B 340"
+    }
+}

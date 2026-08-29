@@ -1,0 +1,240 @@
+alias zshconfig="nvim ~/.zshrc"
+alias aliasconfig="nvim ~/.aliases"
+alias tmuxconfig="nvim ~/.config/tmux/tmux.conf"
+
+alias q="exit"
+alias rf="rm -rf"
+alias cat="bat --paging=never"
+alias c="clear"
+
+# Full Gentoo system update (eix-sync = emerge --sync + eix-update)
+sysup() {
+  doas eix-sync &&
+  eselect news read &&
+  doas emerge -auDN @world &&
+  doas emerge --depclean --ask &&
+  doas dispatch-conf
+}
+
+# eix
+alias es='eix'
+alias esu='doas eix-update'
+
+# equery
+alias eqf='equery f'   # files owned by package
+alias eqb='equery b'   # which package owns a file
+alias eql='equery l'   # list installed matching pattern
+alias eqd='equery d'   # reverse deps
+alias equ='equery u'   # USE flags for package
+alias eqs='equery s'   # package size
+
+# gentoolkit
+alias rr='doas revdep-rebuild'
+alias eclean='doas eclean distfiles'
+
+alias v='nvim'
+alias yz='yazi'
+alias lz='lazygit'
+alias tl='task list'
+alias himalaya='firejail himalaya-tui'
+
+# ProtonVPN over raw WireGuard. Configs live in /etc/wireguard (dir 755, keys 600).
+# wg-quick needs root -> interactive `doas` only; no passwordless rules.
+#   vpn up [name]   pick (fzf) or name a server and connect
+#   vpn upr [filt]  connect to a random server, optionally filtered (e.g. `vpn upr FI`)
+#   vpn down        tear down the active tunnel
+#   vpn list        list available servers
+#   vpn status      show the active interface/endpoint
+vpn() {
+  local dir=/etc/wireguard
+# local tsnet=100.64.0.0/10 tstable=52 tsprio=5000   # pin tailnet out tailscale0, above Proton's rules
+  local tsnet=100.64.0.0/10 tstable=52 tsprio=4990
+  local cur; cur=$(ip -o link show type wireguard 2>/dev/null | awk -F': ' 'NR==1{print $2}')
+  case "${1:-status}" in
+    list)
+      for f in "$dir"/*.conf(N); do print -r -- "${f:t:r}"; done
+      ;;
+    up|upr)
+      local name="${2:-}"
+      if [ "$1" = upr ]; then
+        local -a pool
+        pool=("$dir"/*${2:-}*.conf(N:t:r))
+        (( $#pool )) || { echo "no server matches: ${2:-*}" >&2; return 1; }
+        name=$pool[$((RANDOM % $#pool + 1))]
+        echo "random: $name"
+      elif [ -z "$name" ]; then
+        name=$(for f in "$dir"/*.conf(N); do print -r -- "${f:t:r}"; done \
+          | fzf --prompt='proton > ' --header='enter: connect / esc: cancel')
+      fi
+      [ -n "$name" ] || return 0
+      [ -f "$dir/$name.conf" ] || { echo "unknown server: $name" >&2; return 1; }
+      [ -n "$cur" ] && doas wg-quick down "$cur"
+      doas wg-quick up "$name" || return
+      # keep the tailnet reachable while Proton owns the default route (re-add idempotently)
+      doas sh -c "ip rule del to $tsnet priority $tsprio 2>/dev/null; ip rule add to $tsnet lookup $tstable priority $tsprio"
+      ;;
+    down)
+      if [ -n "$cur" ]; then
+        doas sh -c "wg-quick down '$cur'; ip rule del to $tsnet priority $tsprio 2>/dev/null"
+      else
+        echo "no active tunnel"
+      fi
+      ;;
+    status)
+      if [ -n "$cur" ]; then
+        local ep; ep=$(ip route show | awk '$1 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ && /via/ {print $1; exit}')
+        echo "up: ${cur#wg-} (endpoint ${ep:-?})"
+      else
+        echo "down"
+      fi
+      ;;
+    *) echo "usage: vpn {up [name]|upr [filter]|down|list|status}" >&2; return 2 ;;
+  esac
+}
+
+alias mpvpl='find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-'
+alias fbook='find ~/* -type d \( -name "books" \) -exec find {} -type f \( -name "*.pdf" -o -name "*.epub" -o -name "*.mobi" -o -name "*.cbz" -o -name "*.cbr" \) \; | fzf --height 40% --layout reverse --border --no-preview | xargs -r -I {} sh -c "zathura \"{}\" &"'
+
+# --- fzf helpers (ported from fish) ---------------------------------------
+# pick a command from the completion table, then act on it
+fman() {
+  local cmd
+  cmd=$(print -rl -- ${(k)commands} | sort -u | fzf --height 40% --layout reverse --border --no-preview) \
+    && man "$cmd"
+}
+
+ftldr() {
+  if (( $# > 0 )); then
+    tldr "$@"
+    return
+  fi
+  local cmd
+  cmd=$(print -rl -- ${(k)commands} | sort -u | fzf --height 40% --layout reverse --border --no-preview) \
+    && tldr "$cmd"
+}
+
+# fuzzy-pick a path under $HOME and cd into its directory
+fcd() {
+  cd ~ || return
+  local target
+  target=$(fzf | sed 's:/[^/]*$::') && [[ -n "$target" ]] && cd "$target"
+}
+
+# fuzzy-pick a file and open/cat/bat it
+fv()   { local f; f=$(fzf) && [[ -n "$f" ]] && nvim "$f"; }
+fcat() { local f; f=$(find . -type f | fzf) && [[ -n "$f" ]] && cat "$f"; }
+fbat() { local f; f=$(find . -type f | fzf) && [[ -n "$f" ]] && bat "$f"; }
+
+# scratch markdown buffer in $TMPDIR
+vt() { nvim "$(mktemp /tmp/vt-XXXXXX.md)"; }
+
+# fuzzy alias / git-alias browsers
+falias() { alias | fzf; }
+galias() { git config --get-regexp '^alias\.' | fzf; }
+
+# --- ssh / misc -----------------------------------------------------------
+alias kssh="kitty +kitten ssh"
+alias cr="codex resume"
+alias virsh="virsh -c qemu:///system"
+alias lsblko="lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINT,MODEL"
+alias clipc="wl-copy </dev/null"
+alias make="make -j\$(nproc)"
+alias ninja="ninja -j\$(nproc)"
+alias n="ninja"
+
+# --- taskwarrior fuzzy search ---------------------------------------------
+tws() {
+  command -v fzf >/dev/null || { echo "tws requires fzf"; return 1; }
+  local query="$*" selected id
+  selected=$(task rc.color=off rc._forcecolor=no rc.defaultwidth=1000 list | awk '
+      NR <= 3 { next }
+      /^[[:space:]]*$/ { next }
+      /^[[:space:]]*[0-9]+ tasks?[[:space:]]*$/ { next }
+      { print }
+    ' | fzf --query="$query" --height 80% --layout=reverse --border \
+        --header="Taskwarrior search") || return
+  id=$(printf '%s\n' "$selected" | awk '{print $1}')
+  [[ -n "$id" ]] && task "$id" info
+}
+
+# --- pipewire: pick default sink ------------------------------------------
+wptui-default-sink() {
+  local candidates=() line id selected
+  while IFS= read -r line; do
+    id=${line%% *}
+    if wpctl inspect "$id" 2>/dev/null | grep -q 'media.class = "Audio/Sink"'; then
+      candidates+=("$line")
+    fi
+  done < <(wpctl status --name | awk '
+      /Sinks:/   { in_audio_sinks=1; next }
+      /Sources:/ { in_audio_sinks=0 }
+      /Filters:/ { in_filters=1; next }
+      /Streams:/ { in_filters=0 }
+      (in_audio_sinks || in_filters) && /[0-9]+\./
+    ' | sed -E 's/.* ([0-9]+)\.[[:space:]]+(.*)/\1 \2/')
+  selected=$(printf '%s\n' "${candidates[@]}" | fzf --prompt='Select sink > ') || return
+  id=${selected%% *}
+  [[ -n "$id" ]] && wpctl set-default "$id"
+}
+
+# --- podman + fzf ---------------------------------------------------------
+pstart() {
+  local selected
+  selected=$(podman ps -a --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" \
+    | fzf --height 40% --reverse --border --header "select container to start")
+  [[ -z "$selected" ]] && return
+  podman start "$(echo "$selected" | awk '{print $1}')"
+}
+
+pstop() {
+  local selected
+  selected=$(podman ps --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" \
+    | fzf --height 40% --reverse --border --header "select container to stop")
+  [[ -z "$selected" ]] && return
+  podman stop "$(echo "$selected" | awk '{print $1}')"
+}
+
+prm() {
+  local selected
+  selected=$(podman ps -a --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}" \
+    | fzf --height 40% --reverse --border --header "select container to remove")
+  [[ -z "$selected" ]] && return
+  podman rm "$(echo "$selected" | awk '{print $1}')"
+}
+
+# --- process picker (view PID -> clipboard, or kill) ----------------------
+pz() {
+  local sort_option="" header="Search processes" action="view"
+  while (( $# > 0 )); do
+    case "$1" in
+      -m|--mem)  sort_option="--sort=-%mem"; header="Search by memory usage" ;;
+      -k|--kill) action="kill"; header="Kill process" ;;
+      -h|--help)
+        echo "Usage: pz [-m|--mem] [-k|--kill]"
+        echo "  -m  Sort by memory usage"
+        echo "  -k  Kill selected process"
+        return 0 ;;
+    esac
+    shift
+  done
+
+  local selection pid confirm
+  selection=$(ps aux $sort_option | fzf --ansi --header="$header" \
+    --layout=reverse --height=80% \
+    --preview='pid=$(echo {} | awk "{print \$2}"); \
+      ps -p $pid -o pid= -o ppid= -o user= -o %cpu= -o %mem= -o etime= -o cmd=') || return
+  pid=$(echo "$selection" | awk '{print $2}')
+  [[ -z "$pid" ]] && return 1
+
+  if [[ "$action" == kill ]]; then
+    read "confirm?Kill process PID $pid? [y/N]: "
+    if [[ "$confirm" == [Yy] ]]; then
+      doas kill -9 "$pid" && echo "Process $pid killed."
+    else
+      echo "Canceled."
+    fi
+  else
+    echo -n "$pid" | wl-copy
+    echo "PID $pid copied to clipboard."
+  fi
+}

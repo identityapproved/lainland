@@ -1,0 +1,66 @@
+/*
+ * gtk.css — translucent chrome for Liferea's GTK3 widgets.
+ *
+ * NOT loaded by GTK itself. The transparency plugin (plugins/transparency.py)
+ * loads this via Gtk.CssProvider and installs it with add_provider_for_screen,
+ * which is process-local — so these rules reach Liferea and no other GTK3 app,
+ * without dropping anything into ~/.config/gtk-3.0/gtk.css.
+ *
+ * Colours come from the active GTK theme's named colours rather than literals,
+ * which is what makes ../gtk-3.0/gtk.css (the Lain override sheet) reach
+ * Liferea's chrome without being restated here. Palette: lain-colors.md.
+ *
+ * Alpha 0.85 matches kitty's background_opacity.
+ */
+
+/* The single layer that carries the alpha. */
+window#liferea-transparent {
+  background-color: alpha(@theme_bg_color, 0.85);
+  /* GTK's font-name is "Adwaita Sans 11" here, which matches nothing else in
+     the rice. Setting only the family keeps GTK's size, and inherits to the
+     menus, feed list and item list. Scoped to this window, so no other GTK
+     app is affected. */
+  font-family: "Iosevka Nerd Font";
+}
+
+/*
+ * Every widget stacked above the window must paint nothing. GTK composites
+ * these in order, so two 0.85 layers give an effective 0.978 and the window
+ * reads as solid — the transparency only survives if exactly one layer tints.
+ */
+window#liferea-transparent grid,
+window#liferea-transparent box,
+window#liferea-transparent paned,
+window#liferea-transparent separator,
+window#liferea-transparent notebook,
+window#liferea-transparent notebook > header,
+window#liferea-transparent notebook > header > tabs > tab,
+window#liferea-transparent notebook > stack,
+window#liferea-transparent scrolledwindow,
+window#liferea-transparent viewport,
+window#liferea-transparent toolbar,
+window#liferea-transparent statusbar,
+window#liferea-transparent headerbar,
+window#liferea-transparent treeview.view,
+window#liferea-transparent treeview.view header button {
+  background-color: transparent;
+  background-image: none;
+}
+
+/*
+ * Row states still need a fill or the feed and item lists lose all sense of
+ * where the cursor is once the wallpaper shows through.
+ */
+window#liferea-transparent treeview.view:hover {
+  background-color: alpha(@theme_base_color, 0.55);
+}
+
+window#liferea-transparent treeview.view:selected {
+  background-color: alpha(@theme_selected_bg_color, 0.85);
+  color: @theme_selected_fg_color;
+}
+
+/* Pane dividers vanish against a busy wallpaper without an explicit edge. */
+window#liferea-transparent paned > separator {
+  background-color: alpha(@borders, 0.6);
+}

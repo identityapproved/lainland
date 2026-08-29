@@ -1,0 +1,29 @@
+#compdef nb
+
+local -a nb_subcommands
+nb_subcommands=(
+  add archive bookmark browse completions copy count delete do edit env export
+  folders git help history import init list ls move notebooks open peek pin
+  plugins remote run search settings shell show status subcommands sync tasks
+  todo todos unarchive undo unset unpin update use version
+)
+
+if (( CURRENT == 2 )); then
+  _describe 'nb subcommand' nb_subcommands
+  return
+fi
+
+case "${words[2]}" in
+  help)
+    _describe 'nb subcommand' nb_subcommands
+    ;;
+  notebooks)
+    _values 'notebooks subcommand' add archive author current delete export import init open peek rename select show status unarchive use
+    ;;
+  bookmark)
+    _values 'bookmark subcommand' list edit delete open peek search url
+    ;;
+  *)
+    _files
+    ;;
+esac
