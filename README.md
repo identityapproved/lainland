@@ -34,7 +34,9 @@ home/                  chezmoi source root
   .chezmoiignore       template; the per-WM switch
   dot_config/...       -> ~/.config/...
   dot_local/share/...  -> ~/.local/share/... (wallpapers, liferea plugins)
-  dot_zshrc  dot_zshenv  dot_zprofile  dot_aliases
+  dot_themes/lain/     -> ~/.themes/lain      GTK2/3/4 theme
+  dot_icons/lainicons/ -> ~/.icons/lainicons  icon + cursor theme
+  dot_zshrc  dot_zshenv  dot_zprofile  dot_aliases  dot_gtkrc-2.0
 installers/            package installers, one per area (no linking; see below)
 gentoo/                mirror of this host's /etc/portage and local overlay
 monitoring/            auditd rules; host-level, not chezmoi-managed
@@ -116,7 +118,28 @@ through that document's Semantic Role Map rather than picking hexes by eye.
 | `mako` | Notification daemon, per-urgency colors |
 | `wlogout` | Logout/power menu |
 | `awww` | Wallpaper randomizer over the Lain set |
-| `gtk-3.0` / `gtk-4.0` | Adwaita-dark plus a Lain `gtk.css` named-color override |
+| `gtk` / `qt` | Full Lain GTK2/3/4 theme, icon and cursor set, and Qt palette — see below |
+
+### Toolkits
+
+The desktop is themed at the toolkit level, not just per-app, so GTK and Qt
+dialogs, file pickers and menus match the rest of the rice.
+
+| Piece | Target | Notes |
+|---|---|---|
+| `lain` GTK theme | `~/.themes/lain` | libadwaita recolor; GTK2, GTK3 and GTK4 |
+| `lainicons` | `~/.icons/lainicons` | icon overlay on AdwaitaLegacy, plus a full cursor set |
+| `gtk-3.0` / `gtk-4.0` / `.gtkrc-2.0` | `~/.config`, `~` | select the theme, icons, cursors, Iosevka |
+| `qt5ct` / `qt6ct` | `~/.config` | `colors/Lain.conf` palette, Iosevka, `lainicons` |
+| `xsettingsd` | `~/.config` | carries the theme to X11 clients under XWayland |
+| `nwg-look` | `~/.config` | GTK settings editor; its exports write back into this repo |
+| `xdg-desktop-portal` | `~/.config` | per-WM backend choice; `gtk` first so the Settings portal reaches Flatpak and Electron apps |
+
+Two details worth knowing. libadwaita ignores `gtk-theme-name` entirely, so
+`~/.config/gtk-4.0/gtk.css` is a one-line `@import` of the theme's own sheet —
+edit the theme, not that file. And Qt reads none of the GTK settings: the
+palette only applies with `QT_QPA_PLATFORMTHEME=qt6ct`, which `mango/config.conf`
+and `hypr/configs/envars.conf` both set.
 
 ### Terminal / shell
 
@@ -180,7 +203,8 @@ code, `Iosevka Nerd Font Propo` for UI chrome, `Iosevka Nerd Font` for prose.
 
 ## Thanks / Credits / Inspiration
 
-- **[Ascaniolamp/Hyprlain](https://github.com/Ascaniolamp/Hyprlain)** — the original Lain rice that started it all. Waybar layout and several theming ideas are heavily inspired by this work. Go star it.
+- **[Ascaniolamp/Hyprlain](https://github.com/Ascaniolamp/Hyprlain)** — the original Lain rice that started it all, and the direct source of a good deal of what is here. The waybar layout and much of the theming approach are inspired by it, and the GTK theme (`~/.themes/lain`), the icon and cursor set (`~/.icons/lainicons`) and the Qt color scheme (`qt5ct`/`qt6ct` `colors/Lain.conf`) are vendored from its `src/gtkqtxdg` tree, renamed and lightly adapted. Go star it.
+- **[uhm26](https://github.com/uhm26)** — the libadwaita recolor and the recolored Adwaita icons behind that GTK theme, via Hyprlain.
 - **[niraletter/waybar-timer](https://github.com/niraletter/waybar-timer)** — pomodoro/timer waybar module.
 - **[DreamMaoMao/mango](https://github.com/DreamMaoMao/mango)** — the dwl/wlroots compositor this desktop runs.
 - **Serial Experiments Lain** — Yoshitoshi ABe, Yasuyuki Ueda, Ryutaro Nakamura. Watch it.
