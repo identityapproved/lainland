@@ -65,7 +65,9 @@ so editing `~/.config/mango/config.conf` edits the repo. Two consequences:
 
 - `~/.config/liferea` and `~/.config/vesktop` stay real directories holding
   their own live state (feed lists, session data), with only the themed files
-  linked in. That is deliberate.
+  linked in. That is deliberate. Vesktop's `settings.json` and the desktop's
+  `mimeapps.list` are live state too and are not managed at all -- enable the
+  Lain theme once from Vesktop's Themes pane.
 - Templates cannot be symlinked. `waybar/config.jsonc.tmpl` is written out as a
   real file — edit the `.tmpl` in the repo and `chezmoi apply`.
 
