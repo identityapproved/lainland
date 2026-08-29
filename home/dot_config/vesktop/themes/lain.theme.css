@@ -11,9 +11,9 @@
 
 body {
 	/* font, change to '' for default discord font */
-	--font: "AdwaitaMono Nerd Font";
+	--font: "Iosevka Nerd Font Propo";
 	/* change to '' for default discord font */
-	--code-font: "AdwaitaMono Nerd Font";
+	--code-font: "IosevkaTerm Nerd Font Mono";
 	/* change to '' for default discord font */
 	font-weight: 300;
 	/* text font weight. 300 is light, 400 is normal. DOES NOT AFFECT BOLD TEXT */
