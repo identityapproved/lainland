@@ -40,6 +40,13 @@ home/dot_config/mimeapps.list
 home/dot_config/liferea/feedlist.opml*
 home/dot_config/liferea/user.js
 
+# Walker regenerates themes/default.* on every start -- it stamps them
+# "AUTO GENERATED. DO NOT EDIT." and means it, replacing whatever is at that
+# path, chezmoi's symlink included. Only the hand-written lain.* is ours.
+home/dot_config/walker/themes/default.css
+home/dot_config/walker/themes/default.toml
+home/dot_config/walker/themes/default_window.toml
+
 # Clipse: keep config/theme, ignore runtime state
 home/dot_config/clipse/clipboard_history.json
 home/dot_config/clipse/clipse.log
