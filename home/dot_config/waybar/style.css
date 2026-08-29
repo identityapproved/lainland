@@ -1,4 +1,4 @@
-/* Waybar — Lain. Palette: lain-colors.md (private repo). */
+/* Waybar — Lain. */
 @define-color lain-bg #000000;      /* backprimary   — window background */
 @define-color lain-bg-2 #1A1A1A;    /* backsecondary — raised surface */
 @define-color lain-fg #CE7688;      /* foreprimary   — chrome body text */

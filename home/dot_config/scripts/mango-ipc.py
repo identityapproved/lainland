@@ -30,7 +30,7 @@ import time
 
 # Inline Pango colors. A script label carries no CSS class, so waybar's
 # style.css cannot reach these -- they are set here and must be kept in step
-# with waybar/style.css by hand. Palette: lain-colors.md (private repo).
+# with waybar/style.css by hand.
 COLOR_ACTIVE = "#C1B48E"  # highprimary    - focused tag
 COLOR_OCCUPIED = "#CE7688"  # foreprimary  - has clients, not focused
 COLOR_EMPTY = "#804654"  # foresenary      - no clients

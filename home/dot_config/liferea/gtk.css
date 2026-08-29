@@ -1,15 +1,11 @@
 /*
  * gtk.css — translucent chrome for Liferea's GTK3 widgets.
  *
- * NOT loaded by GTK itself. The transparency plugin (plugins/transparency.py)
- * loads this via Gtk.CssProvider and installs it with add_provider_for_screen,
- * which is process-local — so these rules reach Liferea and no other GTK3 app,
- * without dropping anything into ~/.config/gtk-3.0/gtk.css.
- *
- * Colours come from the active GTK theme's named colours rather than literals,
- * which is what makes ../gtk-3.0/gtk.css (the Lain override sheet) reach
- * Liferea's chrome without being restated here. Palette: lain-colors.md.
- *
+ * NOT loaded by GTK itself: plugins/transparency.py installs it via
+ * Gtk.CssProvider + add_provider_for_screen, which is process-local, so it
+ * reaches Liferea and no other GTK3 app.
+ * Colours are the theme's named colours, not literals, so ../gtk-3.0/gtk.css
+ * reaches Liferea's chrome without being restated here.
  * Alpha 0.85 matches kitty's background_opacity.
  */
 
@@ -23,11 +19,8 @@ window#liferea-transparent {
   font-family: "Iosevka Nerd Font";
 }
 
-/*
- * Every widget stacked above the window must paint nothing. GTK composites
- * these in order, so two 0.85 layers give an effective 0.978 and the window
- * reads as solid — the transparency only survives if exactly one layer tints.
- */
+/* Widgets above the window must paint nothing: GTK composites in order, so two
+ * 0.85 layers give 0.978 and read as solid. Exactly one layer may tint. */
 window#liferea-transparent grid,
 window#liferea-transparent box,
 window#liferea-transparent paned,
@@ -47,10 +40,8 @@ window#liferea-transparent treeview.view header button {
   background-image: none;
 }
 
-/*
- * Row states still need a fill or the feed and item lists lose all sense of
- * where the cursor is once the wallpaper shows through.
- */
+/* Row states still need a fill, or the lists lose the cursor once the
+ * wallpaper shows through. */
 window#liferea-transparent treeview.view:hover {
   background-color: alpha(@theme_base_color, 0.55);
 }

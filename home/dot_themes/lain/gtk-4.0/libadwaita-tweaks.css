@@ -1,4 +1,4 @@
-/* Lain GTK theme. Palette: lain-colors.md (private repo).
+/* Lain GTK theme.
    Vendored from Ascaniolamp/Hyprlain (libadwaita recolor by uhm26); only the
    accent block below is changed, see the comment inside :root. */
 @define-color accent_bg_color #c1b48e;  /* highprimary — selection fill */

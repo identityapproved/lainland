@@ -47,7 +47,7 @@ set page-padding              0.2
 set pages-per-row             2
 set first-page-column         1:2
 
-# Lain palette (lain-colors.md)
+# Lain palette
 set default-fg                "#C1B48E"
 set default-bg                "#000000"
 

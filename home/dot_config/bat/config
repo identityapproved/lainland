@@ -1,4 +1,4 @@
-# bat config — Lain. Palette: lain-colors.md (private repo).
+# bat config — Lain.
 # Theme files live in ./themes; rebuild the cache after changes: bat cache --build
 --theme="Lain"
 --style="numbers,changes,header"

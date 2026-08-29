@@ -2,8 +2,8 @@
 
 `lain.json` puts OpenCode's TUI on the same Lain palette as the rest of this
 repo. Colors resolve through the palette's Semantic Role Map rather than being
-picked by eye; `lain-colors.md` itself is a symlink into a private repo and is
-gitignored here.
+picked by eye; the palette reference itself is symlinked in and not tracked
+here.
 
 Installed by chezmoi to `~/.config/opencode/themes/lain.json`. Selecting it is
 the other repo's job: [agentsdots](https://github.com/identityapproved/agentsdots)

@@ -1,28 +1,15 @@
 /*
  * liferea.css — Lain theme for Liferea's item view (WebKitGTK).
- * Palette: lain-colors.md (private repo).
  *
- * Liferea renders items as HTML in a WebKit view, so the GTK theme only
- * reaches the window chrome — feed list, item list, toolbar. Everything
- * inside the reading pane is styled here.
- *
- * The filename matters and is easy to get wrong: despite the shipped template
- * being called user.css, Liferea 1.16 reads the user override from
- * ~/.config/liferea/liferea.css. It seeds that path with the template on first
- * run. A user.css placed in the same directory is ignored outright (tested).
- *
- * It is loaded after Liferea's built-in stylesheet, so plain declarations win
- * on source order and nothing here needs !important. Redefining the custom
- * properties is enough — the shipped rules such as
- * `body { background: var(--body-bg) }` then resolve to these values.
- *
- * Liferea reads this once at startup — restart to see changes.
+ * GTK theme reaches only the chrome; the reading pane is styled here.
+ * Filename is load-bearing: Liferea 1.16 reads ~/.config/liferea/liferea.css,
+ * not user.css (a user.css beside it is ignored outright, tested).
+ * Loaded after the built-in sheet, so source order wins — redefining the custom
+ * properties is enough, no !important. Read once at startup; restart to apply.
  */
 
 :root {
-  /* The reading pane is long-form content, so it takes the ochre (High) ramp
-     for body text -- "ochre on black for content" in the palette's pairing
-     rule. Chrome around it (gtk.css, feed list) stays rose. */
+  /* Long-form content, so ochre on black for body text; chrome stays rose. */
   --lain-bg:          #000000;  /* backprimary */
   --lain-bg-dark:     #050505;  /* view-bg */
   --lain-rule:        #2A2A2A;  /* backtertiary  — borders, hr, table cells */
@@ -30,23 +17,20 @@
   --lain-fg-dim:      #A49978;  /* hightertiary  — blockquote, pre output */
   --lain-fg-dimmer:   #897F63;  /* highquinary   — metadata line */
   --lain-muted:       #804654;  /* foresenary    — category chips */
-  /* Links deviate from the role map, which puts Link/URL on highprimary: body
-     text already is highprimary here, so a link would be invisible. Rose on
-     black instead -- still legal, the ban is on rose *over an ochre fill*. */
+  /* Links deviate from the role map: body text is already highprimary, so a
+     link would vanish. Rose on black -- the ban is only on rose over ochre. */
   --lain-link:        #CE7688;  /* foreprimary */
   --lain-link-hover:  #FFB1C3;  /* accent */
   --lain-error:       #930006;  /* error-bg */
   --lain-code:        #FFDCB9;  /* success-fg */
 
-  /* These override the same names in Liferea's built-in sheet, including the
-     values it sets in its own prefers-color-scheme:dark block. */
+  /* Override the built-in sheet, including its prefers-color-scheme:dark. */
   --text-color:       var(--lain-fg);
   --text-color-light: var(--lain-fg-dimmer);
   --primary:          var(--lain-link);
-  /* Transparent so the translucent GTK window shows through. The alpha is
-     owned solely by gtk.css. This depends on the transparency plugin setting
-     an RGBA background on the WebKit view — without it, WebKit falls back to
-     its opaque white base and the pane renders white rather than see-through. */
+  /* Transparent so the GTK window shows through; alpha is owned by gtk.css.
+     Needs the transparency plugin's RGBA background on the WebKit view, or
+     WebKit falls back to its opaque white base. */
   --body-bg:          transparent;
   --box-bg:           rgba(26, 26, 26, 0.5);   /* backsecondary @ 50% */
   --box-text-color:   var(--lain-fg);
@@ -54,16 +38,15 @@
 
   --error-bg:         rgba(147, 0, 6, 0.18);   /* error-bg @ 18% */
 
-  /* Iosevka, matching the rest of the rice: the proportional cut for prose,
-     the Term cut's Mono variant for code, same as kitty. */
+  /* Iosevka: proportional for prose, Term Mono for code, same as kitty. */
   --body-font-family: "Iosevka Nerd Font", sans-serif;
   --mono-font-family: "IosevkaTerm Nerd Font Mono", monospace;
 
   color-scheme: dark;
 }
 
-/* Inverted, matching kitty's selection_background/selection_foreground rather
-   than the GTK accent — that differs between the Dark and Pink-Dark variants. */
+/* Inverted to match kitty's selection colors, not the GTK accent, which
+   differs between the Dark and Pink-Dark variants. */
 ::selection {
   color: var(--lain-bg);
   background: var(--lain-fg);
@@ -73,8 +56,7 @@ a[href]:hover {
   color: var(--lain-link-hover);
 }
 
-/* Item header: title in full fg, metadata line dimmed, separated from the
-   body by a rule so the two never read as one block of text. */
+/* Header: title full fg, metadata dimmed, ruled off from the body. */
 div.item header {
   border-bottom: 1px solid var(--lain-rule);
   padding-bottom: 0.5rem;
@@ -117,8 +99,7 @@ hr {
   margin: 1.5rem 0;
 }
 
-/* Feeds embed tables freely and the shipped stylesheet leaves them
-   unstyled, which renders as white-on-white cells in dark mode. */
+/* Feeds embed tables; the shipped sheet leaves them white-on-white in dark. */
 table {
   border-collapse: collapse;
   max-width: 100%;

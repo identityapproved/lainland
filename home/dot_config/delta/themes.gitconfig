@@ -4,7 +4,7 @@
     line-numbers = true
     side-by-side = true
 
-    # Lain palette from lain-colors.md
+    # Lain palette
     commit-style = "#C1B48E"
     file-style = "bold #CE7688"
     hunk-header-style = "file line-number syntax #965363"
