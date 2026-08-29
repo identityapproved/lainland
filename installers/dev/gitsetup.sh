@@ -4,8 +4,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 COMMON_LIB="$SCRIPT_DIR/../lib/common.sh"
-LAZYGIT_SRC="$ROOT_DIR/lazygit"
-DELTA_SRC="$ROOT_DIR/delta"
 
 if [ -f "$COMMON_LIB" ]; then
   # shellcheck source=/dev/null
@@ -21,17 +19,7 @@ echo "Installing Git tooling (git-delta, lazygit)..."
 install_pkg git-delta
 install_pkg lazygit
 
-if [ -d "$LAZYGIT_SRC" ]; then
-  link_config_dir "$LAZYGIT_SRC" "$HOME/.config/lazygit"
-else
-  echo "No lazygit config found. Skipping link."
-fi
-
-if [ -d "$DELTA_SRC" ]; then
-  link_config_dir "$DELTA_SRC" "$HOME/.config/delta"
-else
-  echo "No delta config found. Skipping link."
-fi
+# ~/.config/lazygit and ~/.config/delta are chezmoi-managed; nothing to link.
 
 # Prompt for user.name and user.email
 read -rp "Enter your Git user.name: " git_name

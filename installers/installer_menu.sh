@@ -12,7 +12,6 @@ scripts=(
   "fun/fun_tools_setup.sh"
   "gaming/gaming_setup.sh"
   "hardware/hardware_tools_setup.sh"
-  "linking/simlinking.sh"
   "monitoring/monitoring_tools_setup.sh"
   "hyprland/hyprland_tools_setup.sh"
   "hyprland/voice_input_setup.sh"
@@ -27,6 +26,8 @@ scripts=(
   "virtualization/containerization_setup.sh"
   "virtualization/virtmanager.sh"
   "virtualization/virtualboxinstall.sh"
+  "setup-keyd.sh"
+  "setup-liferea.sh"
 )
 
 run_script() {

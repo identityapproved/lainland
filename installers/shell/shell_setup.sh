@@ -5,9 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 COMMON_LIB="$SCRIPT_DIR/../lib/common.sh"
 
-ZSHRC_SRC="$ROOT_DIR/.zshrc"
-FISH_SRC="$ROOT_DIR/fish"
-DIRCOLORS_SRC="$ROOT_DIR/dircolors"
+# No *_SRC paths here any more: ~/.zshrc, ~/.config/fish and
+# ~/.config/dircolors are chezmoi-managed (home/ in this repo). These functions
+# install the shells and their plugin managers; `chezmoi apply` supplies the
+# configuration.
 
 if [ -f "$COMMON_LIB" ]; then
   # shellcheck source=/dev/null
@@ -17,29 +18,10 @@ else
   exit 1
 fi
 
-backup_path() {
-  local path="$1"
-  if [ -e "$path" ] || [ -L "$path" ]; then
-    mv "$path" "${path}.bak.$(date +%Y%m%d%H%M%S)"
-  fi
-}
-
 setup_zsh() {
   ensure_helper
   echo "Installing zsh..."
   install_pkg zsh
-
-  if [ -f "$ZSHRC_SRC" ]; then
-    echo "Configuring zsh..."
-    backup_path "$HOME/.zshrc"
-    cp "$ZSHRC_SRC" "$HOME/.zshrc"
-  else
-    echo "Warning: $ZSHRC_SRC not found. Skipping zsh config copy."
-  fi
-
-  if [ -d "$DIRCOLORS_SRC" ]; then
-    link_config_dir "$DIRCOLORS_SRC" "$HOME/.config/dircolors"
-  fi
 
   if [ -d "$HOME/.oh-my-zsh" ]; then
     bash "$SCRIPT_DIR/zsh_plugins.sh"
@@ -52,17 +34,6 @@ setup_fish() {
   ensure_helper
   echo "Installing fish..."
   install_pkg fish
-
-  if [ -d "$FISH_SRC" ]; then
-    echo "Configuring fish..."
-    link_config_dir "$FISH_SRC" "$HOME/.config/fish"
-  else
-    echo "Warning: $FISH_SRC not found. Skipping fish config copy."
-  fi
-
-  if [ -d "$DIRCOLORS_SRC" ]; then
-    link_config_dir "$DIRCOLORS_SRC" "$HOME/.config/dircolors"
-  fi
 
   echo "Adding fish vi keybindings and installing fisher + fzf.fish..."
   fish --no-config -c "grep -qx 'fish_vi_key_bindings' ~/.config/fish/config.fish; or echo 'fish_vi_key_bindings' >> ~/.config/fish/config.fish"

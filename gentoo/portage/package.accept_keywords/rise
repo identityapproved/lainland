@@ -1,0 +1,7 @@
+gui-apps/waybar ~amd64
+gui-apps/ironbar ~amd64
+gui-apps/eww ~amd64
+gui-apps/swayosd ~amd64
+gui-apps/walker ~amd64
+gui-libs/gtk4-layer-shell ~amd64
+gui-apps/wlogout ~amd64

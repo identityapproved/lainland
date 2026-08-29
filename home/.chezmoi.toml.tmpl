@@ -1,0 +1,18 @@
+{{/*
+   Asked once, at `chezmoi init`. The answers land in
+   ~/.config/chezmoi/chezmoi.toml and drive .chezmoiignore, so the same branch
+   produces a mango desktop here and a sway laptop there with no host detection
+   and no per-host branch.
+*/ -}}
+{{- $wm := promptStringOnce . "wm" "Window manager (mango/hyprland/sway)" -}}
+{{- $host := promptStringOnce . "host" "Short host name" -}}
+
+
+# Symlink mode: chezmoi links managed *files* back into this repo, so editing a
+# config in ~/.config edits the repo. Templates are the exception -- they cannot
+# be symlinked and are written out as real files.
+mode = "symlink"
+
+[data]
+wm = {{ $wm | quote }}
+host = {{ $host | quote }}

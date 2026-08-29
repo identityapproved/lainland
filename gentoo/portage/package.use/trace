@@ -1,0 +1,2 @@
+dev-debug/strace elfutils -unwind 
+dev-debug/ltrace elfutils -unwind 

@@ -68,29 +68,17 @@ ask_yes() {
   [[ "$answer" =~ ^([Yy]|yes)$ ]]
 }
 
+# Config linking is chezmoi's job now, not the installers'. The repo no longer
+# has top-level per-app directories to link from -- they live under
+# home/dot_config/ as a chezmoi source tree, applied with:
+#
+#   chezmoi init --apply <this repo>
+#
+# The call sites below are left in place because they document which installer
+# owns which config; this stub keeps them harmless. Delete a call only when the
+# installer itself goes away.
 link_config_dir() {
-  local src="$1"
-  local dest="$2"
-
-  if [ ! -d "$src" ]; then
-    echo "Warning: $src not found. Skipping."
-    return 0
-  fi
-
-  mkdir -p "$HOME/.config"
-  if [ -L "$dest" ]; then
-    local current
-    current="$(readlink -f "$dest" || true)"
-    if [ "$current" = "$src" ]; then
-      echo "Config already linked: $dest -> $src"
-      return 0
-    fi
-  fi
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    local backup="${dest}.bak.$(date +%Y%m%d%H%M%S)"
-    mv "$dest" "$backup"
-    echo "Backed up existing config: $dest -> $backup"
-  fi
-  ln -s "$src" "$dest"
-  echo "Linked config: $dest -> $src"
+  local dest="${2:-}"
+  echo "Skipping link for ${dest:-config}: linking is handled by chezmoi apply."
+  return 0
 }

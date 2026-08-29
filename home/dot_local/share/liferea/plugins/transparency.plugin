@@ -1,0 +1,8 @@
+[Plugin]
+Module=transparency
+Loader=python
+IAge=2
+Name=Transparency
+Description=Translucent window background, including the WebKit item view
+Authors=identityapproved
+Copyright=Copyright © 2026 identityapproved

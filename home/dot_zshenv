@@ -1,0 +1,23 @@
+# .zshenv — sourced for EVERY zsh (login, interactive, scripts), before all else.
+# Keep it minimal and side-effect-free: only environment that non-interactive
+# shells and scripts also need. Interactive-only setup lives in rc.d/.
+#
+# PATH is intentionally NOT here: Gentoo's /etc/zsh/zprofile runs `env-update`,
+# which resets PATH *after* .zshenv is read. PATH lives in .zprofile.
+
+export EDITOR="nvim"
+export MANPAGER="nvim +Man!"
+export GOPATH="$HOME/go"
+export XDG_DATA_HOME="$HOME/.local/share"
+export AGENTSDOTS_ROOT="$HOME/github/agentsdots"
+export ZK_NOTEBOOK_DIR="$HOME/zettelnotes"
+export ZETTEL_DIR="$HOME/zettelnotes"
+export BAT_THEME="Lain"   # used by bat, the cat= alias, and fzf previews
+
+# zoxide's doctor false-positives in snapshot-restored shells (Claude Code and
+# friends re-source a dump of our *functions* into a fresh `zsh -c`, which brings
+# back zoxide's cd wrapper but not the chpwd_functions array it hooks into), so
+# every `cd` there prints the "initialize zoxide last" nag. Init order is already
+# correct — see rc.d/50-tools.zsh. Silence it for non-interactive shells only, so
+# a genuine ordering regression still shows up in a real terminal.
+[[ -o interactive ]] || export _ZO_DOCTOR=0

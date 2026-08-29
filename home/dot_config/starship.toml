@@ -1,0 +1,174 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+command_timeout = 2000
+
+format = """
+[](fg:color_bg1)\
+$os\
+$username\
+$hostname\
+[ ](fg:color_bg1 bg:color_bg2)\
+$directory\
+[ ](fg:color_bg2 bg:color_bg3)\
+$git_branch\
+$git_status\
+[ ](fg:color_bg3 bg:color_bg4)\
+$c\
+$dotnet\
+$java\
+$kotlin\
+$nodejs\
+[ ](fg:color_bg4 bg:color_bg5)\
+$cmd_duration\
+[ ](fg:color_bg5)\
+\n$character\
+"""
+
+palette = "lain"
+
+# Lain. Palette: lain-colors.md (private repo).
+# The powerline gradient walks the dark tail of the Fore (rose) ramp, stepping
+# down into the terminal background (backprimary #000000) so the last separator
+# disappears into the prompt line.
+#
+# color_blue / color_red / color_white keep their upstream names -- starship's
+# module styles below reference them -- but carry palette roles, not hues:
+# nothing in Lain is blue. blue = highprimary (accent/active), red = accent
+# (peak rose, error), white = foreprimary (chrome body text), gray =
+# foresenary (disabled/comment).
+[palettes.lain]
+color_bg1 = "#804654"   # foresenary
+color_bg2 = "#6F3D49"   # foreseptenary
+color_bg3 = "#5D333C"   # foreoctonary
+color_bg4 = "#381E24"   # foredecenary
+color_bg5 = "#1D0F12"   # foreduodenary
+
+color_blue = "#C1B48E"  # highprimary  — accent, active
+color_gray = "#804654"  # foresenary   — dimmed
+color_red = "#FFB1C3"   # accent       — error, peak rose
+color_white = "#CE7688" # foreprimary  — body text
+
+[character]
+error_symbol = "[❯](bold color_red)"
+success_symbol = "[❯](bold color_blue)"
+
+[cmd_duration]
+format = "[$duration](bg:color_bg5 fg:color_gray)"
+min_time = 500
+
+[directory]
+style = "bg:color_bg2 fg:color_white"
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:color_bg3 fg:color_blue"
+format = "[$symbol $branch]($style)"
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+deleted = ""
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+format = '[( $all_status$ahead_behind)]($style)'
+style = "bold bg:color_bg3 fg:color_red"
+
+[hostname]
+format = "[@$hostname]($style)"
+ssh_only = true
+ssh_symbol = " "
+style = "bg:color_bg1 fg:color_white"
+
+[os]
+format = "[$symbol]($style)"
+style = "bg:color_bg1 fg:color_white"
+disabled = false
+
+[username]
+disabled = false
+format = "[$user]($style)"
+show_always = false
+style_root = "bg:color_bg1 fg:color_red"
+style_user = "bg:color_bg1 fg:color_white"
+
+# Code symbols. Upstream used each language's brand color; those are all blue,
+# green or violet and have no home in Lain, so the five walk distinguishable
+# steps of the High and Fore ramps instead.
+[c]
+format = '[$symbol]($style)'
+style = "bg:color_bg4 fg:#C1B48E"  # highprimary
+symbol = " "
+
+[dotnet]
+format = '[$symbol]($style)'
+style = "bg:color_bg4 fg:#A49978"  # hightertiary
+symbol = " "
+
+[java]
+format = '[$symbol]($style)'
+style = "bg:color_bg4 fg:#CE7688"  # foreprimary
+symbol = " "
+
+[kotlin]
+format = '[$symbol]($style)'
+style = "bg:color_bg4 fg:#A05969"  # foretertiary
+symbol = " "
+
+[nodejs]
+style = "bg:color_bg4 fg:#897F63"  # highquinary
+format = '[$symbol($version)]($style)'
+symbol = " "
+
+# OS Symbols
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "

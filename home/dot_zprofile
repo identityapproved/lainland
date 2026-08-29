@@ -1,0 +1,51 @@
+# Gentoo's /etc/zsh/zprofile resets PATH — put custom paths here, not in .zshrc
+
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"  # `go install` binaries (clipse, catnip, …)
+
+# Language servers shared with the agent harnesses. Neovim, OpenCode and Claude
+# Code all resolve LSP binaries from PATH, so appending these three dirs lets
+# all three run one set of servers with nothing installed system-wide:
+#   mason/bin          — the primary source: rust-analyzer, ruff, clangd,
+#                        lua-language-server, marksman, zls, taplo, …
+#   opencode/bin       — release binaries OpenCode downloaded itself
+#   opencode/node_…    — npm-only servers OpenCode installed with its embedded
+#                        Bun (bash-language-server, typescript-language-server).
+#                        Note this one lives under .config, not .cache.
+# Appended, not prepended, so real system packages (e.g. the portage clangd)
+# still win over Mason's copies. Same reasoning as nvim's lua/config/options.lua.
+export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"
+export PATH="$PATH:$HOME/.cache/opencode/bin"
+export PATH="$PATH:$HOME/.config/opencode/node_modules/.bin"
+
+# One Python language server for all three tools. Neovim starts Mason's
+# basedpyright directly; OpenCode and Claude Code both look for the name
+# `pyright-langserver`. basedpyright is a pyright fork -- its dist file is
+# literally pyright-langserver.js -- and installs via pip rather than npm, so
+# it works on a host with no node. Pointing the expected name at it keeps one
+# server everywhere and stops OpenCode fetching a second copy.
+# Idempotent, and self-heals on a machine where Mason has just installed it.
+if [[ -x "$HOME/.local/share/nvim/mason/bin/basedpyright-langserver" \
+   && ! -e "$HOME/.local/bin/pyright-langserver" ]]; then
+  mkdir -p "$HOME/.local/bin"
+  ln -s "$HOME/.local/share/nvim/mason/bin/basedpyright-langserver" \
+        "$HOME/.local/bin/pyright-langserver"
+fi
+
+# Flatpak exports must be on XDG_DATA_DIRS before the compositor starts, so launchers
+# that inherit mango's env (walker) can index flatpak .desktop files. Single source of
+# truth — do not also set XDG_DATA_DIRS in mango/config.conf (it would clobber this).
+export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+# GPU OpenCL: enable Rusticl on radeonsi (RX 580) for darktable et al.
+export RUSTICL_ENABLE=radeonsi
+
+# nb notebooks. Set before the mango exec below so everything the compositor
+# spawns (waybar's nb module, terminals) sees the same notebook dir.
+export NB_DIR="$HOME/nb"
+
+# Auto-start mango on tty1
+if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+    exec dbus-run-session mango
+fi

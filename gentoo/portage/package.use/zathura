@@ -1,0 +1,5 @@
+x11-libs/cairo X
+# required by app-containers/containers-common-0.64.2::gentoo
+# required by app-containers/podman-5.8.2::gentoo
+# required by app-containers/podman (argument)
+>=net-firewall/iptables-1.8.13 nftables

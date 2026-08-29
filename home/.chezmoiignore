@@ -1,0 +1,14 @@
+{{/*
+   Target paths listed here are NOT applied on this machine. Evaluated per
+   machine against the data in ~/.config/chezmoi/chezmoi.toml, so one branch
+   serves every host.
+
+   Everything not listed is applied everywhere: configs for tools that are not
+   installed (fish, tofi, wofi, sioyek, spotify, aerc ...) are inert, and land
+   ready for the machine that does have them. Only the window-manager trees are
+   mutually exclusive, so only they are switched.
+*/ -}}
+{{ if ne .wm "mango"    }}.config/mango{{ end }}
+{{ if ne .wm "hyprland" }}.config/hypr{{ end }}
+{{ if ne .wm "sway"     }}.config/sway{{ end }}
+

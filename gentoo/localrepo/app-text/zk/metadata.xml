@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<!-- maintainer-needed -->
+	<longdescription lang="en">
+		zk is a command-line tool helping you to maintain a plain text
+		Zettelkasten or personal wiki. Notes are Markdown files indexed in a
+		SQLite database with full-text search, and can be queried, linked and
+		browsed interactively.
+	</longdescription>
+	<use>
+		<flag name="fzf">Pull in <pkg>app-shells/fzf</pkg> for zk's interactive note browser</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">zk-org/zk</remote-id>
+		<bugs-to>https://github.com/zk-org/zk/issues</bugs-to>
+		<doc>https://zk-org.github.io/zk/</doc>
+	</upstream>
+</pkgmetadata>

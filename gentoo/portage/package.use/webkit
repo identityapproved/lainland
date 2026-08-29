@@ -1,0 +1,4 @@
+>=media-libs/harfbuzz-12.3.2 icu
+>=media-libs/gst-plugins-base-1.24.13-r1 opengl
+>=media-libs/vulkan-loader-1.4.341.0 X
+net-libs/webkit-gtk keyring

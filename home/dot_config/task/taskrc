@@ -1,0 +1,9 @@
+# Taskwarrior config (from hyprarchdots, adapted for this host).
+# Lives in the repo and is symlinked to ~/.config/task (XDG location task 3.x reads).
+data.location=~/taskwarrior/task
+news.version=3.4.2
+
+pager=bat --paging=always
+editor=nvim -f
+
+include ~/.config/task/themes/lain-256.theme
