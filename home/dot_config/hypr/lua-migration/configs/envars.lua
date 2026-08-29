@@ -12,10 +12,10 @@ local env = {
     { "QT_WAYLAND_DISABLE_WINDOWDECORATION", "1" },
     { "ELECTRON_OZONE_PLATFORM_HINT", "wayland" },
     { "SWAPPY_DIR", "$HOME/drives/kodak/pics/screenshots" },
-    { "XCURSOR_SIZE", "23" },
-    { "XCURSOR_THEME", "Bibata-Modern-Ice" },
+    { "XCURSOR_SIZE", "24" },
+    { "XCURSOR_THEME", "lainicons" },
     { "WLR_NO_HARDWARE_CURSORS", "0" },
-    { "GTK_THEME", "Adwaita:dark" },
+    { "GTK_THEME", "lain" },
     { "MOZ_ENABLE_WAYLAND", "1" },
     { "MOZ_DBUS_REMOTE", "1" },
 }

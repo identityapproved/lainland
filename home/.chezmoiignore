@@ -12,3 +12,12 @@
 {{ if ne .wm "hyprland" }}.config/hypr{{ end }}
 {{ if ne .wm "sway"     }}.config/sway{{ end }}
 
+{{/*
+   xdg-desktop-portal reads $XDG_CURRENT_DESKTOP-portals.conf, and each
+   compositor sets a different value: mango -> wlroots, hyprland -> Hyprland,
+   sway -> sway. Only the matching one is installed.
+*/ -}}
+{{ if ne .wm "mango"    }}.config/xdg-desktop-portal/wlroots-portals.conf{{ end }}
+{{ if ne .wm "hyprland" }}.config/xdg-desktop-portal/hyprland-portals.conf{{ end }}
+{{ if ne .wm "sway"     }}.config/xdg-desktop-portal/sway-portals.conf{{ end }}
+

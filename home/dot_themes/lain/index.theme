@@ -1,0 +1,6 @@
+[X-GNOME-Metatheme]
+Name=lain
+Type=X-GNOME-Metatheme
+Comment=Lain GTK theme — a libadwaita recolor, from Ascaniolamp/Hyprlain
+Encoding=UTF-8
+GtkTheme=lain
