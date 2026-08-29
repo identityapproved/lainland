@@ -152,7 +152,17 @@ dialogs, file pickers and menus match the rest of the rice.
 | `nwg-look` | `~/.config` | GTK settings editor; its exports write back into this repo |
 | `xdg-desktop-portal` | `~/.config` | per-WM backend choice; `gtk` first so the Settings portal reaches Flatpak and Electron apps |
 
-Two details worth knowing. libadwaita ignores `gtk-theme-name` entirely, so
+One step is not a file. GTK3 apps prefer `org.gnome.desktop.interface`
+GSettings keys over `settings.ini` whenever a dconf backend is present, so a
+theme set only in `settings.ini` is silently ignored and the old one keeps
+rendering. dconf cannot be checked in; `installers/setup-gtk-qt.sh` is the
+reproducible record of those keys. Run it once per machine:
+
+```bash
+sh installers/setup-gtk-qt.sh
+```
+
+Two more details worth knowing. libadwaita ignores `gtk-theme-name` entirely, so
 `~/.config/gtk-4.0/gtk.css` is a one-line `@import` of the theme's own sheet —
 edit the theme, not that file. And Qt reads none of the GTK settings: the
 palette only applies with `QT_QPA_PLATFORMTHEME=qt6ct`, which `mango/config.conf`
