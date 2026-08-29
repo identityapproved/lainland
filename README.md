@@ -56,6 +56,17 @@ chezmoi apply --dry-run --verbose   # read it before the next line
 chezmoi apply
 ```
 
+Then two things that are caches or dconf rather than files, so `chezmoi apply`
+cannot do them:
+
+```bash
+bat cache --build              # registers bat/themes/Lain.tmTheme
+sh installers/setup-gtk-qt.sh  # GSettings; see the Toolkits section
+```
+
+Without the first, `bat` silently falls back and every `bat`, `cat` alias and
+fzf preview renders in the default theme.
+
 `--source` is recorded in the generated config, so later `chezmoi` commands
 need no flags. To answer the prompts non-interactively, note that
 `--promptString` is keyed by the prompt *text*, not the variable name:
