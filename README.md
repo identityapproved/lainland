@@ -198,6 +198,7 @@ and `hypr/configs/envars.conf` both set.
 | `lazygit` | Git TUI styled to match |
 | `bat` | Custom `Lain.tmTheme` |
 | `yazi` | File manager, `flavors/lain.yazi` plus plugins |
+| `opencode` | TUI theme, `opencode/themes/lain.json` — see its README |
 
 ### Media
 
@@ -245,4 +246,5 @@ code, `Iosevka Nerd Font Propo` for UI chrome, `Iosevka Nerd Font` for prose.
 - **[uhm26](https://github.com/uhm26)** — the libadwaita recolor and the recolored Adwaita icons behind that GTK theme, via Hyprlain.
 - **[niraletter/waybar-timer](https://github.com/niraletter/waybar-timer)** — pomodoro/timer waybar module.
 - **[DreamMaoMao/mango](https://github.com/DreamMaoMao/mango)** — the dwl/wlroots compositor this desktop runs.
+- **[b0o/lavi](https://github.com/b0o/lavi)** — its `contrib/opencode` themes are the clearest worked example of an OpenCode theme, and gave `opencode/themes/lain.json` its key set and file layout. None of its colors are used.
 - **Serial Experiments Lain** — Yoshitoshi ABe, Yasuyuki Ueda, Ryutaro Nakamura. Watch it.
