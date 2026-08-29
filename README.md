@@ -217,6 +217,7 @@ and `hypr/configs/envars.conf` both set.
 | `calcurse` | Calendar / todo |
 | `zathura` | PDF reader; ochre-on-black document colors |
 | `sioyek` | PDF reader (other machines) |
+| `aerc` | Mail client |
 | `liferea` | RSS reader; WebKit item view plus a GTK transparency plugin |
 
 ### Communication
