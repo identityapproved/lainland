@@ -26,6 +26,7 @@ scripts=(
   "virtualization/containerization_setup.sh"
   "virtualization/virtmanager.sh"
   "virtualization/virtualboxinstall.sh"
+  "setup-gtk-qt.sh"
   "setup-keyd.sh"
   "setup-liferea.sh"
 )
