@@ -22,12 +22,19 @@ home/dot_config/wpaperd/
 # Vesktop: keep only the curated theme, ignore runtime/session/cache noise.
 # Under chezmoi the target is a real directory with individual files linked in,
 # so everything below simply never becomes a source file.
+#
+# settings.json is deliberately NOT managed: it is live Vencord state that the
+# app rewrites constantly, and the copy this repo used to carry was a stale
+# snapshot that would have reverted every plugin toggle on apply. Enabling the
+# Lain theme is a one-time click in Vesktop's Themes pane.
 home/dot_config/vesktop/*
 !home/dot_config/vesktop/README.md
-!home/dot_config/vesktop/settings/
-!home/dot_config/vesktop/settings/settings.json
 !home/dot_config/vesktop/themes/
 !home/dot_config/vesktop/themes/lain.theme.css
+
+# mimeapps.list is per-machine desktop state (the default browser is recorded
+# there with a generated userapp-*.desktop id), not rice. Not managed.
+home/dot_config/mimeapps.list
 
 # Liferea: same story. feedlist.opml and the item DB stay out of the repo.
 home/dot_config/liferea/feedlist.opml*
