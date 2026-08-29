@@ -131,9 +131,9 @@ works. It has no window-title or layout module at all, so
 
 ## Themed Tools (Lain palette)
 
-The palette itself lives in a private repo and is symlinked in as
-`lain-colors.md` (gitignored here). Every themed config resolves its colors
-through that document's Semantic Role Map rather than picking hexes by eye.
+The palette reference is symlinked in and not tracked here. Every themed
+config resolves its colors through its Semantic Role Map rather than picking
+hexes by eye.
 
 ### WM / desktop
 

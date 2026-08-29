@@ -1,14 +1,8 @@
-# fish colors — Lain. Palette: lain-colors.md (private repo).
-#
-# This file was the palette doc's one listed deviation: it carried a
-# magenta/cyan/yellow scheme (ff00f6, 00fbfd, f9f972, 7f7094) unrelated to Lain.
-# Now on the ramps: rose (Fore) for command chrome, ochre (High) for values and
-# matches, greys for structure.
-#
-# `set -U` writes to the universal variable store (~/.config/fish/fish_variables),
-# which shadows this file on later runs. fish_variables is tracked in this repo,
-# so the two stay in step; if they ever disagree, the store wins and this file
-# needs re-running with `source`.
+# fish colors — Lain. Was magenta/cyan/yellow, unrelated to the palette; now on
+# the ramps: rose for command chrome, ochre for values and matches, greys for
+# structure.
+# `set -U` writes to ~/.config/fish/fish_variables, which shadows this file on
+# later runs. That store is tracked here; if they disagree, the store wins.
 
 if status is-interactive
     set -U fish_color_normal CE7688          # foreprimary

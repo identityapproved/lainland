@@ -1,22 +1,11 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
-# Lain palette anchors:
-# bg0  = #000000 (backprimary)
-# bg1  = #1A1A1A (backsecondary)
-# bg2  = #2A2A2A (backtertiary)
-# bg3  = #3A3A3A (backquaternary)
-# fg0  = #CE7688 (foreprimary)
-# fg1  = #A05969 (foretertiary)
-# fg2  = #804654 (foresenary)
-# acc0 = #C1B48E (highprimary)
-# acc1 = #A49978 (hightertiary)
+# Lain anchors: bg0 #000000  bg1 #1A1A1A  bg2 #2A2A2A  bg3 #3A3A3A
+# fg0 #CE7688  fg1 #A05969  fg2 #804654 | acc0 #C1B48E  acc1 #A49978
 
 # : Manager {{{
 [mgr]
 cwd = { fg = "#C1B48E", bold = true }
-
-hovered         = { fg = "#CE7688", bg = "#2A2A2A", bold = true }
-preview_hovered = { underline = true }
 
 find_keyword  = { fg = "#C1B48E", bg = "#000000", bold = true, italic = true, underline = true }
 find_position = { fg = "#CE7688", bg = "reset", bold = true, italic = true }
@@ -39,6 +28,10 @@ border_style  = { fg = "#3A3A3A" }
 [tabs]
 active   = { fg = "#000000", bg = "#CE7688", bold = true }
 inactive = { fg = "#A05969", bg = "#1A1A1A" }
+
+# Square off Yazi's default rounded powerline separators.
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
 # : }}}
 
 
@@ -55,8 +48,24 @@ unset_alt  = { fg = "#930006", bg = "#1A1A1A" }
 # : }}}
 
 
+# : Indicator of hovered file {{{
+[indicator]
+parent  = { fg = "#CE7688", bg = "#2A2A2A", bold = true }
+current = { fg = "#CE7688", bg = "#2A2A2A", bold = true }
+preview = { underline = true }
+
+# Squared off. Yazi tints these pads as a foreground glyph, so a space leaves a
+# hole and an empty string un-aligns the row; a full block fills the cell.
+padding = { open = "█", close = "█" }
+# : }}}
+
+
 # : Status bar {{{
 [status]
+# Square off Yazi's default rounded powerline separators.
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
 perm_sep   = { fg = "#3A3A3A" }
 perm_type  = { fg = "#C1B48E" }
 perm_read  = { fg = "#FFDCB9" }
@@ -84,7 +93,7 @@ separator_style = { fg = "#3A3A3A" }
 [confirm]
 border  = { fg = "#A49978" }
 title   = { fg = "#CE7688", bold = true }
-content = { fg = "#C1B48E" }
+body    = { fg = "#C1B48E" }
 list    = {}
 btn_yes = { fg = "#000000", bg = "#C1B48E", bold = true }
 btn_no  = { fg = "#CE7688", bold = true }
@@ -167,7 +176,7 @@ rules = [
 
 # : Icons {{
 [icon]
-# Force folder icon color to Lain ochre; overrides Yazi's default blue `if = "dir"` fallback.
+# Ochre folders; overrides Yazi's default blue `if = "dir"` fallback.
 dirs = [
 	{ name = "*", text = "󰉋", fg = "#C1B48E" },
 ]

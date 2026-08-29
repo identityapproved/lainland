@@ -1,12 +1,8 @@
-/* Walker — Lain. Palette: lain-colors.md (private repo).
+/* Walker — Lain.
  *
  * Hand-written, unlike themes/default.css which walker regenerates. Walker
- * exposes exactly three variables; the rest of the sheet below is the default
- * layout, unchanged.
- *
- *   foreground  foreprimary #CE7688 — chrome body text
- *   background  backprimary #000000 — window background
- *   color1      highprimary #C1B48E — selection, active, match
+ * exposes three variables; the rest below is the default layout, unchanged.
+ * foreground #CE7688  background #000000  color1 #C1B48E
  */
 
 @define-color foreground rgba(206, 118, 136, 0.95);
@@ -67,17 +63,12 @@ slider,
   padding: 8px;
 }
 
-/* The prompt is lain-eye -- U+1F441 EYE, outlined into
-   ~/.icons/lainicons/scalable/actions/lain-eye.svg. It carries its own fill
-   (highprimary) rather than following `color` here, because it is a plain
-   scalable icon, not a -symbolic one; GTK only recolors the latter. `color`
-   stays set to the same value so the two cannot drift.
-
-   Full opacity, and a solid glyph: this started at opacity 0.2 on a stock grey
-   AdwaitaLegacy PNG, then briefly used the D005 hieroglyph, whose fine strokes
-   put only 15% ink in an 18px box and read as a smudge. The eye is 38%.
-
-   The clear glyph next to it IS symbolic and does follow `color`. */
+/* Prompt is lain-eye (U+1F441) from ~/.icons/lainicons. It carries its own
+   fill because it is a plain scalable icon, not -symbolic; GTK only recolors
+   the latter. `color` is set to the same value so the two cannot drift.
+   Solid glyph at full opacity: the D005 hieroglyph put only 15% ink in an 18px
+   box and read as a smudge; the eye is 38%.
+   The clear glyph beside it IS symbolic and does follow `color`. */
 #prompt {
   margin-left: 4px;
   margin-right: 12px;
