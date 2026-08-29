@@ -8,6 +8,13 @@
 {{- $host := promptStringOnce . "host" "Short host name" -}}
 
 
+# Where the source tree actually lives. Without this chezmoi looks in
+# ~/.local/share/chezmoi; this repo is cloned to ~/github/lainland instead, and
+# `chezmoi init --source <path>` records that path here. workingTree, not
+# sourceDir: .chezmoiroot already points chezmoi at home/, and it re-applies
+# that itself.
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
 # Symlink mode: chezmoi links managed *files* back into this repo, so editing a
 # config in ~/.config edits the repo. Templates are the exception -- they cannot
 # be symlinked and are written out as real files.
