@@ -45,8 +45,25 @@ assets/                README screenshots
 
 ## Install
 
+Clone this repo somewhere you want to keep it -- it is the live source tree,
+not a staging copy, so `~/github/lainland` rather than chezmoi's default
+`~/.local/share/chezmoi`:
+
 ```bash
-chezmoi init --apply https://github.com/<you>/lainland.git
+git clone https://github.com/<you>/lainland.git ~/github/lainland
+chezmoi init --source ~/github/lainland
+chezmoi apply --dry-run --verbose   # read it before the next line
+chezmoi apply
+```
+
+`--source` is recorded in the generated config, so later `chezmoi` commands
+need no flags. To answer the prompts non-interactively, note that
+`--promptString` is keyed by the prompt *text*, not the variable name:
+
+```bash
+chezmoi init --source ~/github/lainland \
+  --promptString "Window manager (mango/hyprland/sway)=sway" \
+  --promptString "Short host name=$(hostname)"
 ```
 
 `chezmoi init` asks two questions once and stores the answers in
