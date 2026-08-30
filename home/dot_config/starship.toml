@@ -30,8 +30,9 @@ palette = "lain"
 # terminal background so it dissolves into the prompt line.
 # No rounded caps: dither ramp (U+2591..2593) opens and closes the bar, U+258C
 # half-block squares off the interior seams. Glyphs geometric, not pictorial.
+# The bar is rose, so nothing drawn on it may be: text walks the High ramp.
 # Upstream names, palette roles -- nothing in Lain is blue:
-# blue=highprimary red=accent white=foreprimary gray=foresenary.
+# blue=highprimary red=accent white=success-fg gray=highquaternary.
 [palettes.lain]
 color_bg1 = "#804654"   # foresenary
 color_bg2 = "#6F3D49"   # foreseptenary
@@ -39,10 +40,10 @@ color_bg3 = "#5D333C"   # foreoctonary
 color_bg4 = "#381E24"   # foredecenary
 color_bg5 = "#1D0F12"   # foreduodenary
 
-color_blue = "#C1B48E"  # highprimary  — accent, active
-color_gray = "#804654"  # foresenary   — dimmed
-color_red = "#FFB1C3"   # accent       — error, peak rose
-color_white = "#CE7688" # foreprimary  — body text
+color_blue = "#C1B48E"  # highprimary    — accent, active
+color_gray = "#968C6E"  # highquaternary — dimmed
+color_red = "#FFB1C3"   # accent         — error only
+color_white = "#FFDCB9" # success-fg     — text on the bar
 
 [character]
 error_symbol = "[»](bold color_red)"
@@ -95,8 +96,8 @@ show_always = false
 style_root = "bg:color_bg1 fg:color_red"
 style_user = "bg:color_bg1 fg:color_white"
 
-# Upstream brand colors are blue/green/violet; these walk the High and Fore
-# ramps instead.
+# Upstream brand colors are blue/green/violet; these walk the High ramp
+# instead, spaced far enough apart to stay distinguishable on bg4.
 [c]
 format = '[$symbol]($style)'
 style = "bg:color_bg4 fg:#C1B48E"  # highprimary
@@ -109,16 +110,16 @@ symbol = " "
 
 [java]
 format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#CE7688"  # foreprimary
+style = "bg:color_bg4 fg:#FFDCB9"  # success-fg
 symbol = " "
 
 [kotlin]
 format = '[$symbol]($style)'
-style = "bg:color_bg4 fg:#A05969"  # foretertiary
+style = "bg:color_bg4 fg:#B5A985"  # highsecondary
 symbol = " "
 
 [nodejs]
-style = "bg:color_bg4 fg:#897F63"  # highquinary
+style = "bg:color_bg4 fg:#968C6E"  # highquaternary
 format = '[$symbol($version)]($style)'
 symbol = " "
 
