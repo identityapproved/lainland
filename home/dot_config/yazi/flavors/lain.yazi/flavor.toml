@@ -50,18 +50,22 @@ unset_alt  = { fg = "#930006", bg = "#1A1A1A" }
 
 # : Indicator of hovered file {{{
 [indicator]
-parent  = { fg = "#CE7688", bg = "#2A2A2A", bold = true }
-current = { fg = "#CE7688", bg = "#2A2A2A", bold = true }
+parent  = { fg = "#000000", bg = "#C1B48E", bold = true }
+current = { fg = "#000000", bg = "#C1B48E", bold = true }
 preview = { underline = true }
 
 # Squared off. Yazi tints these pads as a foreground glyph, so a space leaves a
 # hole and an empty string un-aligns the row; a full block fills the cell.
-padding = { open = "█", close = "█" }
+padding = { open = "▓", close = "▓▒░" }
 # : }}}
 
 
 # : Status bar {{{
 [status]
+# Base style for the bar; the hovered filename span carries no style of its
+# own, so it inherits this.
+overall = { fg = "#CE7688" }
+
 # Square off Yazi's default rounded powerline separators.
 sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
