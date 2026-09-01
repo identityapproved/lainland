@@ -228,22 +228,27 @@ name = "websearch"
 placeholder = "Websearch"
 
 [[builtins.websearch.entries]]
-name = "Google"
-url = "https://www.google.com/search?q=%TERM%"
-
-[[builtins.websearch.entries]]
 name = "DuckDuckGo"
 url = "https://duckduckgo.com/?q=%TERM%"
+
+[[builtins.websearch.entries]]
+name = "Google"
+url = "https://www.google.com/search?q=%TERM%"
 switcher_only = true
 
 [[builtins.websearch.entries]]
-name = "Ecosia"
-url = "https://www.ecosia.org/search?q=%TERM%"
+name = "GitHub"
+url = "https://github.com/search?q=%TERM%&type=repositories"
 switcher_only = true
 
 [[builtins.websearch.entries]]
-name = "Yandex"
-url = "https://yandex.com/search/?text=%TERM%"
+name = "Perplexity"
+url = "https://www.perplexity.ai/search?q=%TERM%"
+switcher_only = true
+
+[[builtins.websearch.entries]]
+name = "Wikipedia"
+url = "https://en.wikipedia.org/w/index.php?search=%TERM%"
 switcher_only = true
 
 [builtins.dmenu]
