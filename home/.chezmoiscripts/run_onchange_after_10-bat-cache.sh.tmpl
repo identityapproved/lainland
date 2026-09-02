@@ -1,0 +1,14 @@
+#!/bin/sh
+# bat compiles themes into a binary cache; a .tmTheme dropped into
+# ~/.config/bat/themes does nothing until `bat cache --build` runs. Without this
+# every `bat`, the `cat` alias and every fzf preview silently fall back to the
+# default theme.
+#
+# run_onchange_ re-runs when this script's rendered text changes, so the theme's
+# hash is embedded below purely to move it when the theme is edited.
+#
+# theme: {{ include "dot_config/bat/themes/Lain.tmTheme" | sha256sum }}
+set -eu
+command -v bat >/dev/null 2>&1 || exit 0
+bat cache --build >/dev/null
+echo "bat: theme cache rebuilt"

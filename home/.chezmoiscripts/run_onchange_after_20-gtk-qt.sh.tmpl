@@ -1,0 +1,12 @@
+#!/bin/sh
+# GTK3 apps prefer org.gnome.desktop.interface GSettings keys over settings.ini
+# whenever a dconf backend is present, so a theme set only in settings.ini is
+# silently ignored. dconf cannot be checked in; installers/setup-gtk-qt.sh is the
+# reproducible record of those keys, and this hook is what runs it.
+#
+# settings.ini: {{ include "dot_config/gtk-3.0/settings.ini" | sha256sum }}
+set -eu
+command -v gsettings >/dev/null 2>&1 || exit 0
+script="{{ .chezmoi.workingTree }}/installers/setup-gtk-qt.sh"
+[ -r "$script" ] || exit 0
+sh "$script"

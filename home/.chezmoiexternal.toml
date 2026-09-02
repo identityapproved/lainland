@@ -1,0 +1,66 @@
+{{/*
+   Git repos chezmoi clones and refreshes as part of `apply`, so a fresh machine
+   needs no manual `git clone` and tmux needs no self-bootstrapping TPM block.
+
+   refreshPeriod is how often chezmoi re-pulls; `chezmoi apply --refresh-externals`
+   forces it. These are all read-only upstreams, so a week is plenty.
+*/ -}}
+
+# --- oh-my-zsh custom plugins ---------------------------------------------
+# The five in .config/zsh/rc.d/00-omz.zsh that OMZ does not bundle. The bundled
+# ones (git, gitignore, web-search, pip, python, extract, history) need nothing
+# here.
+[".oh-my-zsh/custom/plugins/zsh-syntax-highlighting"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    refreshPeriod = "168h"
+
+[".oh-my-zsh/custom/plugins/zsh-autosuggestions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+    refreshPeriod = "168h"
+
+[".oh-my-zsh/custom/plugins/zsh-completions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-completions.git"
+    refreshPeriod = "168h"
+
+[".oh-my-zsh/custom/plugins/zsh-vi-mode"]
+    type = "git-repo"
+    url = "https://github.com/jeffreytse/zsh-vi-mode.git"
+    refreshPeriod = "168h"
+
+[".oh-my-zsh/custom/plugins/zsh-git-fzf"]
+    type = "git-repo"
+    url = "https://github.com/alexiszamanidis/zsh-git-fzf.git"
+    refreshPeriod = "168h"
+
+[".oh-my-zsh/custom/plugins/alias-tips"]
+    type = "git-repo"
+    url = "https://github.com/djui/alias-tips.git"
+    refreshPeriod = "168h"
+
+# --- tmux ------------------------------------------------------------------
+# Cloned under ~/.tmux/plugins rather than the XDG default
+# $XDG_CONFIG_HOME/tmux/plugins, which would land inside the directory chezmoi
+# manages. tmux.conf pins TMUX_PLUGIN_MANAGER_PATH to match.
+[".tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm.git"
+    refreshPeriod = "168h"
+
+[".tmux/plugins/lain.tmux"]
+    type = "git-repo"
+    url = "https://github.com/identityapproved/lain.tmux.git"
+    refreshPeriod = "168h"
+
+[".tmux/plugins/tmux-resurrect"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tmux-resurrect.git"
+    refreshPeriod = "168h"
+
+[".tmux/plugins/tmux-continuum"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tmux-continuum.git"
+    refreshPeriod = "168h"
+
