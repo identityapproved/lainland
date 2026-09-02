@@ -1,0 +1,23 @@
+# Runit services linked into /var/service on voidbox, one per line.
+# ./install.sh links any that are missing; ./sync-from-system.sh refreshes it.
+# Comments and blank lines are ignored.
+#
+# agetty-tty1..6, udevd, dbus and elogind come enabled on a stock Void install;
+# they are listed anyway so the file is a complete statement of the runlevel.
+NetworkManager
+agetty-tty1
+agetty-tty2
+agetty-tty3
+agetty-tty4
+agetty-tty5
+agetty-tty6
+bluetoothd
+chronyd
+dbus
+elogind
+nanoklogd
+nftables
+socklog-unix
+tailscaled
+tlp
+udevd

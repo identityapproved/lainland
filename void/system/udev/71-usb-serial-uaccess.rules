@@ -1,0 +1,28 @@
+# USB serial adapters (Arduino, ESP8266/ESP32, CH340, CP210x, FTDI, PL2303).
+#
+# Void's /usr/lib/udev/rules.d/50-udev-default.rules:25 gives these devices
+# root:dialout 0660, and 70-uaccess.rules only tags ttyACM devices that are
+# flagged as signal analyzers. So a plain board is unreadable without being in
+# the dialout group -- and a fresh group only takes effect on a NEW LOGIN,
+# which is why boards seemed to work "only after reboot".
+#
+# TAG+="uaccess" makes elogind attach an ACL for whoever is logged in on the
+# active seat, applied at hotplug time. No group, no re-login, no reboot.
+#
+# MUST be numbered below 73. The tag is only acted on by
+# /usr/lib/udev/rules.d/73-seat-late.rules, which runs
+# elogind-uaccess-command on TAG=="uaccess". udev evaluates rules in lexical
+# order, so a 99- rule sets the tag too late and nothing ever applies the ACL.
+
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", TAG+="uaccess"
+
+# Raw USB access for flashing tools that talk to the device directly rather
+# than through a tty: esptool in ESP32-S2/S3 USB-CDC/DFU mode, dfu-util,
+# and Arduino boards sitting in their bootloader.
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="10c4", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0403", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="303a", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="2341", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1b4f", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="067b", TAG+="uaccess"

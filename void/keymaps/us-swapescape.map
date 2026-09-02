@@ -1,0 +1,15 @@
+# US layout with Caps Lock and Escape swapped (console/TTY).
+# Mirrors the Wayland setting `xkb_options caps:swapescape` in .config/sway/config.
+#
+# Install:
+#   sudo install -Dm644 etc/keymaps/us-swapescape.map \
+#       /usr/share/kbd/keymaps/i386/qwerty/us-swapescape.map
+#   sudo sed -i 's/^#\?KEYMAP=.*/KEYMAP="us-swapescape"/' /etc/rc.conf
+#
+# Test without reboot:
+#   sudo loadkeys etc/keymaps/us-swapescape.map
+
+include "/usr/share/kbd/keymaps/i386/qwerty/us.map.gz"
+
+keycode   1 = Caps_Lock
+keycode  58 = Escape

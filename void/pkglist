@@ -1,0 +1,184 @@
+# Explicitly installed packages on voidbox, grouped by role.
+#
+# Source of truth is `xbps-query -m`; ./sync-from-system.sh reconciles this file
+# with it and reports drift. Names only, no versions, so the list is directly
+# consumable: ./install.sh feeds it to xbps-install.
+#
+# Blank lines and everything from a '#' to end of line are ignored by both
+# scripts. Dependencies are deliberately absent -- xbps pulls them in.
+
+# --- base system, boot, init -------------------------------------------
+base-system
+base-devel
+linux-headers
+linux-firmware
+dkms
+efibootmgr
+grub-x86_64-efi
+parted
+opendoas
+elogind
+polkit
+polkit-gnome
+dbus
+socklog-void
+chrony
+xtools
+# Nonfree repo. Must be installed and synced before broadcom-* resolve;
+# install.sh handles that ordering.
+void-repo-nonfree
+
+# --- hardware, power, graphics -----------------------------------------
+acpi
+lm_sensors
+tlp
+brightnessctl
+bluez
+bluetui
+broadcom-bt-firmware
+broadcom-wl-dkms
+mesa-dri
+mesa-vaapi
+mesa-vulkan-lavapipe
+libva-intel-driver
+libva-utils
+# The terminfo set. ncurses-base alone has no tmux-256color entry, and without
+# it every tmux pane redraws at the wrong column -- typed characters and inline
+# autosuggestions duplicate on screen. See tmux.conf's default-terminal guard.
+ncurses-term
+
+# --- network ------------------------------------------------------------
+NetworkManager
+nftables
+runit-nftables
+tailscale
+wireguard-tools
+curl
+wget
+rsync
+croc
+tcpdump
+
+# --- secrets and sandboxing --------------------------------------------
+gnupg2
+pinentry
+pass
+rbw
+firejail
+
+# --- wayland session (sway) --------------------------------------------
+sway
+swaybg
+swayidle
+Waybar
+SwayNotificationCenter
+tofi
+wl-clipboard
+grim
+slurp
+swappy
+libnotify
+wayland
+pixman-devel
+resvg
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+xdg-desktop-portal-wlr
+xdg-utils
+desktop-file-utils
+xsettingsd
+nwg-look
+qt5ct
+qt6ct
+
+# --- fonts --------------------------------------------------------------
+nerd-fonts
+noto-fonts-ttf
+font-awesome
+
+# --- audio and music ----------------------------------------------------
+pipewire
+alsa-pipewire
+libspa-bluetooth
+pavucontrol
+pamixer
+playerctl
+mpd
+mpDris2
+rmpc
+cava
+
+# --- media, images, documents ------------------------------------------
+ffmpeg
+mpv
+ImageMagick
+chafa
+dcraw
+libraw
+exiftool
+poppler
+zathura
+zathura-cb
+zathura-djvu
+zathura-pdf-mupdf
+zathura-ps
+
+# --- terminal and shell -------------------------------------------------
+foot
+tmux
+zsh
+zsh-completions
+bash-completion
+starship
+zoxide
+fzf
+eza
+bat
+fd
+ripgrep
+delta
+jq
+yazi
+glow
+tldr
+cheat
+fastfetch
+htop
+btop
+lsof
+strace
+7zip
+zip
+unzip
+zstd
+
+# --- editors, dev, vcs --------------------------------------------------
+neovim
+git
+github-cli
+lazygit
+chezmoi
+pkg-config
+man-pages-devel
+man-pages-posix
+esptool
+
+# --- containers and virtualisation --------------------------------------
+# Installed for the CLI only. Their services stay out of /var/service; see
+# "Services installed but deliberately not enabled" in README.md.
+podman
+podman-compose
+libvirt
+virt-manager
+virtiofsd
+
+# --- applications -------------------------------------------------------
+firefox
+liferea
+libwebkit2gtk41
+offpunk
+w3m
+calcurse
+task
+taskwarrior-tui
+timewarrior

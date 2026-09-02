@@ -4,9 +4,13 @@
    serves every host.
 
    Everything not listed is applied everywhere: configs for tools that are not
-   installed (fish, tofi, wofi, sioyek, spotify, aerc ...) are inert, and land
-   ready for the machine that does have them. Only the window-manager trees are
-   mutually exclusive, so only they are switched.
+   installed (fish, tofi, wofi, sioyek, spotify ...) are inert, and land ready
+   for the machine that does have them.
+
+   Only two kinds of thing are listed below. Mutually exclusive choices, where
+   applying both would be ambiguous rather than harmless -- the window-manager
+   trees, their portal configs, and the notification daemon. And retired configs
+   kept as reference, which are switched off on every host rather than per-host.
 */ -}}
 {{ if ne .wm "mango"    }}.config/mango{{ end }}
 {{ if ne .wm "hyprland" }}.config/hypr{{ end }}
@@ -21,3 +25,25 @@
 {{ if ne .wm "hyprland" }}.config/xdg-desktop-portal/hyprland-portals.conf{{ end }}
 {{ if ne .wm "sway"     }}.config/xdg-desktop-portal/sway-portals.conf{{ end }}
 
+{{/*
+   Notification daemon. Unlike the launcher configs (tofi/wofi/walker), which are
+   inert when their binary is absent, mako and swaync both draw layer-shell
+   notifications -- shipping both to one host is ambiguous, not harmless. sway
+   uses swaync (its control center is bound to $mod+n); mango and hyprland use
+   mako.
+*/ -}}
+{{ if ne .wm "sway" }}.config/swaync{{ end }}
+{{ if eq .wm "sway" }}.config/mako{{ end }}
+
+{{/*
+   Tracked as reference, deliberately never linked on any host. The configs stay
+   in the repo -- they are finished work and cost nothing to keep -- but nothing
+   reads them, so applying them would just leave dead files in ~/.config.
+
+     ncmpcpp  superseded by rmpc, which is the mpd client on every host now.
+     aerc     retired; the account config is kept for whenever mail comes back.
+
+   Unconditional, not switched on .wm: neither is host-specific.
+*/ -}}
+.config/ncmpcpp
+.config/aerc
