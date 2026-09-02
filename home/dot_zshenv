@@ -14,6 +14,23 @@ export ZK_NOTEBOOK_DIR="$HOME/zettelnotes"
 export ZETTEL_DIR="$HOME/zettelnotes"
 export BAT_THEME="Lain"   # used by bat, the cat= alias, and fzf previews
 
+# VISUAL, not EDITOR, is what git, lazygit and aerc reach for first.
+export VISUAL="nvim"
+export PAGER="less"
+export BROWSER="firefox"
+export CARGO_HOME="$HOME/.cargo"
+export RUSTUP_HOME="$HOME/.rustup"
+
+# The terminal is resolved at chezmoi apply time; see .config/scripts/term.
+export TERMINAL="$HOME/.config/scripts/term"
+
+# Void mounts /tmp noexec and cargo's build scripts exec out of $TMPDIR, so it
+# has to point somewhere exec-allowed. Harmless on a host where /tmp is exec.
+# Created here rather than left to chezmoi: nothing else makes it, and a TMPDIR
+# that does not exist breaks mktemp and every build that uses it.
+export TMPDIR="$HOME/.cache/tmp"
+[ -d "$TMPDIR" ] || mkdir -p "$TMPDIR"
+
 # zoxide's doctor false-positives in snapshot-restored shells (Claude Code and
 # friends re-source a dump of our *functions* into a fresh `zsh -c`, which brings
 # back zoxide's cd wrapper but not the chpwd_functions array it hooks into), so

@@ -1,0 +1,85 @@
+# Lain theme for btop
+# Colors resolved through the Semantic Role Map in lain-colors.md.
+# Rose (fore*) for chrome, ochre (high*) for content and accents, grey (back*)
+# for surfaces. The three-stop gradients walk a ramp from dark to bright so
+# rising load reads as rising saturation rather than a hue change.
+
+# Main background - empty string keeps terminal transparency
+theme[main_bg]=""
+
+# Main text
+theme[main_fg]="#CE7688"
+
+# Title
+theme[title]="#C1B48E"
+
+# Highlight / selected item
+theme[hi_fg]="#FFB1C3"
+
+# Selection
+theme[selected_bg]="#C1B48E"
+theme[selected_fg]="#000000"
+
+# Dimmed text
+theme[inactive_fg]="#804654"
+
+# Text on top of graphs
+theme[graph_text]="#A49978"
+
+# Meter background
+theme[meter_bg]="#2A2A2A"
+
+# Process box misc
+theme[proc_misc]="#B5A985"
+
+# Boxes
+theme[cpu_box]="#965363"
+theme[mem_box]="#965363"
+theme[net_box]="#965363"
+theme[proc_box]="#965363"
+theme[div_line]="#3A3A3A"
+
+# CPU load gradient - ochre ramp, dark to bright
+theme[cpu_start]="#5A5341"
+theme[cpu_mid]="#A49978"
+theme[cpu_end]="#C1B48E"
+
+# Free memory
+theme[free_start]="#49272F"
+theme[free_mid]="#A05969"
+theme[free_end]="#CE7688"
+
+# Cached memory
+theme[cached_start]="#4E4838"
+theme[cached_mid]="#897F63"
+theme[cached_end]="#B5A985"
+
+# Available memory
+theme[available_start]="#5D333C"
+theme[available_mid]="#BA6A7B"
+theme[available_end]="#FFB1C3"
+
+# Used memory
+theme[used_start]="#403C2E"
+theme[used_mid]="#968C6E"
+theme[used_end]="#C1B48E"
+
+# Download
+theme[download_start]="#49272F"
+theme[download_mid]="#A05969"
+theme[download_end]="#CE7688"
+
+# Upload
+theme[upload_start]="#4E4838"
+theme[upload_mid]="#A49978"
+theme[upload_end]="#C1B48E"
+
+# Process gradient
+theme[process_start]="#5A5341"
+theme[process_mid]="#968C6E"
+theme[process_end]="#FFB1C3"
+
+# Temperature gradient - cool ochre to hot rose, ending on the error red
+theme[temp_start]="#897F63"
+theme[temp_mid]="#CE7688"
+theme[temp_end]="#930006"

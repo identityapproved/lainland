@@ -45,6 +45,16 @@ home/dot_config/walker/themes/default.css
 home/dot_config/walker/themes/default.toml
 home/dot_config/walker/themes/default_window.toml
 
+# offpunk writes its TOFU cert store beside offpunkrc.
+home/dot_config/offpunk/cert_cache/
+
+# btop regenerates its bundled themes on start and writes a log beside its conf;
+# only the hand-written lain theme is ours. Same failure mode as walker's
+# themes/default.* above.
+home/dot_config/btop/themes/*
+!home/dot_config/btop/themes/lain.theme
+home/dot_config/btop/btop.log
+
 # Clipse: keep config/theme, ignore runtime state
 home/dot_config/clipse/clipboard_history.json
 home/dot_config/clipse/clipse.log

@@ -9,6 +9,39 @@
 # variants are composable: `ldirs -a`, `lt --git-ignore src`, `ll -s size`.
 
 if command -v eza >/dev/null 2>&1; then
+  # Colour. 15-dircolors.zsh already set LS_COLORS from the repo's indexed Lain
+  # profile, and eza reads LS_COLORS first; EZA_COLORS then overrides the keys
+  # below with the truecolor hexes, which the 256-colour cube cannot express.
+  # Roles resolved through the Semantic Role Map in lain-colors.md:
+  #
+  #   ur/gr/tr  read bits    hightertiary  #A49978
+  #   uw/gw/tw  write bits   foreprimary   #CE7688
+  #   ux/gx/tx  exec bits    accent        #FFB1C3
+  #   ue        setuid       accent        #FFB1C3
+  #   sn        size number  highprimary   #C1B48E
+  #   sb        size unit    highsenary    #7A7158
+  #   da        date         foresenary    #804654
+  #   di        directory    highprimary   #C1B48E
+  #   ln        symlink      foreprimary   #CE7688
+  #   ex        executable   accent        #FFB1C3
+  export EZA_COLORS="\
+ur=38;2;164;153;120:\
+uw=38;2;206;118;136:\
+ux=38;2;255;177;195:\
+ue=38;2;255;177;195:\
+gr=38;2;164;153;120:\
+gw=38;2;206;118;136:\
+gx=38;2;255;177;195:\
+tr=38;2;164;153;120:\
+tw=38;2;206;118;136:\
+tx=38;2;255;177;195:\
+sn=38;2;193;180;142:\
+sb=38;2;122;113;88:\
+da=38;2;128;70;84:\
+di=38;2;193;180;142:\
+ln=38;2;206;118;136:\
+ex=38;2;255;177;195"
+
   # Flags every listing gets. --icons=auto and --color=auto draw glyphs/colour
   # only on a tty, so piping stays parseable. --no-quotes drops the quoting eza
   # adds around names with spaces.

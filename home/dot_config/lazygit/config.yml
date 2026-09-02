@@ -1,6 +1,6 @@
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --dark --paging=never --config ~/.config/delta/themes.gitconfig --features lain-lazygit-compact
+      command: delta --dark --paging=never --config ~/.config/delta/themes.gitconfig --features lain-lazygit-compact
       # pager: delta --dark --paging=never --config ~/.config/delta/themes.gitconfig --features lain
       # pager: delta --dark --paging=never --config ~/.config/delta/themes.gitconfig --features lain-lazygit
