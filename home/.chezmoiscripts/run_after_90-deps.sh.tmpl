@@ -22,7 +22,26 @@ pkg_for() {
 {{ if eq .chezmoi.osRelease.id "void" -}}
         waybar)          echo Waybar ;;   # Void capitalises it
 {{ end -}}
+{{ if eq .chezmoi.osRelease.id "gentoo" -}}
+        # The three names portage spells differently. Nothing below this block
+        # diverges, and a wrong name here is the whole cost of the report --
+        # pkg_for only ever runs on a binary that is already missing, i.e. on a
+        # fresh box, which is exactly when there is no way to check by hand.
+        #   lm-sensors     hyphenated; Void underscores it
+        #   gui-apps/mako  qualified, because bare `mako` also matches
+        #                  dev-python/mako and emerge refuses an ambiguous
+        #                  short name rather than picking one
+        #   mangowm        the ebuild name (guru); `mango` matches no ebuild
+        # Both binaries of each pair map to one atom so pkgs_for's sort -u
+        # collapses them instead of printing the package twice.
+        sensors)         echo lm-sensors ;;
+        mako|makoctl)    echo gui-apps/mako ;;
+        mango|mmsg)      echo mangowm ;;
+{{ else -}}
         sensors)         echo lm_sensors ;;
+        makoctl)         echo mako ;;
+        mmsg)            echo mango ;;
+{{ end -}}
         wl-copy)         echo wl-clipboard ;;
         wpctl)           echo wireplumber ;;
         rg)              echo ripgrep ;;
@@ -30,9 +49,7 @@ pkg_for() {
         gh)              echo github-cli ;;
         timew)           echo timewarrior ;;
         swaymsg|swaynag) echo sway ;;
-        makoctl)         echo mako ;;
         swaync-client)   echo swaync ;;
-        mmsg)            echo mango ;;
         hyprctl)         echo hyprland ;;
         *)               echo "$1" ;;
     esac
@@ -81,7 +98,14 @@ group notify   required  mako makoctl
 group wm       required  hyprctl hypridle
 group notify   required  mako makoctl
 {{ end -}}
-group bar      required  waybar cava sensors
+group bar      required  waybar cava
+
+# sensors is not a bar dependency. waybar's temperature module reads
+# /sys/class/hwmon directly (modules/temperature.sh says so in its first line),
+# so the bar shows a CPU temp with no lm-sensors installed. The only caller is
+# the click handler, scripts/popup_sensors.sh, which runs `watch -n 1 sensors`
+# in a float -- optional, not required.
+group sensors  optional  sensors
 group screen   required  grim slurp swappy wl-copy notify-send
 group audio    required  wpctl playerctl
 group dev      optional  lazygit delta gh glow w3m
