@@ -4,9 +4,13 @@
 #
 # --no-color throughout: nb colours even when piped, and the escapes would end up
 # in the fzf list and in the id parsed out of it.
+#
+# NB_DIR is pinned unconditionally, same as nb.sh: a stale value inherited from
+# whatever launched waybar would point nb at a dead path, and nb answers that by
+# bootstrapping an empty notebook there.
 set -euo pipefail
 
-export NB_DIR="${NB_DIR:-$HOME/nb}"
+export NB_DIR="$HOME/nb"
 
 # nb list prints "[3] Some title"; the bracketed id is what nb show/edit take.
 strip_id() { sed -E 's/^\[([^]]+)\].*/\1/'; }
