@@ -1,0 +1,44 @@
+redirect *googletagmanager.com BLOCK
+redirect *google-analytics.com BLOCK
+redirect *googlesyndication.com BLOCK
+redirect *googleadservices.com BLOCK
+redirect *adservice.google.com BLOCK
+redirect *scorecardresearch.com BLOCK
+redirect *quantserve.com BLOCK
+redirect *adnxs.com BLOCK
+redirect *criteo.com BLOCK
+redirect *taboola.com BLOCK
+redirect *outbrain.com BLOCK
+redirect *hotjar.com BLOCK
+redirect *mixpanel.com BLOCK
+redirect *segment.com BLOCK
+redirect *amplitude.com BLOCK
+redirect *branch.io BLOCK
+redirect *onesignal.com BLOCK
+redirect *amazon-adsystem.com BLOCK
+redirect *googleusercontent.com BLOCK
+redirect *githubusercontent.com BLOCK
+redirect *instagram.com BLOCK
+redirect *threads.net BLOCK
+redirect *pinterest.com BLOCK
+redirect *snapchat.com BLOCK
+redirect *github.com BLOCK
+redirect *youtube.com BLOCK
+redirect *youtu.be BLOCK
+redirect *twitter.com BLOCK
+redirect *x.com BLOCK
+redirect *reddit.com BLOCK
+redirect *tiktok.com BLOCK
+theme window_title magenta bold
+theme window_subtitle magenta faint
+theme title bright_yellow bold underline
+theme subtitle yellow
+theme subsubtitle yellow faint
+theme link bright_yellow
+theme new_link bright_yellow bold
+theme oneline_link bright_yellow
+theme image_link yellow faint
+theme preformatted faint
+theme blockquote green italic
+theme prompt_on purple bold
+theme prompt_off purple

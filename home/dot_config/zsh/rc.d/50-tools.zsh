@@ -14,7 +14,11 @@ if ! ps -p "${SSH_AGENT_PID:-0}" >/dev/null 2>&1; then
 fi
 
 # Starship prompt (Lain palette) — must come after OMZ so it wins the prompt.
-eval "$(starship init zsh)"
+# Guarded on the binary, same as zoxide in 99: an unguarded eval here aborts the
+# rest of rc.d on a host where starship is not installed yet.
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
 
 # uv / cargo shims (adds ~/.local/bin to PATH; guarded, harmless re-run).
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"

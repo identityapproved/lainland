@@ -7,3 +7,6 @@ hash = "92fbb5483657fa7976cdf4e0104e18e0"
 use = "ktunprasert/git-files"
 rev = "c7289ad"
 hash = "cdb1a69bed63211c75b72521bbab875d"
+
+[flavor]
+deps = []

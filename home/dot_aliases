@@ -16,6 +16,23 @@ sysup() {
   doas dispatch-conf
 }
 
+# --- Void (xbps / runit) --------------------------------------------------
+# Sits beside the portage block above: one aliases file for every host, and an
+# alias whose binary is absent simply never runs. Same model as .chezmoiignore's
+# "configs for tools that are not installed are inert".
+alias xi='doas xbps-install -S'
+alias xu='doas xbps-install -Syu'
+alias xr='doas xbps-remove -R'
+alias xs='xbps-query -Rs'
+alias xl='xbps-query -l | grep -i'
+alias xo='doas xbps-remove -o'   # orphans
+alias xc='doas xbps-remove -O'   # clean the package cache
+
+alias svs='doas sv status'
+alias svu='doas sv up'
+alias svd='doas sv down'
+alias svr='doas sv restart'
+
 # eix
 alias es='eix'
 alias esu='doas eix-update'
@@ -33,6 +50,8 @@ alias rr='doas revdep-rebuild'
 alias eclean='doas eclean distfiles'
 
 alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
 alias yz='yazi'
 alias lz='lazygit'
 alias tl='task list'
@@ -133,7 +152,9 @@ falias() { alias | fzf; }
 galias() { git config --get-regexp '^alias\.' | fzf; }
 
 # --- ssh / misc -----------------------------------------------------------
-alias kssh="kitty +kitten ssh"
+# `kitten ssh` is a kitty-only feature (it ships terminfo to the remote host);
+# there is no foot equivalent, so only define it where kitty exists.
+command -v kitty >/dev/null 2>&1 && alias kssh="kitty +kitten ssh"
 alias cr="codex resume"
 alias virsh="virsh -c qemu:///system"
 alias lsblko="lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINT,MODEL"
@@ -237,4 +258,24 @@ pz() {
     echo -n "$pid" | wl-copy
     echo "PID $pid copied to clipboard."
   fi
+}
+
+# --- network --------------------------------------------------------------
+alias wifi='nmcli dev wifi list'
+alias ports='ss -tulpen'
+alias myip='ip -br a'
+alias route='ip route'   # deliberately shadows the deprecated net-tools route
+
+# --- dictionary -----------------------------------------------------------
+# Exact-headword entry across every dictionary in ~/.dicts. Entries are flush
+# left and their bodies indented, so a non-indented line starts a new headword:
+# print from the one that matches until the next one begins.
+def() {
+    for f in ~/.dicts/*(.); do
+        awk -v w="$1" -v src="${f:t}" '
+            BEGIN { IGNORECASE=1; found=0 }
+            /^[^ \t]/ { printing = (tolower($0) == tolower(w)); if (printing && !found){ print "=== " src " ==="; found=1 } }
+            printing { print }
+        ' "$f"
+    done | bat --paging=always --language=txt
 }
