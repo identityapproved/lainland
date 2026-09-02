@@ -1,0 +1,21 @@
+{
+  "positionX": "right",
+  "positionY": "top",
+  "control-center-margin-top": 8,
+  "control-center-margin-right": 8,
+  "control-center-margin-bottom": 8,
+  "control-center-margin-left": 8,
+  "control-center-exclusive-zone": false,
+  "notification-window-margin-top": 8,
+  "notification-window-margin-right": 8,
+  "notification-window-margin-bottom": 8,
+  "notification-window-margin-left": 8,
+  "notification-icon-size": 32,
+  "notification-body-image-height": 160,
+  "notification-body-image-width": 160,
+  "timeout": 5,
+  "timeout-low": 3,
+  "timeout-critical": 0,
+  "fit-to-screen": true,
+  "layer": "overlay"
+}

@@ -1,0 +1,106 @@
+:root {
+  --bg: #000000;
+  --bg-alt: #1a1a1a;
+  --bg-noise: rgba(255, 255, 255, 0.03);
+  --fg: #ce7688;
+  --fg-dim: #965363;
+  --accent: #c1b48e;
+  --border: #5d333c;
+}
+
+* {
+  font-family: "IosevkaTerm Nerd Font Mono", monospace;
+  font-size: 13px;
+  color: var(--fg);
+}
+
+.notification-row {
+  margin: 6px 0;
+}
+
+.notification {
+  background:
+    linear-gradient(0deg, var(--bg-alt), var(--bg-alt)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 2px,
+      var(--bg-noise) 3px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      var(--bg-noise) 4px
+    );
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.notification.low {
+  border-color: var(--fg-dim);
+}
+
+.notification.critical {
+  border-color: var(--accent);
+}
+
+.notification-title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.notification-body {
+  color: var(--fg);
+}
+
+.notification-action {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.notification-action:hover {
+  background: var(--bg);
+}
+
+.control-center {
+  background:
+    linear-gradient(0deg, var(--bg), var(--bg)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 2px,
+      var(--bg-noise) 3px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      var(--bg-noise) 4px
+    );
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.control-center .title {
+  color: var(--accent);
+}
+
+.control-center .notification {
+  background: var(--bg-alt);
+}
+
+.close-button {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+
+.close-button:hover {
+  background: var(--bg);
+}

@@ -45,7 +45,25 @@ export RUSTICL_ENABLE=radeonsi
 # spawns (waybar's nb module, terminals) sees the same notebook dir.
 export NB_DIR="$HOME/nb"
 
-# Auto-start mango on tty1
+# Auto-start the compositor on tty1. The only templated part of this file --
+# the exec is mutually exclusive by definition, so it cannot be a runtime check.
+#
+# sway goes through .config/sway/start-sway rather than `dbus-run-session sway`:
+# mango sets its session env with `env=` lines in mango/config.conf and hyprland
+# in configs/envars.conf, but sway has no equivalent. Its `exec` runs after the
+# compositor is already up, which is too late for XDG_CURRENT_DESKTOP (the portal
+# matches it against UseIn= in wlr.portal) and too late for the Electron/Qt/
+# Firefox Wayland hints. start-sway is the sway analogue of those env blocks.
+#
+# No logging by default. To debug a session that will not start, swap the exec
+# below for the commented line, `chezmoi apply`, and retry.
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+{{- if eq .wm "sway" }}
+    # exec "$HOME/.config/sway/start-sway" >>"$HOME/.local/state/sway.log" 2>&1
+    exec "$HOME/.config/sway/start-sway"
+{{- else if eq .wm "hyprland" }}
+    exec dbus-run-session Hyprland
+{{- else }}
     exec dbus-run-session mango
+{{- end }}
 fi

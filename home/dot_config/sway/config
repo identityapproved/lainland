@@ -1,0 +1,277 @@
+### lainsway — Sway config for a Void Linux laptop (single output eDP-1)
+#
+# Palette: lain-colors.md. Font: IosevkaTerm Nerd Font Mono.
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+# Preferred terminal emulator. Resolved at chezmoi apply time by
+# ~/.config/scripts/term, which picks the first installed of kitty/foot/alacritty
+# and normalises the per-emulator flag spelling. Same indirection as
+# hypr/configs/defaults.conf and mango/config.conf.
+set $term ~/.config/scripts/term
+# Application launcher (lain colors)
+# Launcher is tofi; see .config/tofi/config. wmenu was retired with $mod+d.
+
+xwayland enable
+
+### Autostart
+#
+# The D-Bus session is started by start-sway *before* sway exists, so
+# dbus-activated services (the portals) would inherit an environment with no
+# WAYLAND_DISPLAY and fall back to X11 ("cannot open display"). Push the real
+# session env onto the bus first. Unset variables are ignored.
+exec --no-startup-id dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP
+
+# No systemd on Void, so nothing socket-activates the audio stack.
+exec --no-startup-id sh -c 'pgrep -x pipewire >/dev/null || pipewire &'
+# mpd backs rmpc; nothing supervises it on Void, so start it here if it is down.
+exec --no-startup-id sh -c 'pgrep -x mpd >/dev/null || mpd'
+# mpd speaks no MPRIS on its own; mpDris2 bridges it so the XF86Audio
+# transport keys (which go through playerctl) can drive rmpc.
+exec --no-startup-id sh -c 'pgrep -x mpDris2 >/dev/null || mpDris2 &'
+exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
+exec --no-startup-id swaync
+exec --no-startup-id waybar
+
+exec_always --no-startup-id "$HOME/.config/sway/scripts/set-wallpaper.sh"
+
+# No screen locking on this laptop - swaylock is removed. swayidle stays purely
+# to blank the panel after 10min; the lock and before-sleep actions below are
+# kept commented in case locking is ever wanted back.
+exec --no-startup-id swayidle -w \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
+#   timeout 300 'swaylock -f -c 000000' \
+#   before-sleep 'swaylock -f -c 000000'
+
+### Appearance
+#
+# Remove titlebars globally (pixel borders have no titlebar).
+default_border pixel 2
+default_floating_border pixel 2
+
+# Lain border colors.
+client.focused          #CE7688 #000000 #C1B48E #C1B48E #CE7688
+client.focused_inactive #5D333C #000000 #965363 #5D333C #5D333C
+client.unfocused        #381E24 #000000 #965363 #381E24 #381E24
+client.urgent           #C1B48E #000000 #CE7688 #C1B48E #C1B48E
+client.placeholder      #1D0F12 #000000 #965363 #1D0F12 #1D0F12
+
+# Small gaps between tiled windows.
+gaps inner 6
+gaps outer 4
+
+### Output configuration
+#
+# Names come from `swaymsg -t get_outputs`. This machine has eDP-1 built in,
+# plus HDMI-A-1 / DP-1 / VGA-1 available for docking.
+output eDP-1 scale 1
+
+# Docking examples — uncomment and adjust as needed:
+# output HDMI-A-1 resolution 1920x1080 position 1366,0
+# output DP-1 resolution 1920x1080 position 1366,0
+# output VGA-1 resolution 1680x1050 position 1366,0
+
+### Input configuration
+#
+# Keyboard
+input type:keyboard {
+    xkb_options caps:swapescape
+}
+
+# Mice
+input type:pointer {
+    accel_profile flat
+}
+
+# Touchpad
+input type:touchpad {
+    dwt enabled
+    tap enabled
+    natural_scroll disabled
+}
+
+# Close the lid, turn the panel off.
+bindswitch --reload --locked lid:on output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
+
+### Key bindings
+#
+# Ported from lainland/hypr/configs/keybinds.conf. Hyprland concepts that have
+# no sway analogue (pseudo, bringactivetotop, swapactiveworkspaces) are dropped;
+# sway-only things (bindswitch, reload) are kept.
+#
+# Terminal:
+#
+    # Mod+Return is tmux and Mod+Shift+Return is a bare shell - deliberately
+    # inverted against lainland, which does it the other way round.
+    bindsym $mod+Return exec $term -e tmux
+    bindsym $mod+Shift+Return exec $term
+    bindsym $mod+Ctrl+Return exec $term --float
+#
+# Core actions:
+#
+    bindsym $mod+e exec $term -e yazi
+    bindsym $mod+q kill
+    bindsym $mod+space exec tofi-drun
+    bindsym $mod+Shift+space exec tofi-run
+    bindsym $mod+f fullscreen
+    bindsym $mod+Shift+t exec notify-send "  $(date +%H:%M) |   $(date +%d.%m.%y)"
+    # No screen locking on this laptop; swaylock removed.
+    # bindsym $mod+F12 exec swaylock -f -c 000000
+    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+m exec swaynag -t warning -m 'Exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+#
+# Floating and layout:
+#
+    bindsym $mod+v floating toggle
+    bindsym $mod+a focus mode_toggle
+    bindsym $mod+Tab focus next
+    bindsym $mod+Shift+Tab focus prev
+    bindsym $mod+g layout toggle tabbed split
+    bindsym $mod+t layout toggle split
+    bindsym $mod+y sticky toggle
+    floating_modifier $mod normal
+#
+# Focus and movement:
+#
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    bindsym $mod+1 workspace 1
+    bindsym $mod+2 workspace 2
+    bindsym $mod+3 workspace 3
+    bindsym $mod+4 workspace 4
+    bindsym $mod+5 workspace 5
+    bindsym $mod+6 workspace 6
+    bindsym $mod+7 workspace 7
+    bindsym $mod+8 workspace 8
+    bindsym $mod+9 workspace 9
+    bindsym $mod+0 workspace 10
+
+    # Ctrl: move the window and follow it.
+    bindsym $mod+Ctrl+1 move container to workspace 1; workspace 1
+    bindsym $mod+Ctrl+2 move container to workspace 2; workspace 2
+    bindsym $mod+Ctrl+3 move container to workspace 3; workspace 3
+    bindsym $mod+Ctrl+4 move container to workspace 4; workspace 4
+    bindsym $mod+Ctrl+5 move container to workspace 5; workspace 5
+    bindsym $mod+Ctrl+6 move container to workspace 6; workspace 6
+    bindsym $mod+Ctrl+7 move container to workspace 7; workspace 7
+    bindsym $mod+Ctrl+8 move container to workspace 8; workspace 8
+    bindsym $mod+Ctrl+9 move container to workspace 9; workspace 9
+    bindsym $mod+Ctrl+0 move container to workspace 10; workspace 10
+
+    # Shift: move the window silently, stay put.
+    bindsym $mod+Shift+1 move container to workspace 1
+    bindsym $mod+Shift+2 move container to workspace 2
+    bindsym $mod+Shift+3 move container to workspace 3
+    bindsym $mod+Shift+4 move container to workspace 4
+    bindsym $mod+Shift+5 move container to workspace 5
+    bindsym $mod+Shift+6 move container to workspace 6
+    bindsym $mod+Shift+7 move container to workspace 7
+    bindsym $mod+Shift+8 move container to workspace 8
+    bindsym $mod+Shift+9 move container to workspace 9
+    bindsym $mod+Shift+0 move container to workspace 10
+
+    bindsym $mod+period workspace next_on_output
+    bindsym $mod+comma workspace prev_on_output
+    bindsym $mod+slash workspace back_and_forth
+#
+# Scratchpad (hypr special workspace):
+#
+    bindsym $mod+minus move scratchpad
+    bindsym $mod+equal scratchpad show
+#
+# Gaps:
+#
+    bindsym $mod+Ctrl+g gaps inner all plus 2
+    bindsym $mod+Ctrl+s gaps inner all minus 2
+    bindsym $mod+Ctrl+r gaps inner all set 6; gaps outer all set 4
+#
+# Resize:
+#
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+    # Quick resize without entering the mode.
+    bindsym $mod+Ctrl+Shift+Right resize grow width 23px
+    bindsym $mod+Ctrl+Shift+Left resize shrink width 23px
+    bindsym $mod+Ctrl+Shift+Up resize shrink height 23px
+    bindsym $mod+Ctrl+Shift+Down resize grow height 23px
+    bindsym $mod+Ctrl+Shift+l resize grow width 23px
+    bindsym $mod+Ctrl+Shift+h resize shrink width 23px
+    bindsym $mod+Ctrl+Shift+k resize shrink height 23px
+    bindsym $mod+Ctrl+Shift+j resize grow height 23px
+#
+# Media and hardware:
+#
+    bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ && notify-send -h string:x-canonical-private-synchronous:vol "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+    bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && notify-send -h string:x-canonical-private-synchronous:vol "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+    bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && notify-send -h string:x-canonical-private-synchronous:vol "$(wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+    bindsym --locked XF86AudioMicMute exec ~/.config/waybar/scripts/toggle_mic.sh toggle
+    bindsym $mod+m exec ~/.config/waybar/scripts/toggle_mic.sh toggle
+
+    # mpd has no MPRIS of its own; mpDris2 bridges it for playerctl.
+    bindsym --locked XF86AudioPlay exec playerctl play-pause
+    bindsym --locked XF86AudioPrev exec playerctl previous
+    bindsym --locked XF86AudioNext exec playerctl next
+
+    bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+    bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+#
+# Screenshots (grim + slurp + swappy, as in lainland):
+#
+    bindsym Print exec grim "$HOME/pics/screenshots/$(date +%Y%m%d_%Hh%Mm%Ss)_grim.png"
+    bindsym $mod+Print exec grim -g "$(slurp -o)" - | swappy -f -
+    bindsym $mod+Shift+Print exec grim -g "$(slurp)" - | swappy -f -
+#
+# Notifications:
+#
+    bindsym $mod+n exec swaync-client -t
+
+### Window rules
+#
+# scripts/term tags float windows with BOTH an app_id and a title, because the
+# flag differs per emulator (foot --app-id, kitty/alacritty --class + --title).
+# Match both so the rule holds whichever terminal is installed.
+for_window [app_id="termfloat"] floating enable
+for_window [title="termfloat"] floating enable
+
+include /etc/sway/config.d/*

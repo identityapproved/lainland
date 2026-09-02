@@ -1,0 +1,29 @@
+#!/bin/sh
+# Session launcher for Sway. Sets up the D-Bus session and the Wayland
+# environment that environment.d would provide on a systemd box.
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    exec dbus-run-session "$0" "$@"
+fi
+
+export XDG_SESSION_TYPE=wayland
+# Must match a UseIn= entry in /usr/share/xdg-desktop-portal/portals/wlr.portal
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_DESKTOP=sway
+
+export MOZ_ENABLE_WAYLAND=1
+# Bay Trail: the i965 VA-API driver fails on the Wayland backend with
+# "undefined symbol: wl_drm_interface" against current Mesa. The DRM backend
+# works and exposes H.264/MPEG2 decode, so pin the driver explicitly.
+export LIBVA_DRIVER_NAME=i965
+export QT_QPA_PLATFORM='wayland;xcb'
+export SDL_VIDEODRIVER=wayland
+export CLUTTER_BACKEND=wayland
+export ELECTRON_ENABLE_WAYLAND=1
+export ELECTRON_OZONE_PLATFORM_HINT=wayland
+export OZONE_PLATFORM=wayland
+export XDG_DATA_DIRS="$HOME/.local/share:/usr/local/share:/usr/share"
+
+exec sway "$@"
