@@ -3,7 +3,10 @@
 #
 # waybar is started from mango's exec-once, which does not run a login shell, so
 # NB_DIR from .zprofile cannot be relied on here — it is pinned below, same as
-# toggle_mic.sh pins its device name.
+# toggle_mic.sh pins its device name. The pin is unconditional, not
+# "${NB_DIR:-...}": waybar outlives config changes, and a stale NB_DIR inherited
+# from the session that launched it would otherwise win and send nb at a dead
+# path, which nb answers by bootstrapping an empty notebook there.
 #
 # Two nb behaviours drive the awkward bits below: it colours output even when
 # stdout is a pipe (hence --no-color, or the tooltip fills with escapes), and it
@@ -11,7 +14,7 @@
 # forever waiting on content that never arrives).
 set -euo pipefail
 
-export NB_DIR="${NB_DIR:-$HOME/nb}"
+export NB_DIR="$HOME/nb"
 
 # Before nb has bootstrapped the notebook there is nothing to count, and merely
 # invoking nb would try to create it.
