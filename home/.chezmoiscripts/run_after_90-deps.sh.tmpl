@@ -1,0 +1,151 @@
+#!/bin/sh
+# Dependency report. Runs at the end of every `chezmoi apply` so there is nothing
+# separate to remember to invoke -- this is the whole reason there is no
+# ./checker script in this repo.
+#
+# ALWAYS exits 0. A missing optional tool must never fail an apply.
+#
+# Templated on .wm, so the compositor group is decided here rather than parsed
+# out of chezmoi.toml at runtime.
+
+miss_req=""
+miss_opt=""
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# A missing *binary* is not a package name, and printing `xbps-install -S
+# notify-send` sends you looking for a package that does not exist. Translate
+# the ones that differ; anything unlisted is its own package name.
+pkg_for() {
+    case "$1" in
+        notify-send)     echo libnotify ;;
+{{ if eq .chezmoi.osRelease.id "void" -}}
+        waybar)          echo Waybar ;;   # Void capitalises it
+{{ end -}}
+        sensors)         echo lm_sensors ;;
+        wl-copy)         echo wl-clipboard ;;
+        wpctl)           echo wireplumber ;;
+        rg)              echo ripgrep ;;
+        nvim)            echo neovim ;;
+        gh)              echo github-cli ;;
+        timew)           echo timewarrior ;;
+        swaymsg|swaynag) echo sway ;;
+        makoctl)         echo mako ;;
+        swaync-client)   echo swaync ;;
+        mmsg)            echo mango ;;
+        hyprctl)         echo hyprland ;;
+        *)               echo "$1" ;;
+    esac
+}
+
+# Map a binary list to a deduplicated package list.
+pkgs_for() {
+    for b in $1; do pkg_for "$b"; done | sort -u | tr '\n' ' '
+}
+
+# group <label> <required|optional> <bin>...
+group() {
+    label=$1; kind=$2; shift 2
+    out=""; missing=""
+    for b in "$@"; do
+        if have "$b"; then
+            out="$out $b"
+        else
+            missing="$missing $b"
+        fi
+    done
+    if [ -n "$missing" ]; then
+        printf '  %-14s missing:%s\n' "$label" "$missing"
+        if [ "$kind" = required ]; then
+            miss_req="$miss_req$missing"
+        else
+            miss_opt="$miss_opt$missing"
+        fi
+    else
+        printf '  %-14s ok\n' "$label"
+    fi
+}
+
+echo
+echo "lainland dependency report ({{ .wm }} on {{ .host }})"
+echo
+
+group core     required  git zsh tmux nvim fzf rg fd bat eza zoxide starship
+{{ if eq .wm "sway" -}}
+group wm       required  sway swaymsg swaybg swayidle swaynag
+group notify   required  swaync swaync-client
+{{ else if eq .wm "mango" -}}
+group wm       required  mango mmsg
+group notify   required  mako makoctl
+{{ else -}}
+group wm       required  hyprctl hypridle
+group notify   required  mako makoctl
+{{ end -}}
+group bar      required  waybar cava sensors
+group screen   required  grim slurp swappy wl-copy notify-send
+group audio    required  wpctl playerctl
+group dev      optional  lazygit delta gh glow w3m
+group media    optional  mpv zathura mpd rmpc
+group monitor  required  btop htop
+group prod     optional  task timew calcurse nb zk taskwarrior-tui
+group util     optional  clipse wlogout tofi wg-quick
+
+# The terminal group is any-of, not all-of: .config/scripts/term resolves to
+# whichever of these is installed, so one is a pass.
+term_found=""
+for t in kitty foot alacritty; do
+    have "$t" && { term_found=$t; break; }
+done
+if [ -n "$term_found" ]; then
+    printf '  %-14s ok (%s)\n' terminal "$term_found"
+else
+    printf '  %-14s missing: none of kitty/foot/alacritty\n' terminal
+    miss_req="$miss_req kitty-or-foot-or-alacritty"
+fi
+
+# Fonts are the same set on every host -- see the Fonts section in the README.
+if have fc-list; then
+    font_missing=""
+    for f in "IosevkaTerm Nerd Font Mono" "Iosevka Nerd Font Propo" "Iosevka Nerd Font" "Symbols Nerd Font"; do
+        fc-list | grep -qF "$f" || font_missing="$font_missing '$f'"
+    done
+    if [ -n "$font_missing" ]; then
+        printf '  %-14s missing:%s\n' fonts "$font_missing"
+        miss_req="$miss_req nerd-fonts"
+    else
+        printf '  %-14s ok\n' fonts
+    fi
+fi
+
+{{ if eq .chezmoi.osRelease.id "void" -}}
+# Root-owned Void system files. chezmoi cannot install these without prompting
+# for a password mid-apply, so they are reported instead. See void/README.md.
+for pair in \
+    "/etc/modules-load.d/usb-hotplug.conf|void/system/modules-load.d/usb-hotplug.conf" \
+    "/etc/udev/rules.d/71-usb-serial-uaccess.rules|void/system/udev/71-usb-serial-uaccess.rules"
+do
+    dest=${pair%%|*}; src=${pair#*|}
+    [ -e "$dest" ] && continue
+    printf '  %-14s missing: %s\n' system "$dest"
+    printf '      doas install -Dm 644 %s/%s %s\n' "{{ .chezmoi.workingTree }}" "$src" "$dest"
+done
+{{ end -}}
+
+echo
+if [ -n "$miss_req" ]; then
+    echo "  install (required):"
+{{ if eq .chezmoi.osRelease.id "void" -}}
+    echo "    doas xbps-install -S $(pkgs_for "$miss_req")"
+{{ else if eq .chezmoi.osRelease.id "gentoo" -}}
+    echo "    doas emerge -a $(pkgs_for "$miss_req")"
+{{ else -}}
+    echo "    $(pkgs_for "$miss_req")"
+{{ end -}}
+fi
+if [ -n "$miss_opt" ]; then
+    echo "  optional, not installed: $(pkgs_for "$miss_opt")"
+fi
+[ -z "$miss_req$miss_opt" ] && echo "  everything present."
+echo
+
+exit 0
