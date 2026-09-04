@@ -109,6 +109,7 @@ sys-process/htop
 www-client/w3m
 www-client/zen-bin
 x11-libs/libnotify
+x11-misc/gammastep
 x11-terms/kitty
 x11-themes/gtk-engines-murrine
 x11-themes/tela-icon-theme

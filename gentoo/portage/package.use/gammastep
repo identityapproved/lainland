@@ -1,0 +1,11 @@
+# gammastep. The atom is x11-misc/* for redshift-fork reasons, but the session
+# is wayland-only here.
+#
+#   wayland   the wlr-gamma-control-unstable-v1 backend. Without it only the
+#             X11 randr/vidmode methods are built and gammastep exits with
+#             "no protocol" under mango and sway.
+#  -geoclue   location is manual in ~/.config/gammastep/config.ini; geoclue is
+#             a D-Bus service that reaches the network for it.
+#  -gtk       the tray indicator (and its python dep). The waybar
+#             custom/gammastep module is what toggles it here.
+x11-misc/gammastep wayland -geoclue -gtk
