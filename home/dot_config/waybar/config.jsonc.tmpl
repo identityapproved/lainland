@@ -35,6 +35,7 @@
         "custom/temperature",
         "wireplumber",
         "custom/mic",
+        "custom/gammastep",
         "tray",
         {{ if eq .wm "mango" }}"custom/language"{{ else if eq .wm "hyprland" }}"hyprland/language"{{ else }}"sway/language"{{ end }},
         "clock",
@@ -191,6 +192,18 @@
         "interval": 2,
         "signal": 8,
         "tooltip": false
+    },
+    "custom/gammastep": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/toggle_gammastep.sh waybar",
+        // The process is the state, so poll slowly; the toggle signals RTMIN+10
+        // for an immediate redraw, and 60s is enough to catch the period flip
+        // in the tooltip.
+        "interval": 60,
+        "signal": 10,
+        "on-click": "~/.config/waybar/scripts/toggle_gammastep.sh toggle",
+        "tooltip": true
     },
     "tray": {
         "icon-size": 16,

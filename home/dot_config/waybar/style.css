@@ -127,6 +127,7 @@
 #temperature,
 #wireplumber,
 #custom-mic,
+#custom-gammastep,
 #tray,
 #language,
 #custom-language,
@@ -163,6 +164,28 @@
 
 #custom-mic.absent {
   color: @lain-urgent;
+}
+
+#custom-gammastep {
+  /* single glyph, matched to #custom-mic so the pair reads as one cluster */
+  min-width: 13px;
+  padding: 0px 9px;
+}
+
+#custom-gammastep.on {
+  color: @lain-accent;
+}
+
+#custom-gammastep.off {
+  color: @lain-fg-dim;
+}
+
+/* No binary: the module renders empty text, so collapse the box too rather
+   than leaving a stray bordered gap in the bar. */
+#custom-gammastep.absent {
+  border: none;
+  padding: 0;
+  min-width: 0;
 }
 
 #custom-cava {

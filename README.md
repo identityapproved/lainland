@@ -317,6 +317,7 @@ made in the UI lands in this repo through the symlink.
 | Tool | Notes |
 |---|---|
 | `clipse` | Clipboard manager |
+| `gammastep` | Night colour temperature; started by mango and sway, toggled from the waybar module |
 | `tofi` / `wofi` | Launchers kept for other machines |
 | `fontconfig` | Generic families aliased to Iosevka |
 
