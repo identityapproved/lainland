@@ -59,7 +59,12 @@ waybar)
     # -p is gammastep's one-shot print mode: period, location, solar elevation,
     # temperature. It reads the same config.ini, so the tooltip cannot disagree
     # with what the running instance is applying.
-    tip=$(gammastep -p 2>/dev/null | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+    #
+    # 2>&1 is load-bearing: -p prints through the logger, i.e. to stderr with a
+    # "Notice: " prefix on every line, and nothing at all to stdout.
+    tip=$(gammastep -p 2>&1 |
+        sed -e 's/^Notice: //' -e 's/"/\\"/g' |
+        sed ':a;N;$!ba;s/\n/\\n/g')
     [ -n "$tip" ] || tip="gammastep running"
     printf '{"text":"%s","class":"on","tooltip":"%s"}\n' "$ICON_ON" "$tip"
   else
