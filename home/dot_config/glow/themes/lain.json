@@ -1,0 +1,163 @@
+{
+  "_comment": "Lain glamour style for glow. Colors from lain-colors.md; see the role map there before changing a value. Chroma block mirrors bat/themes/Lain.tmTheme.",
+
+  "document": {
+    "block_prefix": "\n",
+    "block_suffix": "\n",
+    "color": "#C1B48E",
+    "margin": 2
+  },
+  "block_quote": {
+    "color": "#A05969",
+    "italic": true,
+    "indent": 1,
+    "indent_token": "│ "
+  },
+  "paragraph": {},
+  "list": {
+    "color": "#C1B48E",
+    "level_indent": 2
+  },
+  "heading": {
+    "block_suffix": "\n",
+    "color": "#CE7688",
+    "bold": true
+  },
+  "h1": {
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#000000",
+    "background_color": "#CE7688",
+    "bold": true
+  },
+  "h2": {
+    "prefix": "## ",
+    "color": "#CE7688"
+  },
+  "h3": {
+    "prefix": "### ",
+    "color": "#BA6A7B"
+  },
+  "h4": {
+    "prefix": "#### ",
+    "color": "#A05969"
+  },
+  "h5": {
+    "prefix": "##### ",
+    "color": "#965363"
+  },
+  "h6": {
+    "prefix": "###### ",
+    "color": "#8E4E5D",
+    "bold": false
+  },
+  "text": {},
+  "strikethrough": {
+    "color": "#804654",
+    "crossed_out": true
+  },
+  "emph": {
+    "color": "#B5A985",
+    "italic": true
+  },
+  "strong": {
+    "color": "#CE7688",
+    "bold": true
+  },
+  "hr": {
+    "color": "#3A3A3A",
+    "format": "\n--------\n"
+  },
+  "item": {
+    "block_prefix": "• ",
+    "color": "#CE7688"
+  },
+  "enumeration": {
+    "block_prefix": ". ",
+    "color": "#CE7688"
+  },
+  "task": {
+    "ticked": "[✓] ",
+    "unticked": "[ ] "
+  },
+  "link": {
+    "color": "#C1B48E",
+    "underline": true
+  },
+  "link_text": {
+    "color": "#CE7688",
+    "bold": true
+  },
+  "image": {
+    "color": "#A49978",
+    "underline": true
+  },
+  "image_text": {
+    "color": "#804654",
+    "format": "Image: {{.text}} →"
+  },
+  "code": {
+    "prefix": " ",
+    "suffix": " ",
+    "color": "#FFB1C3",
+    "background_color": "#1A1A1A"
+  },
+  "code_block": {
+    "color": "#C1B48E",
+    "margin": 2,
+    "chroma": {
+      "text": { "color": "#C1B48E" },
+      "error": { "color": "#FFB1C3", "background_color": "#930006" },
+      "comment": { "color": "#804654", "italic": true },
+      "comment_preproc": { "color": "#BA6A7B" },
+      "keyword": { "color": "#CE7688", "bold": true },
+      "keyword_reserved": { "color": "#CE7688" },
+      "keyword_namespace": { "color": "#BA6A7B" },
+      "keyword_type": { "color": "#B5A985" },
+      "operator": { "color": "#A05969" },
+      "punctuation": { "color": "#A49978" },
+      "name": { "color": "#C1B48E" },
+      "name_builtin": { "color": "#FFB1C3" },
+      "name_tag": { "color": "#CE7688" },
+      "name_attribute": { "color": "#B5A985" },
+      "name_class": { "color": "#FFB1C3", "bold": true },
+      "name_constant": { "color": "#FFDCB9" },
+      "name_decorator": { "color": "#BA6A7B", "italic": true },
+      "name_exception": { "color": "#FFB1C3" },
+      "name_function": { "color": "#B5A985", "bold": true },
+      "name_other": { "color": "#C1B48E" },
+      "literal": { "color": "#FFDCB9" },
+      "literal_number": { "color": "#FFDCB9" },
+      "literal_date": { "color": "#FFDCB9" },
+      "literal_string": { "color": "#A49978" },
+      "literal_string_escape": { "color": "#FFDCB9" },
+      "generic_deleted": { "color": "#BA6A7B" },
+      "generic_emph": { "color": "#B5A985", "italic": true },
+      "generic_heading": { "color": "#CE7688", "bold": true },
+      "generic_inserted": { "color": "#B5A985" },
+      "generic_strong": { "color": "#CE7688", "bold": true },
+      "generic_subheading": { "color": "#A05969" },
+      "background": { "background_color": "#000000" }
+    }
+  },
+  "table": {
+    "color": "#C1B48E",
+    "center_separator": "┼",
+    "column_separator": "│",
+    "row_separator": "─"
+  },
+  "definition_list": {},
+  "definition_term": {
+    "color": "#CE7688",
+    "bold": true
+  },
+  "definition_description": {
+    "block_prefix": "\n🠶 "
+  },
+  "html_block": {
+    "color": "#5A5341"
+  },
+  "html_span": {
+    "color": "#5A5341"
+  }
+}
