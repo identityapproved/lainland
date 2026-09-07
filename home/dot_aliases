@@ -266,6 +266,49 @@ alias ports='ss -tulpen'
 alias myip='ip -br a'
 alias route='ip route'   # deliberately shadows the deprecated net-tools route
 
+# --- syncthing ------------------------------------------------------------
+# Syncthing here is deliberately NOT a service: no autostart, no GUI on 8384,
+# and one TCP socket that exists only while a session is running. Both machines
+# must be up and running `sy up` at the same time for anything to move.
+# Config is ~/.local/state/syncthing/config.xml, edited with the daemon stopped
+# (it rewrites the file while running, so live edits are lost).
+#   sy up       run in the foreground until Ctrl-C -- this is a "sync session"
+#   sy status   process, listener, peer connection, tail of the log
+#   sy log      follow the log (the only status source with no GUI)
+#   sy id       this machine's device ID
+sy() {
+  local dir="$HOME/.local/state/syncthing"
+  case "${1:-status}" in
+    up)
+      syncthing serve --no-browser --no-restart --log-file=default
+      ;;
+    log)
+      tail -f "$dir/syncthing.log"
+      ;;
+    id)
+      syncthing device-id
+      ;;
+    status)
+      if pgrep -x syncthing >/dev/null 2>&1; then
+        echo "running"
+      else
+        echo "stopped"
+      fi
+      # Expect exactly one listener, on this host's LAN address only, and
+      # nothing on 8384. Anything else is a misconfiguration, not noise.
+      echo "-- listening"
+      ss -lntu 2>/dev/null | grep -E ':(22000|8384)' || echo "   (nothing)"
+      echo "-- peer"
+      ss -nt 2>/dev/null | grep ':22000' || echo "   (not connected)"
+      if [ -f "$dir/syncthing.log" ]; then
+        echo "-- log tail"
+        tail -n 5 "$dir/syncthing.log"
+      fi
+      ;;
+    *) echo "usage: sy {up|status|log|id}" >&2; return 2 ;;
+  esac
+}
+
 # --- dictionary -----------------------------------------------------------
 # Exact-headword entry across every dictionary in ~/.dicts. Entries are flush
 # left and their bodies indented, so a non-indented line starts a new headword:
