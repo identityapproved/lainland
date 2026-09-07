@@ -34,7 +34,7 @@ if status is-interactive
     set -gx VISUAL nvim
     set -gx EDITOR nvim
 
-    set -gx ZK_NOTEBOOK_DIR $HOME/drives/kodak/zettelnotes
+    set -gx ZK_NOTEBOOK_DIR $HOME/zettelnotes
 
     # SSH agent setup
     set -l ssh_env $HOME/.ssh/environment
