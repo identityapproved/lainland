@@ -275,8 +275,21 @@ and `hypr/configs/envars.conf` both set.
 | `bat` | Custom `Lain.tmTheme` |
 | `yazi` | File manager, `flavors/lain.yazi` plus plugins |
 | `opencode` | TUI theme, `opencode/themes/lain.json` — see its README |
+| `glow` | Markdown renderer, `glow/themes/lain.json` — see below |
 | `btop` | Resource monitor, `themes/lain.theme` |
 | `htop` | Resource monitor; colors come from the terminal ANSI palette, see below |
+
+glow takes its style as a glamour JSON file, and it will not expand `~` in the
+path -- `style: "~/.config/glow/themes/lain.json"` fails to open. `glow.yml` is
+therefore a chezmoi template that writes the absolute path at apply time; edit
+`glow/glow.yml.tmpl`, not the generated `~/.config/glow/glow.yml`. Only rendered
+markdown follows the style. glow's own TUI chrome -- the file browser under
+`glow -t` -- is hardcoded in the binary and stays Charm purple.
+
+Inside fenced code blocks glamour hands highlighting to chroma, which emits
+256-colour indices rather than truecolor. The chroma hexes were picked so their
+nearest indices are the ones already in the palette's 256-colour table (174,
+144, 138, 217, 131, 95), so the degradation stays on-palette.
 
 htop has no theme format — `color_scheme` is an integer 0-6 selecting one of six
 built-ins, and there is no way to hand it hex values. `htoprc` therefore sets
