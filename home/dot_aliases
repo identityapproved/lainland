@@ -283,6 +283,12 @@ sy() {
       syncthing serve --no-browser --no-restart --log-file=default
       ;;
     log)
+      # The log only exists once `sy up` has run at least once; without this
+      # guard tail reports the missing file as an error rather than a state.
+      if [ ! -f "$dir/syncthing.log" ]; then
+        echo "no log yet -- syncthing has not been run" >&2
+        return 1
+      fi
       tail -f "$dir/syncthing.log"
       ;;
     id)
