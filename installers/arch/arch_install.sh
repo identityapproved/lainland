@@ -77,7 +77,7 @@ Taskwarrior note:
   If your task data lives outside the default path, update:
     ~/.config/task/taskrc
   Example:
-    data.location=$HOME/drives/kodak/taskwarrior/task
+    data.location=$HOME/taskwarrior/task
 
 EON
 fi

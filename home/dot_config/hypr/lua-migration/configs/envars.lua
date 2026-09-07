@@ -11,7 +11,7 @@ local env = {
     { "XDG_SESSION_TYPE", "wayland" },
     { "QT_WAYLAND_DISABLE_WINDOWDECORATION", "1" },
     { "ELECTRON_OZONE_PLATFORM_HINT", "wayland" },
-    { "SWAPPY_DIR", "$HOME/drives/kodak/pics/screenshots" },
+    -- SWAPPY_DIR is deliberately unset; see configs/envars.conf.
     { "XCURSOR_SIZE", "24" },
     { "XCURSOR_THEME", "lainicons" },
     { "WLR_NO_HARDWARE_CURSORS", "0" },
