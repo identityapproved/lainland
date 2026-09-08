@@ -38,7 +38,7 @@ exec --no-startup-id sh -c 'pgrep -x mpd >/dev/null || mpd'
 # transport keys (which go through playerctl) can drive rmpc.
 exec --no-startup-id sh -c 'pgrep -x mpDris2 >/dev/null || mpDris2 &'
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
-exec --no-startup-id swaync
+exec --no-startup-id mako
 exec --no-startup-id waybar
 # Night colour temperature. Reads ~/.config/gammastep/config.ini, so mango and
 # sway share one set of values. Guarded like the daemons above so a session
@@ -87,20 +87,25 @@ output eDP-1 scale 1
 ### Input configuration
 #
 # Keyboard
+# us,ua with Scroll Lock cycling them, matching mango/config.conf and
+# hypr/configs/input.conf. sway keeps only the last xkb_options line, so
+# caps:swapescape has to share this one comma-separated value.
 input type:keyboard {
-    xkb_options caps:swapescape
+    xkb_layout us,ua
+    xkb_options grp:sclk_toggle,caps:swapescape
 }
 
 # Mice
 input type:pointer {
     accel_profile flat
+    natural_scroll enabled
 }
 
 # Touchpad
 input type:touchpad {
     dwt enabled
     tap enabled
-    natural_scroll disabled
+    natural_scroll enabled
 }
 
 # Close the lid, turn the panel off.
@@ -109,41 +114,50 @@ bindswitch --reload --locked lid:off output eDP-1 enable
 
 ### Key bindings
 #
-# Ported from lainland/hypr/configs/keybinds.conf. Hyprland concepts that have
-# no sway analogue (pseudo, bringactivetotop, swapactiveworkspaces) are dropped;
-# sway-only things (bindswitch, reload) are kept.
+# Kept in step with mango/config.conf, which is the daily driver -- same key,
+# same action, so muscle memory carries between hosts. Where mango does
+# something sway cannot express the key is left unbound with a note, rather
+# than quietly repurposed.
+#
+# Two deliberate divergences from mango, both because the tool differs on Void:
+# the launcher is tofi (mango uses walker) and volume/brightness go through
+# wpctl/brightnessctl (mango uses swayosd-client). Same keys either way.
 #
 # Terminal:
 #
-    # Mod+Return is tmux and Mod+Shift+Return is a bare shell - deliberately
-    # inverted against lainland, which does it the other way round.
+    # Mod+Return is tmux and Mod+Shift+Return is a bare shell. mango and hypr
+    # were flipped to match this, so all three now agree.
     bindsym $mod+Return exec $term -e tmux
     bindsym $mod+Shift+Return exec $term
     bindsym $mod+Ctrl+Return exec $term --float
+    # mango SUPER+c opens clipse in a float; clipse is not installed on Void.
+    # bindsym $mod+c exec $term --float -e clipse
 #
 # Core actions:
 #
+    bindsym $mod+r reload
     bindsym $mod+e exec $term -e yazi
     bindsym $mod+q kill
     bindsym $mod+space exec tofi-drun
-    bindsym $mod+Shift+space exec tofi-run
     bindsym $mod+f fullscreen
-    bindsym $mod+Shift+t exec notify-send "  $(date +%H:%M) |   $(date +%d.%m.%y)"
-    # No screen locking on this laptop; swaylock removed.
-    # bindsym $mod+F12 exec swaylock -f -c 000000
-    bindsym $mod+Shift+c reload
-    bindsym $mod+Shift+m exec swaynag -t warning -m 'Exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
-#
-# Floating and layout:
-#
     bindsym $mod+v floating toggle
-    bindsym $mod+a focus mode_toggle
-    bindsym $mod+Tab focus next
-    bindsym $mod+Shift+Tab focus prev
-    bindsym $mod+g layout toggle tabbed split
-    bindsym $mod+t layout toggle split
-    bindsym $mod+y sticky toggle
-    floating_modifier $mod normal
+    # mango toggleglobal shows a window on every tag; sticky is sway's version.
+    bindsym $mod+g sticky toggle
+    bindsym $mod+Shift+m exec swaynag -t warning -m 'Exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # No sway analogue, left unbound rather than repurposed:
+    #   $mod+Shift+f  mango togglefakefullscreen
+    #   $mod+a        mango togglemaximizescreen
+    #   $mod+o        mango toggleoverlay
+    #   $mod+d, $mod+Shift+d  mango floating-window cycling (not wanted here)
+    #   $mod+grave    mango drop-down console (not wanted here)
+    # No screen locking on this laptop; swaylock and wlogout are not installed.
+    #   $mod+F12 / $mod+Shift+F12
+#
+# Bar:
+#
+    bindsym $mod+b exec pkill -SIGUSR1 waybar
+    bindsym $mod+Shift+b exec pkill -SIGUSR2 waybar
 #
 # Focus and movement:
 #
@@ -151,21 +165,27 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     bindsym $mod+$down focus down
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
+    bindsym $mod+Tab focus next
 
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
+
+    floating_modifier $mod normal
 #
-# Workspaces:
+# Layout:
+#
+    # mango switch_layout cycles its tiling layouts; this is the nearest sway has.
+    bindsym $mod+n layout toggle split tabbed stacking
+    # mango binds Alt+Tab to its overview. sway has none, so this is just a
+    # second cycle key.
+    bindsym Alt+Tab focus next
+
+    # mango scroller-layout binds have no sway equivalent at all:
+    #   $mod+Alt+e, Alt+x, $mod+Alt+Ctrl+{Left,Right,Up,Down}
+#
+# Workspaces (mango tags 1-9; it has no tag 10):
 #
     bindsym $mod+1 workspace 1
     bindsym $mod+2 workspace 2
@@ -176,21 +196,7 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     bindsym $mod+7 workspace 7
     bindsym $mod+8 workspace 8
     bindsym $mod+9 workspace 9
-    bindsym $mod+0 workspace 10
 
-    # Ctrl: move the window and follow it.
-    bindsym $mod+Ctrl+1 move container to workspace 1; workspace 1
-    bindsym $mod+Ctrl+2 move container to workspace 2; workspace 2
-    bindsym $mod+Ctrl+3 move container to workspace 3; workspace 3
-    bindsym $mod+Ctrl+4 move container to workspace 4; workspace 4
-    bindsym $mod+Ctrl+5 move container to workspace 5; workspace 5
-    bindsym $mod+Ctrl+6 move container to workspace 6; workspace 6
-    bindsym $mod+Ctrl+7 move container to workspace 7; workspace 7
-    bindsym $mod+Ctrl+8 move container to workspace 8; workspace 8
-    bindsym $mod+Ctrl+9 move container to workspace 9; workspace 9
-    bindsym $mod+Ctrl+0 move container to workspace 10; workspace 10
-
-    # Shift: move the window silently, stay put.
     bindsym $mod+Shift+1 move container to workspace 1
     bindsym $mod+Shift+2 move container to workspace 2
     bindsym $mod+Shift+3 move container to workspace 3
@@ -200,50 +206,64 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     bindsym $mod+Shift+7 move container to workspace 7
     bindsym $mod+Shift+8 move container to workspace 8
     bindsym $mod+Shift+9 move container to workspace 9
-    bindsym $mod+Shift+0 move container to workspace 10
 
-    bindsym $mod+period workspace next_on_output
+    # mango viewtoleft/viewtoright and their _have_client variants. sway has no
+    # empty workspaces, so both pairs collapse onto prev/next_on_output.
+    bindsym $mod+Left workspace prev_on_output
+    bindsym $mod+Right workspace next_on_output
     bindsym $mod+comma workspace prev_on_output
-    bindsym $mod+slash workspace back_and_forth
+    bindsym $mod+period workspace next_on_output
+
+    # mango tagtoleft / tagtoright.
+    bindsym $mod+Ctrl+Left move container to workspace prev_on_output
+    bindsym $mod+Ctrl+Right move container to workspace next_on_output
+
+    # mango axisbind: scroll over the desktop to change tag.
+    bindsym --whole-window $mod+button4 workspace prev_on_output
+    bindsym --whole-window $mod+button5 workspace next_on_output
 #
-# Scratchpad (hypr special workspace):
+# Scratchpad:
 #
     bindsym $mod+minus move scratchpad
     bindsym $mod+equal scratchpad show
+    # mango minimized / restore_minimized. sway has one mechanism where mango
+    # has two, so these land on the same thing as the pair above; both are kept
+    # so either reflex works.
+    bindsym $mod+i move scratchpad
+    bindsym $mod+Shift+i scratchpad show
+#
+# Resize (mango resizewin, +/-50px):
+#
+    bindsym $mod+Ctrl+Shift+$right resize grow width 50 px
+    bindsym $mod+Ctrl+Shift+$left resize shrink width 50 px
+    bindsym $mod+Ctrl+Shift+$up resize shrink height 50 px
+    bindsym $mod+Ctrl+Shift+$down resize grow height 50 px
+    bindsym $mod+Ctrl+Shift+Right resize grow width 50 px
+    bindsym $mod+Ctrl+Shift+Left resize shrink width 50 px
+    bindsym $mod+Ctrl+Shift+Up resize shrink height 50 px
+    bindsym $mod+Ctrl+Shift+Down resize grow height 50 px
+#
+# Move floating window (mango movewin):
+#
+    bindsym Ctrl+Shift+Left move left 50 px
+    bindsym Ctrl+Shift+Right move right 50 px
+    bindsym Ctrl+Shift+Up move up 50 px
+    bindsym Ctrl+Shift+Down move down 50 px
 #
 # Gaps:
 #
-    bindsym $mod+Ctrl+g gaps inner all plus 2
-    bindsym $mod+Ctrl+s gaps inner all minus 2
-    bindsym $mod+Ctrl+r gaps inner all set 6; gaps outer all set 4
+    bindsym Alt+Shift+x gaps inner all plus 1
+    bindsym Alt+Shift+z gaps inner all minus 1
+    # mango togglegaps flips gaps off and back; this resets to the defaults set
+    # in the Appearance block above.
+    bindsym Alt+Shift+r gaps inner all set 6; gaps outer all set 4
 #
-# Resize:
+# Monitors:
 #
-mode "resize" {
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
-
-    # Quick resize without entering the mode.
-    bindsym $mod+Ctrl+Shift+Right resize grow width 23px
-    bindsym $mod+Ctrl+Shift+Left resize shrink width 23px
-    bindsym $mod+Ctrl+Shift+Up resize shrink height 23px
-    bindsym $mod+Ctrl+Shift+Down resize grow height 23px
-    bindsym $mod+Ctrl+Shift+l resize grow width 23px
-    bindsym $mod+Ctrl+Shift+h resize shrink width 23px
-    bindsym $mod+Ctrl+Shift+k resize shrink height 23px
-    bindsym $mod+Ctrl+Shift+j resize grow height 23px
+    bindsym Alt+Shift+Left focus output left
+    bindsym Alt+Shift+Right focus output right
+    bindsym $mod+Alt+Left move container to output left
+    bindsym $mod+Alt+Right move container to output right
 #
 # Media and hardware:
 #
@@ -261,15 +281,17 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 #
-# Screenshots (grim + slurp + swappy, as in lainland):
+# Screenshots:
 #
-    bindsym Print exec grim "$HOME/pics/screenshots/$(date +%Y%m%d_%Hh%Mm%Ss)_grim.png"
-    bindsym $mod+Print exec grim -g "$(slurp -o)" - | swappy -f -
-    bindsym $mod+Shift+Print exec grim -g "$(slurp)" - | swappy -f -
+# One script for all three compositors -- it only calls grim/slurp/swappy, so
+# nothing in it is compositor-specific. Lives in the shared scripts/ dir because
+# .chezmoiignore drops .config/mango on this host.
 #
-# Notifications:
-#
-    bindsym $mod+n exec swaync-client -t
+    bindsym Print exec ~/.config/scripts/screenshot.sh full
+    bindsym $mod+Print exec ~/.config/scripts/screenshot.sh output
+    bindsym $mod+Shift+Print exec ~/.config/scripts/screenshot.sh region
+    # Xbox Series Share button (xpad emits KEY_RECORD).
+    bindsym XF86AudioRecord exec ~/.config/scripts/screenshot.sh game
 
 ### Window rules
 #
