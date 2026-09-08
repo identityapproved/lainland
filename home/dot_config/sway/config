@@ -50,11 +50,11 @@ exec --no-startup-id sh -c 'pgrep -x gammastep >/dev/null || gammastep &'
 
 exec_always --no-startup-id "$HOME/.config/sway/scripts/set-wallpaper.sh"
 
-# No screen locking on this laptop - swaylock is removed. swayidle stays purely
-# to blank the panel after 10min; the lock and before-sleep actions below are
-# kept commented in case locking is ever wanted back.
-exec --no-startup-id swayidle -w \
-    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
+# No screen locking on this laptop - swaylock is removed, and swayidle is off
+# the system too, so nothing blanks the panel on idle any more. The whole block
+# is kept commented in case idling or locking is ever wanted back.
+# exec --no-startup-id swayidle -w \
+#     timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
 #   timeout 300 'swaylock -f -c 000000' \
 #   before-sleep 'swaylock -f -c 000000'
 
@@ -131,8 +131,8 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     bindsym $mod+Return exec $term -e tmux
     bindsym $mod+Shift+Return exec $term
     bindsym $mod+Ctrl+Return exec $term --float
-    # mango SUPER+c opens clipse in a float; clipse is not installed on Void.
-    # bindsym $mod+c exec $term --float -e clipse
+    # $mod+c is free: clipse is retired on every host, so mango has no SUPER+c
+    # either and there is nothing here to mirror.
 #
 # Core actions:
 #

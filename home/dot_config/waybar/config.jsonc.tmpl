@@ -16,11 +16,15 @@
 
     "modules-left": [
         {{ if eq .wm "mango" }}"ext/workspaces"{{ else if eq .wm "hyprland" }}"hyprland/workspaces"{{ else }}"sway/workspaces"{{ end }},
-        "custom/timer",
         "custom/timewarrior",
-        "custom/media",
-        "custom/spotify",
-        "custom/cava"
+        "custom/tasks",
+        "custom/nb"
+        // Parked, not deleted: uncomment the name here and the definition
+        // below to bring one back. Their style.css rules stay in place.
+        //   "custom/timer"    pomodoro
+        //   "custom/media"    playerctl now-playing
+        //   "custom/spotify"  playerctl, spotify only; the account is gone
+        //   "custom/cava"     audio visualiser (cava itself stays, rmpc uses it)
     ],
     "modules-center": [
         {{ if eq .wm "mango" }}"custom/window"{{ else if eq .wm "hyprland" }}"hyprland/window"{{ else }}"sway/window"{{ end }}
@@ -28,8 +32,6 @@
     "modules-right": [
         "custom/weather",
         "custom/storage",
-        "custom/tasks",
-        "custom/nb",
         "cpu",
         "memory",
         "custom/temperature",
@@ -38,8 +40,9 @@
         "custom/gammastep",
         "tray",
         {{ if eq .wm "mango" }}"custom/language"{{ else if eq .wm "hyprland" }}"hyprland/language"{{ else }}"sway/language"{{ end }},
-        "clock",
-        "custom/power"
+        "clock"
+        // Parked, not deleted:
+        //   "custom/power"   wlogout power button
     ],
 
 {{ if eq .wm "mango" }}    "ext/workspaces": {
@@ -78,18 +81,19 @@
     "sway/language": {
         "format": "{short}"
     },
-{{ end }}    "custom/timer": {
-        "exec": "~/.config/waybar/scripts/pomodoro_timer.sh",
-        "return-type": "json",
-        "format": "{}",
-        "on-click": "~/.config/waybar/scripts/pomodoro_timer.sh click",
-        "on-click-right": "~/.config/waybar/scripts/pomodoro_timer.sh right",
-        "on-click-middle": "~/.config/waybar/scripts/pomodoro_timer.sh middle",
-        "on-scroll-up": "~/.config/waybar/scripts/pomodoro_timer.sh down",
-        "on-scroll-down": "~/.config/waybar/scripts/pomodoro_timer.sh up",
-        "tooltip": true,
-        "escape": true
-    },
+{{ end }}    // Pomodoro. Parked; scripts/pomodoro_timer.sh is untouched.
+    // "custom/timer": {
+    //     "exec": "~/.config/waybar/scripts/pomodoro_timer.sh",
+    //     "return-type": "json",
+    //     "format": "{}",
+    //     "on-click": "~/.config/waybar/scripts/pomodoro_timer.sh click",
+    //     "on-click-right": "~/.config/waybar/scripts/pomodoro_timer.sh right",
+    //     "on-click-middle": "~/.config/waybar/scripts/pomodoro_timer.sh middle",
+    //     "on-scroll-up": "~/.config/waybar/scripts/pomodoro_timer.sh down",
+    //     "on-scroll-down": "~/.config/waybar/scripts/pomodoro_timer.sh up",
+    //     "tooltip": true,
+    //     "escape": true
+    // },
     "custom/timewarrior": {
         "exec": "~/.config/waybar/modules/timewarrior.py",
         "return-type": "json",
@@ -101,24 +105,29 @@
         "tooltip": true
     },
 
-    "custom/media": {
-        "format": "{}",
-        "return-type": "json",
-        "max-length": 40,
-        "exec": "~/.config/waybar/modules/media.sh",
-        "tooltip": false
-    },
-    "custom/spotify": {
-        "exec": "~/.config/waybar/modules/spotify.sh",
-        "return-type": "json",
-        "format": "{}",
-        "tooltip": false
-    },
-    "custom/cava": {
-        "exec": "~/.config/waybar/scripts/cava.sh",
-        "format": "{}",
-        "tooltip": false
-    },
+    // Now playing via playerctl. Parked; modules/media.sh is untouched.
+    // "custom/media": {
+    //     "format": "{}",
+    //     "return-type": "json",
+    //     "max-length": 40,
+    //     "exec": "~/.config/waybar/modules/media.sh",
+    //     "tooltip": false
+    // },
+    // Spotify now playing. Parked; the spicetify theme outlived the account, so
+    // playerctl has no spotify player to read. modules/spotify.sh is untouched.
+    // "custom/spotify": {
+    //     "exec": "~/.config/waybar/modules/spotify.sh",
+    //     "return-type": "json",
+    //     "format": "{}",
+    //     "tooltip": false
+    // },
+    // Audio visualiser. Parked; scripts/cava.sh is untouched, but the cava
+    // package is no longer needed by anything if this stays off.
+    // "custom/cava": {
+    //     "exec": "~/.config/waybar/scripts/cava.sh",
+    //     "format": "{}",
+    //     "tooltip": false
+    // },
     "custom/weather": {
         "format": "{}",
         "return-type": "json",
@@ -214,10 +223,12 @@
         "tooltip": true,
         "tooltip-format": "<big>{:%A, %d %B %Y}</big>\n<tt>{calendar}</tt>",
         "on-click": "~/.config/waybar/scripts/popup_calendar.sh"
-    },
-    "custom/power": {
-        "format": " 󰐥 ",
-        "tooltip": false,
-        "on-click": "wlogout -b 6 -T 340 -B 340"
     }
+    // Power button. Parked; it ran wlogout, which is not installed on Void and
+    // is being removed from Gentoo too. style.css keeps its #custom-power rules.
+    // ,"custom/power": {
+    //     "format": " 󰐥 ",
+    //     "tooltip": false,
+    //     "on-click": "wlogout -b 6 -T 340 -B 340"
+    // }
 }

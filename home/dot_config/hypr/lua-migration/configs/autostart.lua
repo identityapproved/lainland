@@ -12,7 +12,6 @@ hl.on("hyprland.start", function()
         "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &",
         "hash dbus-update-activation-environment 2>/dev/null &",
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &",
-        "clipse -listen &",
         "hypridle -c ~/.config/hypr/hypridle.conf &",
     }
 

@@ -104,12 +104,15 @@ def format_duration(seconds: int) -> str:
     return f"0:{secs:02d}"
 
 
-def compact_tags(tags: list[str], limit: int = 2) -> str:
+def compact_tags(tags: list[str], limit: int = 1, width: int = 8) -> str:
+    # Bar real estate, not information: the full tag list is in the tooltip, so
+    # this keeps the module a fixed narrow width no matter how a bundle is named.
     if not tags:
         return "untagged"
+    shown = "/".join(t if len(t) <= width else t[: width - 1] + "…" for t in tags[:limit])
     if len(tags) <= limit:
-        return "/".join(tags)
-    return f"{'/'.join(tags[:limit])}+{len(tags) - limit}"
+        return shown
+    return f"{shown}+{len(tags) - limit}"
 
 
 def recent_bundles(limit: int = 8) -> list[str]:
