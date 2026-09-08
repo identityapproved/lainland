@@ -37,10 +37,13 @@ pkg_for() {
         sensors)         echo lm-sensors ;;
         mako|makoctl)    echo gui-apps/mako ;;
         mango|mmsg)      echo mangowm ;;
+        swayosd-client|swayosd-server) echo gui-apps/swayosd ;;
 {{ else -}}
         sensors)         echo lm_sensors ;;
         makoctl)         echo mako ;;
         mmsg)            echo mango ;;
+        # Capitalised in the Void repo; a bare echo would look for "swayosd".
+        swayosd-client|swayosd-server) echo SwayOSD ;;
 {{ end -}}
         wl-copy)         echo wl-clipboard ;;
         wpctl)           echo wireplumber ;;
@@ -89,8 +92,10 @@ echo
 group core     required  git zsh tmux nvim fzf rg fd bat eza zoxide starship
 {{ if eq .wm "sway" -}}
 group wm       required  sway swaymsg swaybg swayidle swaynag
+group osd      required  swayosd-server swayosd-client
 {{ else if eq .wm "mango" -}}
 group wm       required  mango mmsg
+group osd      required  swayosd-server swayosd-client
 {{ else -}}
 group wm       required  hyprctl hypridle
 {{ end -}}
@@ -110,7 +115,7 @@ group dev      optional  lazygit delta gh glow w3m
 group media    optional  mpv zathura mpd rmpc
 group monitor  required  btop htop
 group prod     optional  task timew calcurse nb zk taskwarrior-tui
-group util     optional  clipse wlogout tofi wg-quick gammastep
+group util     optional  tofi wg-quick gammastep
 
 # The terminal group is any-of, not all-of: .config/scripts/term resolves to
 # whichever of these is installed, so one is a pass.
