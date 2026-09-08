@@ -4,8 +4,9 @@ local bind = runtime.bind
 local mainMod = runtime.mainMod
 local apps = runtime.apps
 
-bind(mainMod .. " + RETURN", "Opens your preferred terminal emulator", hl.dsp.exec_cmd(apps.terminal))
-bind(mainMod .. " + SHIFT + RETURN", "Opens tmux terminal", hl.dsp.exec_cmd(apps.tmux))
+-- RETURN is tmux and SHIFT+RETURN is a bare shell, matching sway/config.
+bind(mainMod .. " + RETURN", "Opens tmux terminal", hl.dsp.exec_cmd(apps.tmux))
+bind(mainMod .. " + SHIFT + RETURN", "Opens your preferred terminal emulator", hl.dsp.exec_cmd(apps.terminal))
 bind(mainMod .. " + CTRL + RETURN", "Opens floating terminal", hl.dsp.exec_cmd(apps.termfloat))
 bind(mainMod .. " + C", "Opens clipboard history (Clipse)", hl.dsp.exec_cmd("kitty --title termfloat -e clipse"))
 
@@ -18,7 +19,6 @@ bind(mainMod .. " + F", "Toggles current window fullscreen mode", hl.dsp.window.
 bind(mainMod .. " + Y", "Pin current window", hl.dsp.window.pin())
 bind(mainMod .. " + T", "Rotates current dwindle split orientation", hl.dsp.layout("rotatesplit"))
 bind(mainMod .. " + P", "Pseudotiling", hl.dsp.window.pseudo())
-bind(mainMod .. " + SHIFT + T", "Show date/time notification", hl.dsp.exec_cmd('notify-send "  $(date +%H:%M) |   $(date +%d.%m.%y)"'))
 bind(mainMod .. " + F12", "Lock the screen", hl.dsp.exec_cmd(apps.locker))
 bind(mainMod .. " + SHIFT + F12", "Open power menu", hl.dsp.exec_cmd("wlogout -b 6 -T 340 -B 340"))
 

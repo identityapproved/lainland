@@ -49,7 +49,6 @@ pkg_for() {
         gh)              echo github-cli ;;
         timew)           echo timewarrior ;;
         swaymsg|swaynag) echo sway ;;
-        swaync-client)   echo swaync ;;
         hyprctl)         echo hyprland ;;
         *)               echo "$1" ;;
     esac
@@ -90,14 +89,13 @@ echo
 group core     required  git zsh tmux nvim fzf rg fd bat eza zoxide starship
 {{ if eq .wm "sway" -}}
 group wm       required  sway swaymsg swaybg swayidle swaynag
-group notify   required  swaync swaync-client
 {{ else if eq .wm "mango" -}}
 group wm       required  mango mmsg
-group notify   required  mako makoctl
 {{ else -}}
 group wm       required  hyprctl hypridle
-group notify   required  mako makoctl
 {{ end -}}
+# mako on every host since sway moved off swaync, so this is not wm-conditional.
+group notify   required  mako makoctl
 group bar      required  waybar cava
 
 # sensors is not a bar dependency. waybar's temperature module reads
