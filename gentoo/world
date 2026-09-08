@@ -45,9 +45,7 @@ dev-util/pkgdev
 dev-vcs/lazygit
 games-util/gamemode
 games-util/steam-launcher
-gui-apps/eww
 gui-apps/grim
-gui-apps/ironbar
 gui-apps/slurp
 gui-apps/swappy
 gui-apps/swayosd
