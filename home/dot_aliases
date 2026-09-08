@@ -13,7 +13,11 @@ sysup() {
   eselect news read &&
   doas emerge -auDN @world &&
   doas emerge --depclean --ask &&
-  doas dispatch-conf
+  doas dispatch-conf || return
+  # Same "inert when absent" rule as the Void block below: skip what is not
+  # installed instead of failing the run.
+  command -v flatpak >/dev/null && flatpak update
+  command -v cargo-install-update >/dev/null && cargo install-update -ag
 }
 
 # --- Void (xbps / runit) --------------------------------------------------
