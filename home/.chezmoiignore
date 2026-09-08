@@ -9,8 +9,11 @@
 
    Only two kinds of thing are listed below. Mutually exclusive choices, where
    applying both would be ambiguous rather than harmless -- the window-manager
-   trees, their portal configs, and the notification daemon. And retired configs
-   kept as reference, which are switched off on every host rather than per-host.
+   trees and their portal configs. And retired configs kept as reference, which
+   are switched off on every host rather than per-host.
+
+   mako is deliberately in neither list: it is the notification daemon on every
+   host now that sway has moved off swaync, so it applies everywhere.
 */ -}}
 {{ if ne .wm "mango"    }}.config/mango{{ end }}
 {{ if ne .wm "hyprland" }}.config/hypr{{ end }}
@@ -34,7 +37,8 @@
      aerc     retired; the account config is kept for whenever mail comes back.
      sioyek   zathura is the document reader on every host.
      spotify  the spicetify theme outlived the account.
-     clipse   not used on mango or sway.
+     clipse   retired on every host; it was a `go install` binary, never a
+              package, so it is not in the deps script either.
      wlogout  not used on mango or sway; neither host has a power menu.
      wofi     tofi is the launcher on sway, walker on mango.
 

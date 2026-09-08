@@ -69,10 +69,10 @@ firejail
 # --- wayland session (sway) --------------------------------------------
 sway
 swaybg
-swayidle
 gammastep
 Waybar
-SwayNotificationCenter
+mako
+SwayOSD
 tofi
 wl-clipboard
 grim

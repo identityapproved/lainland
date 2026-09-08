@@ -36,9 +36,12 @@ dev-debug/ltrace
 dev-debug/strace
 dev-lang/rust-bin
 dev-libs/criterion
+dev-lua/luacheck
 dev-util/clinfo
 dev-util/git-delta
 dev-util/github-cli
+dev-util/pkgcheck
+dev-util/pkgdev
 dev-vcs/lazygit
 games-util/gamemode
 games-util/steam-launcher
@@ -47,13 +50,10 @@ gui-apps/grim
 gui-apps/ironbar
 gui-apps/slurp
 gui-apps/swappy
-gui-apps/swaybg
-gui-apps/swaylock
 gui-apps/swayosd
 gui-apps/walker
 gui-apps/waybar
 gui-apps/wl-clipboard
-gui-apps/wlogout
 gui-libs/xdg-desktop-portal-wlr
 gui-wm/gamescope
 gui-wm/mangowm
@@ -74,6 +74,7 @@ media-sound/ardour
 media-sound/carla
 media-sound/cava
 media-sound/mpd
+media-sound/mpd-mpris
 media-video/mpv
 media-video/obs-studio
 media-video/pipewire
@@ -83,6 +84,7 @@ net-client/offpunk
 net-im/vesktop-bin
 net-misc/dhcpcd
 net-news/liferea
+net-p2p/syncthing
 net-vpn/tailscale
 net-vpn/wireguard-tools
 net-wireless/bluetui

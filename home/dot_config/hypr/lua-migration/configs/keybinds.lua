@@ -8,7 +8,6 @@ local apps = runtime.apps
 bind(mainMod .. " + RETURN", "Opens tmux terminal", hl.dsp.exec_cmd(apps.tmux))
 bind(mainMod .. " + SHIFT + RETURN", "Opens your preferred terminal emulator", hl.dsp.exec_cmd(apps.terminal))
 bind(mainMod .. " + CTRL + RETURN", "Opens floating terminal", hl.dsp.exec_cmd(apps.termfloat))
-bind(mainMod .. " + C", "Opens clipboard history (Clipse)", hl.dsp.exec_cmd("kitty --title termfloat -e clipse"))
 
 bind(mainMod .. " + E", "Opens your preferred file manager", hl.dsp.exec_cmd(apps.fileManager))
 bind(mainMod .. " + Q", "Closes current window", hl.dsp.window.close())

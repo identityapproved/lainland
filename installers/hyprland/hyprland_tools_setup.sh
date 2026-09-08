@@ -44,7 +44,6 @@ link_config_file() {
 
 install_pkg waybar
 install_pkg wl-clipboard
-install_pkg clipse
 install_pkg wlogout
 install_pkg tofi
 install_pkg mako
@@ -62,9 +61,6 @@ link_config_dir "$ROOT_DIR/tofi" "$HOME/.config/tofi"
 link_config_dir "$ROOT_DIR/mako" "$HOME/.config/mako"
 link_config_dir "$ROOT_DIR/hypr" "$HOME/.config/hypr"
 link_config_dir "$ROOT_DIR/wallpapers" "$HOME/.config/wallpapers"
-mkdir -p "$HOME/.config/clipse"
-link_config_file "$ROOT_DIR/clipse/config.json" "$HOME/.config/clipse/config.json"
-link_config_file "$ROOT_DIR/clipse/custom_theme.json" "$HOME/.config/clipse/custom_theme.json"
 
 wallpaper_options=("hyprpaper" "wpaperd" "skip")
 wallpaper_choice=""

@@ -155,18 +155,19 @@ mango implements `ext-workspace`, so waybar's generic `ext/workspaces` module
 works. It has no window-title or layout module at all, so
 `~/.config/scripts/mango-ipc.py` feeds both over `mmsg`.
 
-Three other things vary, and each is switched a different way:
+Two other things vary, and each is switched a different way:
 
 | What | How |
 |---|---|
 | the compositor tree | `.chezmoiignore` installs one of `.config/{mango,hypr,sway}` |
-| the notification daemon | `.chezmoiignore`: sway gets `swaync`, mango and hyprland get `mako` |
 | the tty1 exec | `dot_zprofile.tmpl` branches on `.wm` |
 
-Both notification daemons draw layer-shell notifications, so shipping both to
-one host would be ambiguous rather than merely inert -- unlike the launcher
-configs (`tofi`/`wofi`/`walker`), which stay installed everywhere and simply do
-nothing without their binary.
+The notification daemon used to be a third: sway ran `swaync` and the other two
+`mako`, and shipping both to one host would have been ambiguous rather than
+merely inert. sway has since moved to `mako` as well, so one daemon now applies
+everywhere and nothing is switched. Contrast the launcher configs
+(`tofi`/`wofi`/`walker`), which stay installed everywhere and simply do nothing
+without their binary.
 
 ### Starting a session
 
@@ -212,11 +213,11 @@ hexes by eye.
 |---|---|
 | `mango` | Border, focus, urgent and window-state colors |
 | `hypr` | Colors, borders, shadows, animations, window rules, scripts |
-| `sway` | Border colors, keybinds ported from hypr, `start-sway` session launcher |
-| `waybar` | Full bar: workspaces, pomodoro, timewarrior, nb, cava, weather, storage |
+| `sway` | Border colors, keybinds kept in step with mango, `start-sway` session launcher |
+| `waybar` | Full bar: workspaces, timewarrior, taskwarrior, nb, weather, storage; pomodoro/media/cava/power parked in the config |
 | `walker` | Launcher; hand-written `themes/lain.{css,toml}` |
-| `mako` | Notification daemon (mango, hyprland), per-urgency colors |
-| `swaync` | Notification daemon + control center (sway), `$mod+n` |
+| `mako` | Notification daemon on every host, per-urgency colors |
+| `swayosd` | Volume and brightness OSD (mango, sway); shared `style.css` |
 | `wlogout` | Logout/power menu |
 | `awww` | Wallpaper randomizer over the Lain set (mango, hyprland) |
 | `swaybg` | Wallpaper setter on sway, via `sway/scripts/set-wallpaper.sh` |
@@ -306,7 +307,7 @@ made in the UI lands in this repo through the symlink.
 | `mpd` | Music daemon behind rmpc |
 | `ncmpcpp` | **Tracked, not linked** — superseded by rmpc on every host |
 | `mpv` | Media player |
-| `spotify` | Spicetify `lain` theme (other machines) |
+| `spotify` | **Tracked, not linked** — the Spicetify `lain` theme outlived the account |
 
 ### Productivity
 
@@ -329,7 +330,6 @@ made in the UI lands in this repo through the symlink.
 
 | Tool | Notes |
 |---|---|
-| `clipse` | Clipboard manager |
 | `gammastep` | Night colour temperature; started by mango and sway, toggled from the waybar module |
 | `tofi` / `wofi` | Launchers kept for other machines |
 | `fontconfig` | Generic families aliased to Iosevka |

@@ -91,7 +91,9 @@ echo
 
 group core     required  git zsh tmux nvim fzf rg fd bat eza zoxide starship
 {{ if eq .wm "sway" -}}
-group wm       required  sway swaymsg swaybg swayidle swaynag
+# swayidle dropped with its exec line in sway/config: nothing blanks the panel
+# on idle now. Put it back here if that block is ever uncommented.
+group wm       required  sway swaymsg swaybg swaynag
 group osd      required  swayosd-server swayosd-client
 {{ else if eq .wm "mango" -}}
 group wm       required  mango mmsg
@@ -101,7 +103,7 @@ group wm       required  hyprctl hypridle
 {{ end -}}
 # mako on every host since sway moved off swaync, so this is not wm-conditional.
 group notify   required  mako makoctl
-group bar      required  waybar cava
+group bar      required  waybar
 
 # sensors is not a bar dependency. waybar's temperature module reads
 # /sys/class/hwmon directly (modules/temperature.sh says so in its first line),
@@ -112,7 +114,9 @@ group sensors  optional  sensors
 group screen   required  grim slurp swappy wl-copy notify-send
 group audio    required  wpctl playerctl
 group dev      optional  lazygit delta gh glow w3m
-group media    optional  mpv zathura mpd rmpc
+# cava moved here from the bar group: waybar's custom/cava is parked, but rmpc
+# drives cava too, and it stays installed on both hosts.
+group media    optional  mpv zathura mpd rmpc cava
 group monitor  required  btop htop
 group prod     optional  task timew calcurse nb zk taskwarrior-tui
 group util     optional  tofi wg-quick gammastep
