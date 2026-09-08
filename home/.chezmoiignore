@@ -32,8 +32,18 @@
 
      ncmpcpp  superseded by rmpc, which is the mpd client on every host now.
      aerc     retired; the account config is kept for whenever mail comes back.
+     sioyek   zathura is the document reader on every host.
+     spotify  the spicetify theme outlived the account.
+     clipse   not used on mango or sway.
+     wlogout  not used on mango or sway; neither host has a power menu.
+     wofi     tofi is the launcher on sway, walker on mango.
 
-   Unconditional, not switched on .wm: neither is host-specific.
+   Unconditional, not switched on .wm: none of these is host-specific.
 */ -}}
 .config/ncmpcpp
 .config/aerc
+.config/sioyek
+.config/spotify
+.config/clipse
+.config/wlogout
+.config/wofi
