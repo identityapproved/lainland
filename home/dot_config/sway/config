@@ -100,7 +100,7 @@ input type:keyboard {
 # Mice
 input type:pointer {
     accel_profile flat
-    natural_scroll enabled
+    natural_scroll disabled
 }
 
 # Touchpad
