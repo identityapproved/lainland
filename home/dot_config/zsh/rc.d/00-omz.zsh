@@ -51,4 +51,12 @@ setopt HIST_REDUCE_BLANKS
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY     # write as each command runs, not on exit
 
+# Completion functions shipped with the rice (_nb, _ccmux). They go on fpath
+# here, before oh-my-zsh.sh runs compinit: a directory added after compinit is
+# still searched when a function autoloads, but its #compdef lines are never
+# read, so a completion only it provides is never bound to its command. _nb got
+# away with the late add because OMZ ships its own _nb. 10-completion.zsh moves
+# the dir back to the front once OMZ has prepended its own.
+fpath=("${${(%):-%x}:A:h:h}/completions" $fpath)
+
 source "$ZSH/oh-my-zsh.sh"
