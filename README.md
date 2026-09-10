@@ -276,6 +276,7 @@ and `hypr/configs/envars.conf` both set.
 | `bat` | Custom `Lain.tmTheme` |
 | `yazi` | File manager, `flavors/lain.yazi` plus plugins |
 | `opencode` | TUI theme, `opencode/themes/lain.json` — see its README |
+| `ccmux` | Agent board; `ccmux/modify_ccmux.json` merges a Lain `theme` into ccmux's own prefs file |
 | `glow` | Markdown renderer, `glow/themes/lain.json` — see below |
 | `btop` | Resource monitor, `themes/lain.theme` |
 | `htop` | Resource monitor; colors come from the terminal ANSI palette, see below |
