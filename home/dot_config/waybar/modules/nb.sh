@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# waybar custom/nb — note count for the nb notebook in $NB_DIR.
+# waybar custom/nb — open todo count for the nb notebook in $NB_DIR.
 #
 # waybar is started from mango's exec-once, which does not run a login shell, so
 # NB_DIR from .zprofile cannot be relied on here — it is pinned below, same as
@@ -24,16 +24,19 @@ if [[ ! -f "${NB_DIR}/.current" ]]; then
   exit 0
 fi
 
-count="$(nb count --no-color 2>/dev/null </dev/null | tr -dc '0-9')"
-count="${count:-0}"
+# Open todos only: `nb count` and `nb list` include done ones. `nb todos` applies
+# --limit before the open filter (--limit 5 can yield fewer than 5 open), so the
+# full list is trimmed here instead. With nothing open it exits 1 and says so on
+# stderr only; the grep keeps just "[id] ..." rows.
+open="$(nb todos open --no-color 2>/dev/null </dev/null | grep '^\[' || true)"
+count=0
+[[ -n "${open}" ]] && count="$(printf '%s\n' "${open}" | wc -l)"
 
-# On an empty notebook `nb list` prints a multi-line "Add a note:" help blurb
-# rather than nothing, which is not what you want hanging off a tooltip.
 if [[ "${count}" == "0" ]]; then
-  recent="notebook is empty"
+  recent="no open todos"
 else
-  recent="$(nb list --limit 5 --no-color 2>/dev/null </dev/null || true)"
-  [[ -n "${recent}" ]] || recent="notebook is empty"
+  recent="$(printf '%s\n' "${open}" | head -n 5)"
+  ((count > 5)) && recent+=$'\n'"$((count - 5)) more open"
 fi
 
 # waybar renders tooltips as pango markup and note titles are arbitrary text, so
