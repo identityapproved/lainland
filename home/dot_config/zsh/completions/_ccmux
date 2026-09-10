@@ -1,0 +1,30 @@
+#compdef ccmux
+
+_ccmux() {
+  local -a lines entries
+  local line directive
+  lines=("${(@f)$(ccmux __complete zsh -- "${(@)words[2,CURRENT]}" 2>/dev/null)}")
+  for line in "${lines[@]}"; do
+    [[ -z "$line" ]] && continue
+    if [[ "$line" == :* ]]; then
+      directive="${line#:}"
+      continue
+    fi
+    if [[ "$line" == *$'\t'* ]]; then
+      entries+=("${${line%%$'\t'*}//:/\\:}:${line#*$'\t'}")
+    else
+      entries+=("${line//:/\\:}")
+    fi
+  done
+  case "$directive" in
+    dir) _files -/ && return ;;
+    file) _files && return ;;
+  esac
+  (( ${#entries} )) && _describe -t ccmux 'ccmux' entries
+}
+
+if [ "$funcstack[1]" = "_ccmux" ]; then
+  _ccmux "$@"
+else
+  compdef _ccmux ccmux
+fi
