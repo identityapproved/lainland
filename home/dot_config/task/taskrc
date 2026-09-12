@@ -6,4 +6,17 @@ news.version=3.4.2
 pager=bat --paging=always
 editor=nvim -f
 
+# Sync. The git backend pushes the TaskChampion replica at data.location as an
+# encrypted operation log to a bare repo on stora. It covers the task database
+# only -- the annotated notes under ~/taskwarrior/tasks are Syncthing's job.
+sync.git.local_path=~/.local/share/task-sync
+sync.git.branch=taskchampion
+sync.git.remote=stora:/data/git/taskwarrior-sync.git
+
 include ~/.config/task/themes/lain-256.theme
+
+# Per-host, deliberately outside the chezmoi tree so it is never committed and
+# never applied to another machine. Holds sync.encryption_secret, which must be
+# byte-identical on every replica, and recurrence, which must be on for exactly
+# one replica and off for all the others. See task-sync(5).
+include ~/.local/share/task/local.taskrc
