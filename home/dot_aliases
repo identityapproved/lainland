@@ -182,6 +182,14 @@ tws() {
   [[ -n "$id" ]] && task "$id" info
 }
 
+# --- zk + fzf (picker look lives in ~/zettelnotes/.zk/config.toml) --------
+alias zke='zk edit --interactive'                       # fuzzy pick note(s), open in nvim
+alias zkr='zk recent'                                   # pick among last two weeks
+alias zkl='zk editlast'                                 # open last modified note
+zkt() { zk edit --interactive --tag "${1:?tag}"; }      # pick within a tag
+zkn() { zk new --title "${*:?title}"; }                 # new note with title
+zkg() { zk edit --interactive --match "${*:?query}"; }  # full-text search, then pick
+
 # --- pipewire: pick default sink ------------------------------------------
 wptui-default-sink() {
   local candidates=() line id selected
