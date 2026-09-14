@@ -1,7 +1,0 @@
-betterbird
-thunderbird
-signal-desktop
-lyrics-in-terminal
-obsidian
-redshift
-zk

@@ -148,20 +148,6 @@ if have fc-list; then
     fi
 fi
 
-{{ if eq .chezmoi.osRelease.id "void" -}}
-# Root-owned Void system files. chezmoi cannot install these without prompting
-# for a password mid-apply, so they are reported instead. See void/README.md.
-for pair in \
-    "/etc/modules-load.d/usb-hotplug.conf|void/system/modules-load.d/usb-hotplug.conf" \
-    "/etc/udev/rules.d/71-usb-serial-uaccess.rules|void/system/udev/71-usb-serial-uaccess.rules"
-do
-    dest=${pair%%|*}; src=${pair#*|}
-    [ -e "$dest" ] && continue
-    printf '  %-14s missing: %s\n' system "$dest"
-    printf '      doas install -Dm 644 %s/%s %s\n' "{{ .chezmoi.workingTree }}" "$src" "$dest"
-done
-{{ end -}}
-
 echo
 if [ -n "$miss_req" ]; then
     echo "  install (required):"

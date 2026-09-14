@@ -40,10 +40,7 @@ home/                   chezmoi source root
   dot_themes/lain/      -> ~/.themes/lain      GTK2/3/4 theme
   dot_icons/lainicons/  -> ~/.icons/lainicons  icon + cursor theme
   dot_zshrc  dot_zshenv  dot_zprofile.tmpl  dot_aliases  dot_gtkrc-2.0
-installers/             package installers, one per area (no linking; see below)
-gentoo/                 mirror of the Gentoo host's /etc/portage and overlay
-void/                   the Void host's package list + installer, udev rules, modules-load.d
-monitoring/             auditd rules; host-level, not chezmoi-managed
+scripts/                GSettings helpers (gtk theme, liferea); dconf is not a file
 assets/                 README screenshots
 ```
 
@@ -68,7 +65,7 @@ dconf rather than files --
 | Script | Does | Re-runs when |
 |---|---|---|
 | `10-bat-cache` | `bat cache --build`, registering `bat/themes/Lain.tmTheme` | the theme changes |
-| `20-gtk-qt` | runs `installers/setup-gtk-qt.sh` (GSettings; see Toolkits) | `gtk-3.0/settings.ini` changes |
+| `20-gtk-qt` | runs `scripts/setup-gtk-qt.sh` (GSettings; see Toolkits) | `gtk-3.0/settings.ini` changes |
 | `90-deps` | prints a grouped report of anything missing, with the exact install command for this host | every apply |
 
 `90-deps` always exits 0 -- a missing optional tool never fails an apply. It is
@@ -127,16 +124,10 @@ so editing `~/.config/mango/config.conf` edits the repo. Two consequences:
 - Templates cannot be symlinked. `waybar/config.jsonc.tmpl` is written out as a
   real file — edit the `.tmpl` in the repo and `chezmoi apply`.
 
-Package installation is separate and optional:
-
-```bash
-bash installers/installer_menu.sh
-```
-
-The installers install packages only. Linking used to live in
-`installers/linking/simlinking.sh`; that script is gone and chezmoi does the job.
-Dependency checking used to be a `checker` script in the sway repo; that is gone
-too, and `.chezmoiscripts/run_after_90-deps.sh.tmpl` reports on every apply.
+Package installation is not part of this repo. Host package lists, installers
+and system config (`/etc`, udev, services) live in a separate private repo; the
+rice only reports what it needs, via `.chezmoiscripts/run_after_90-deps.sh.tmpl`
+on every apply.
 
 ---
 
@@ -241,11 +232,12 @@ dialogs, file pickers and menus match the rest of the rice.
 One step is not a file. GTK3 apps prefer `org.gnome.desktop.interface`
 GSettings keys over `settings.ini` whenever a dconf backend is present, so a
 theme set only in `settings.ini` is silently ignored and the old one keeps
-rendering. dconf cannot be checked in; `installers/setup-gtk-qt.sh` is the
-reproducible record of those keys. Run it once per machine:
+rendering. dconf cannot be checked in; `scripts/setup-gtk-qt.sh` is the
+reproducible record of those keys. The `20-gtk-qt` hook runs it on apply; to
+run it by hand:
 
 ```bash
-sh installers/setup-gtk-qt.sh
+sh scripts/setup-gtk-qt.sh
 ```
 
 Two more details worth knowing. libadwaita ignores `gtk-theme-name` entirely, so

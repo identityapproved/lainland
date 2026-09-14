@@ -1,3 +1,0 @@
-app-emulation/libvirt policykit
->=net-misc/spice-gtk-0.42-r4 usbredir
->=net-libs/gnutls-3.8.13 pkcs11 tools
