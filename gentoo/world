@@ -2,6 +2,7 @@ app-admin/bitwarden-desktop-bin
 app-admin/chezmoi
 app-admin/doas
 app-arch/lz4
+app-containers/incus
 app-containers/podman
 app-containers/podman-compose
 app-editors/nano
@@ -23,6 +24,7 @@ app-office/calcurse
 app-portage/cpuid2cpuflags
 app-portage/eix
 app-portage/gentoolkit
+app-portage/pycargoebuild
 app-shells/fzf
 app-shells/gentoo-zsh-completions
 app-shells/starship
@@ -45,6 +47,7 @@ dev-util/pkgdev
 dev-vcs/lazygit
 games-util/gamemode
 games-util/steam-launcher
+gui-apps/awww
 gui-apps/grim
 gui-apps/slurp
 gui-apps/swappy
@@ -97,6 +100,7 @@ sys-apps/xdg-desktop-portal-gtk
 sys-auth/rtkit
 sys-auth/seatd
 sys-boot/grub
+sys-firmware/intel-microcode
 sys-fs/cryptsetup
 sys-fs/ddrescue
 sys-fs/exfatprogs

@@ -1,0 +1,7 @@
+# required by app-containers/incus
+dev-libs/raft lz4
+dev-util/xdelta lzma
+net-firewall/nftables json
+sys-fs/squashfs-tools lzma
+# lxc[caps] and lxc[tools] both need static libcap
+sys-libs/libcap static-libs
