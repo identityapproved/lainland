@@ -1,6 +1,7 @@
 Delta theme config for this repo.
 
-`installers/dev/gitsetup.sh` links this directory to `~/.config/delta` and adds:
+chezmoi links this directory to `~/.config/delta`. Global git config (not
+managed here) needs:
 
 `[include] path = ~/.config/delta/themes.gitconfig`
 
