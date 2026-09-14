@@ -1,0 +1,38 @@
+# fzf -- Lain. Read through FZF_DEFAULT_OPTS_FILE by every fzf on the desktop:
+# zsh exports it (rc.d/40-keybindings.zsh) and scripts/tmux-pick sets it for its
+# popup, whose environment comes from the tmux server rather than zsh.
+#
+# The colors are the ones nvim's fzf-lua pickers get from lain.nvim
+# (fzf_colors = true maps each fzf color to an FzfLuaFzf* highlight group), read
+# back from fzf-lua's generated command line, so a shell or tmux picker looks
+# like the nvim one. The values themselves are lain-colors.md steps:
+#   text, query, selected text     highprimary    #C1B48E
+#   match                          accent         #FFB1C3
+#   prompt                         accent         #FFB1C3
+#   pointer, marker, spinner       foreprimary    #CE7688
+#   labels                         foreprimary    #CE7688  (bold, as FzfLuaTitle)
+#   info                           highquaternary #968C6E
+#   header                         backnonary     #8A8A8A
+#   borders, separator, scrollbar  forequaternary #965363
+#   background, selected row       backsecondary  #1A1A1A  (lain.nvim's float surface)
+--color=fg:#C1B48E,bg:#1A1A1A,hl:#FFB1C3,query:#C1B48E:regular
+--color=fg+:#C1B48E,bg+:#1A1A1A,hl+:#FFB1C3,gutter:#1A1A1A
+--color=prompt:#FFB1C3,pointer:#CE7688,marker:#CE7688,spinner:#CE7688
+--color=info:#968C6E,header:#8A8A8A
+--color=border:#965363,separator:#965363,scrollbar:#965363
+--color=label:#CE7688:bold,preview-label:#CE7688:bold
+--color=preview-fg:#C1B48E,preview-bg:#1A1A1A,preview-border:#965363
+--highlight-line
+
+# Scrolling -- the same keys in every picker. nvim's fzf-lua sets the identical
+# map (plugins/fzf-lua.lua), and the shift/f3/f4 ones are fzf-lua's defaults.
+#   ctrl-f / ctrl-b          preview half a page down / up
+#   alt-j  / alt-k           preview one line down / up
+#   shift-down / shift-up    preview a page down / up
+#   f3                       toggle preview line wrap
+#   f4                       hide / show the preview
+# ctrl-u keeps fzf's default: clear the query.
+--bind=ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up
+--bind=alt-j:preview-down,alt-k:preview-up
+--bind=shift-down:preview-page-down,shift-up:preview-page-up
+--bind=f3:toggle-preview-wrap,f4:toggle-preview

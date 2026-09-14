@@ -1,0 +1,297 @@
+#!/bin/sh
+# tmux-pick -- fzf a file or a directory and open it next to the current pane.
+#
+# Usage: tmux-pick file|dir PANE_ID
+#   prefix + f   file(s)   -> nvim
+#   prefix + F   directory -> shell
+#
+# Runs inside a tmux display-popup started in the pane's directory (the binds
+# pass -d #{pane_current_path} and #{pane_id}). Once a pick is made the popup
+# closes and the new window or pane opens beside PANE_ID.
+#
+#   enter   new window, right after the current one
+#   ctrl-v  pane to the right
+#   ctrl-s  pane below
+#   tab     mark several files; they open together in one nvim
+#
+#   ctrl-p  list from the pane's directory (the start)
+#   ctrl-h  list from ~ (files 5 levels deep, directories 4)
+#   ctrl-n  list the notes: ~/kioku, ~/zettelnotes, ~/taskwarrior/tasks
+#   ctrl-z  zoxide's frecent directories (directory mode only)
+#
+#   ctrl-f / ctrl-b  preview half a page   alt-j / alt-k  a line
+#   shift-down / up  preview a page        f3 wrap, f4 hide preview
+#   ctrl-u           clear the query
+# (the scroll keys come from fzf/lain.fzfrc and match nvim's fzf-lua)
+#
+# Laid out like fzf-lua in nvim: a rounded box labelled Files or Dirs holding
+# the prompt, a key-hint header and the list, and a separate rounded preview box
+# labelled with the highlighted file's name.
+#
+# Icons are nvim's: the glyphs and colors mini.icons shows under lain.nvim,
+# exported once into fzf/icons.tsv (kind, name, glyph, r;g;b) rather than asked
+# of nvim on every open. Each row is "icon<TAB>path"; fzf matches and returns
+# only the path. After changing icons or the colorscheme, regenerate with
+#   tmux-pick --gen-icons > ~/.config/fzf/icons.tsv
+#
+# Preview: markdown through glow with the Lain glamour style, other files
+# through bat (Lain theme), directories as an eza tree.
+#
+# Rows are absolute paths with $HOME shortened to ~, so a row names its root
+# whichever list it came from. nvim starts in the first file's git root, or
+# beside the file outside a repo -- never in the directory the picker was opened
+# from. That start directory is what #{pane_current_path} reports for the nvim
+# pane, so prefix + | and - split off it land next to the file, not back in ~.
+#
+# The popup's environment is the tmux server's, not zsh's, so three things are
+# set here rather than inherited:
+#   FZF_DEFAULT_OPTS_FILE  Lain colors and the preview keys (fzf/lain.fzfrc),
+#                          the same file zsh points fzf at
+#   COLORTERM=truecolor    without it bat, eza and glow drop to 256 colours and
+#                          the palette collapses onto the pink band
+#   BAT_THEME=Lain         in case the server was started without it
+
+set -u
+
+FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/lain.fzfrc"
+COLORTERM=truecolor
+BAT_THEME=${BAT_THEME:-Lain}
+export FZF_DEFAULT_OPTS_FILE COLORTERM BAT_THEME
+
+self=$0
+notes="$HOME/kioku $HOME/zettelnotes $HOME/taskwarrior/tasks"
+
+usage() {
+    echo "usage: tmux-pick file|dir PANE_ID" >&2
+    exit 2
+}
+
+# list file|dir here|home|notes|zoxide
+list() {
+    t=f
+    depth=5
+    if [ "$1" = dir ]; then
+        t=d
+        depth=4
+    fi
+    case $2 in
+        here) fd --type "$t" --hidden --exclude .git . "$TMUX_PICK_HERE" ;;
+        home) fd --type "$t" --hidden --exclude .git --max-depth "$depth" . "$HOME" ;;
+        notes)
+            for d in $notes; do
+                [ -d "$d" ] && fd --type "$t" --hidden --exclude .git . "$d"
+            done
+            ;;
+        zoxide) zoxide query --list ;;
+    esac | sed "s|^$HOME|~|" | decorate "$1"
+}
+
+# decorate file|dir -- prefix each path with its icon and a tab. Lookup order
+# follows mini.icons: exact file name, then a two-part extension (tar.gz), then
+# the last extension, then the default; directories by name, then the default.
+decorate() {
+    icons="$HOME/.config/fzf/icons.tsv"
+    if [ ! -r "$icons" ]; then
+        sed 's/^/ \t/'
+        return
+    fi
+    # C locale: gawk's regexes run byte-wise instead of decoding UTF-8, which
+    # halves the time over the ~330k rows of the ~ list. Glyphs pass through
+    # untouched and tolower only needs ASCII extensions.
+    LC_ALL=C awk -F '\t' -v mode="$1" '
+        FNR == NR { g[$1 FS $2] = $3; c[$1 FS $2] = $4; next }
+        function emit(k) {
+            if (k in g) printf "\033[38;2;%sm%s\033[0m\t%s\n", c[k], g[k], $0
+            else printf " \t%s\n", $0
+        }
+        {
+            b = $0
+            sub(/\/$/, "", b)
+            sub(/.*\//, "", b)
+            if (mode == "dir") {
+                k = "directory" FS b
+                if (!(k in g)) k = "default" FS "directory"
+                emit(k)
+                next
+            }
+            k = "file" FS b
+            if (!(k in g)) {
+                lb = tolower(b)
+                k = "default" FS "file"
+                if (match(lb, /\.[^.]+\.[^.]+$/) && (("extension" FS substr(lb, RSTART + 1)) in g))
+                    k = "extension" FS substr(lb, RSTART + 1)
+                else if (match(lb, /.\.[^.]+$/) && (("extension" FS substr(lb, RSTART + 2)) in g))
+                    k = "extension" FS substr(lb, RSTART + 2)
+            }
+            emit(k)
+        }
+    ' "$icons" -
+}
+
+# gen_icons -- print icons.tsv from nvim's mini.icons under the active
+# colorscheme. Covers mini.icons' own file, directory and extension tables plus
+# the 400 most common extensions under ~, which mini.icons otherwise resolves
+# through nvim's filetype detection at lookup time.
+gen_icons() {
+    tmp=$(mktemp -d) || exit 1
+    trap 'rm -rf "$tmp"' EXIT
+    fd --type f --hidden --exclude .git --max-depth 6 . "$HOME" 2>/dev/null |
+        awk -F / '{ n = $NF; if (match(n, /.\.[^.]+$/)) print tolower(substr(n, RSTART + 2)) }' |
+        sort | uniq -c | sort -rn | head -n 400 | awk '{ print $2 }' >"$tmp/exts"
+    cat >"$tmp/gen.lua" <<'LUA'
+local MI = require("mini.icons")
+local rows = {}
+local function rgb(hl)
+  local fg = vim.api.nvim_get_hl(0, { name = hl, link = false }).fg or 0x8A8A8A
+  return string.format("%d;%d;%d", bit.rshift(fg, 16), bit.band(bit.rshift(fg, 8), 255), bit.band(fg, 255))
+end
+local function add(kind, name)
+  local ok, glyph, hl = pcall(MI.get, kind, name)
+  if ok and glyph then rows[#rows + 1] = table.concat({ kind, name, glyph, rgb(hl) }, "\t") end
+end
+for _, kind in ipairs({ "file", "directory", "extension" }) do
+  for _, name in ipairs(MI.list(kind)) do add(kind, name) end
+end
+for ext in io.lines(os.getenv("PICK_EXTS")) do add("extension", ext) end
+add("default", "file")
+add("default", "directory")
+local f = assert(io.open(os.getenv("PICK_OUT"), "w"))
+f:write(table.concat(rows, "\n"), "\n")
+f:close()
+LUA
+    PICK_EXTS="$tmp/exts" PICK_OUT="$tmp/icons.tsv" nvim --headless \
+        -c "lua vim.defer_fn(function() dofile('$tmp/gen.lua'); vim.cmd('qa!') end, 1500)" >/dev/null 2>&1
+    [ -s "$tmp/icons.tsv" ] || { echo "tmux-pick: nvim produced no icons" >&2; exit 1; }
+    sort -u "$tmp/icons.tsv"
+}
+
+# preview ROW -- what the right-hand side shows for a row.
+preview() {
+    p=$1
+    case $p in
+        "~"*) p="$HOME${p#\~}" ;;
+    esac
+    if [ -d "$p" ]; then
+        eza --tree --level=2 --all --group-directories-first --color=always -- "$p"
+        return
+    fi
+    case $p in
+        *.md | *.markdown)
+            if command -v glow >/dev/null 2>&1; then
+                # glow styles only for a terminal: piped, it prints plain text,
+                # and even CLICOLOR_FORCE caps it at 16 colours. script(1) gives
+                # it a pty, so it renders the Lain style in truecolor; the pty's
+                # CRLF line endings are stripped for fzf. The command string is
+                # single-quoted on purpose: the pty's shell expands the vars.
+                # shellcheck disable=SC2016
+                PICK_FILE=$p PICK_WIDTH=${FZF_PREVIEW_COLUMNS:-80} \
+                    script -qec 'glow -s "$HOME/.config/glow/themes/lain.json" -w "$PICK_WIDTH" "$PICK_FILE"' \
+                    /dev/null </dev/null | tr -d '\r'
+                return
+            fi
+            ;;
+    esac
+    bat --color=always --style=numbers --paging=never --line-range :2000 -- "$p"
+}
+
+# fzf runs this script again to produce the other lists and the preview.
+case ${1-} in
+    --list)
+        list "${2-}" "${3-}"
+        exit 0
+        ;;
+    --preview)
+        preview "${2-}"
+        exit 0
+        ;;
+    --gen-icons)
+        gen_icons
+        exit 0
+        ;;
+esac
+
+mode=${1-}
+pane=${2-}
+case $mode in
+    file | dir) ;;
+    *) usage ;;
+esac
+[ -n "$pane" ] || usage
+
+TMUX_PICK_HERE=$PWD
+export TMUX_PICK_HERE
+
+# The prompt names the list's root, the way fzf-lua shows its cwd, and follows
+# the root toggles.
+here_prompt="$(printf '%s' "$PWD" | sed "s|^$HOME|~|")/"
+[ "$PWD" = / ] && here_prompt=/
+
+scroll='^f/^b M-j/M-k scroll  f4 preview'
+if [ "$mode" = file ]; then
+    set -- --multi --list-label ' Files ' \
+        --header "$(printf 'enter window  ^v right  ^s below  tab mark\n^p here  ^h ~  ^n notes  %s' "$scroll")"
+else
+    set -- --no-multi --list-label ' Dirs ' \
+        --header "$(printf 'enter window  ^v right  ^s below\n^p here  ^h ~  ^n notes  ^z zoxide  %s' "$scroll")" \
+        --bind "ctrl-z:change-prompt[zoxide/]+reload[\"$self\" --list dir zoxide]"
+fi
+
+# Rows are "icon<TAB>path": --nth 2 matches the path only, --accept-nth 2 prints
+# it without the icon, and {2} is the path for the preview and its label (the
+# single quotes are intentional, fzf's shell expands the basename).
+# shellcheck disable=SC2016
+out=$(list "$mode" here | fzf "$@" \
+    --layout reverse \
+    --info inline-right \
+    --list-border rounded \
+    --prompt "$here_prompt" \
+    --ansi \
+    --delimiter '\t' \
+    --nth 2 \
+    --accept-nth 2 \
+    --tabstop 1 \
+    --expect ctrl-v,ctrl-s \
+    --preview "\"$self\" --preview {2}" \
+    --preview-window 'right,60%,border-rounded' \
+    --bind 'focus:transform-preview-label:echo " $(basename {2}) "' \
+    --bind "ctrl-p:change-prompt[$here_prompt]+reload[\"$self\" --list $mode here]" \
+    --bind "ctrl-h:change-prompt[~/]+reload[\"$self\" --list $mode home]" \
+    --bind "ctrl-n:change-prompt[notes/]+reload[\"$self\" --list $mode notes]") || exit 0
+
+# --expect puts the key on the first line (empty for enter), picks after it.
+key=$(printf '%s\n' "$out" | sed -n 1p)
+picks=$(printf '%s\n' "$out" | sed 1d)
+[ -n "$picks" ] || exit 0
+
+set --
+while IFS= read -r p; do
+    case $p in
+        "~"*) p="$HOME${p#\~}" ;;
+    esac
+    set -- "$@" "$p"
+done <<EOF
+$picks
+EOF
+
+# open DIR [COMMAND...] -- new window or split beside $pane, per $key.
+open() {
+    dir=$1
+    shift
+    case $key in
+        ctrl-v) exec tmux split-window -h -t "$pane" -c "$dir" "$@" ;;
+        ctrl-s) exec tmux split-window -v -t "$pane" -c "$dir" "$@" ;;
+        *)
+            # new-window takes a window target, not a pane id.
+            win=$(tmux display-message -p -t "$pane" '#{window_id}')
+            exec tmux new-window -a -t "$win" -c "$dir" "$@"
+            ;;
+    esac
+}
+
+if [ "$mode" = dir ]; then
+    open "$1"
+fi
+
+d=$(dirname -- "$1")
+cwd=$(git -C "$d" rev-parse --show-toplevel 2>/dev/null) || cwd=$d
+open "$cwd" nvim -- "$@"

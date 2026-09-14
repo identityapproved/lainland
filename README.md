@@ -267,6 +267,36 @@ and `hypr/configs/envars.conf` both set.
 | `starship` | Powerline gradient down the Fore ramp |
 | `dircolors` | `ls` colors, index-based; `EZA_COLORS` layers truecolor over it |
 
+Two tmux pickers, both `scripts/tmux-pick` in a popup that starts in the
+current pane's directory, open what you choose next to the pane:
+
+| Key | Picks | Opens |
+|---|---|---|
+| prefix + `f` | file(s), tab to mark several | nvim |
+| prefix + `F` | a directory | a shell |
+
+In the popup, enter opens a new window, ctrl-v a pane to the right and ctrl-s a
+pane below; ctrl-p, ctrl-h and ctrl-n switch the list between the pane's
+directory, `~` and the notes (kioku, zettelnotes, taskwarrior tasks), and ctrl-z
+lists zoxide's directories in the directory picker. The preview renders markdown
+through glow, other files through bat and directories as an eza tree. The popup
+is drawn like nvim's fzf-lua: a Files box with key hints and a preview box, same
+colors, same file icons. The icons are exported from nvim's mini.icons into
+`fzf/icons.tsv`; after changing icons or the colorscheme, regenerate it with
+`tmux-pick --gen-icons > ~/.config/fzf/icons.tsv`.
+
+ctrl-j / ctrl-k move the list in every picker. tmux's no-prefix C-h/j/k/l pane
+switching steps aside for panes running nvim or fzf, so those keys reach them;
+vim-tmux-navigator in nvim still moves on to the next tmux pane at the edge.
+
+Scrolling is the same in every picker, shell, tmux and nvim alike: ctrl-f /
+ctrl-b half a page, alt-j / alt-k a line, shift-down / shift-up a page, f3 wrap,
+f4 hide the preview; ctrl-u clears the query. fzf's colors and those keys live
+in `fzf/lain.fzfrc`, read through `FZF_DEFAULT_OPTS_FILE` by the zsh fzf
+bindings and the pickers alike, and copied from what lain.nvim gives fzf-lua. tmux sets
+`COLORTERM=truecolor` for every pane, without which bat, delta, eza and glow fall
+back to 256 colours and the palette collapses.
+
 ### Dev / CLI
 
 | Tool | Notes |
@@ -276,7 +306,6 @@ and `hypr/configs/envars.conf` both set.
 | `bat` | Custom `Lain.tmTheme` |
 | `yazi` | File manager, `flavors/lain.yazi` plus plugins |
 | `opencode` | TUI theme, `opencode/themes/lain.json` — see its README |
-| `ccmux` | Agent board; `ccmux/modify_ccmux.json` merges a Lain `theme` into ccmux's own prefs file |
 | `glow` | Markdown renderer, `glow/themes/lain.json` — see below |
 | `btop` | Resource monitor, `themes/lain.theme` |
 | `htop` | Resource monitor; colors come from the terminal ANSI palette, see below |
