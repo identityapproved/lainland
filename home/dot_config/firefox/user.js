@@ -60,3 +60,10 @@ user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 // --------------------------------------------------------------- misc -------
 user_pref("browser.aboutConfig.showWarning", false);
 user_pref("browser.download.useDownloadDir", true);
+
+// ---------------------------------------------------------------- dark ------
+// 0 = dark, 1 = light, 2 = auto (verified against themeNames in
+// preferences/config/appearance.mjs). Forcing 0 makes every site that
+// implements prefers-color-scheme render dark without a restyling extension.
+user_pref("layout.css.prefers-color-scheme.content-override", 0);
+user_pref("pdfjs.viewerCssTheme", 2);
