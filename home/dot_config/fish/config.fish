@@ -174,12 +174,6 @@ if status is-interactive
         find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-
     end
 
-    function fbook
-        find ~/* -type d \( -name books \) -exec find {} -type f \( -name "*.pdf" -o -name "*.epub" -o -name "*.mobi" -o -name "*.cbz" -o -name "*.cbr" \) \; \
-            | fzf --height 40% --layout reverse --border --no-preview \
-            | xargs -r -I {} sh -c "zathura \"{}\" &"
-    end
-
     function wptui-default-sink
         set -l candidates
 
