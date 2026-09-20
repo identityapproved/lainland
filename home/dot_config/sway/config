@@ -150,7 +150,6 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     #   $mod+Shift+f  mango togglefakefullscreen
     #   $mod+a        mango togglemaximizescreen
     #   $mod+o        mango toggleoverlay
-    #   $mod+d, $mod+Shift+d  mango floating-window cycling (not wanted here)
     #   $mod+grave    mango drop-down console (not wanted here)
     # No screen locking on this laptop; swaylock and wlogout are not installed.
     #   $mod+F12 / $mod+Shift+F12
@@ -167,6 +166,12 @@ bindswitch --reload --locked lid:off output eDP-1 enable
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
     bindsym $mod+Tab focus next
+
+    # mango needs scripts/focus-floating.sh here because focusstack has no
+    # floating filter; sway treats the floating layer as a focus target, so
+    # mode_toggle covers the same $mod+d muscle memory with no script.
+    bindsym $mod+d focus mode_toggle
+    bindsym $mod+Shift+d focus floating
 
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
