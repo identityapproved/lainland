@@ -7,10 +7,11 @@
    installed (fish, tofi, wofi, sioyek, spotify ...) are inert, and land ready
    for the machine that does have them.
 
-   Only two kinds of thing are listed below. Mutually exclusive choices, where
+   Three kinds of thing are listed below. Mutually exclusive choices, where
    applying both would be ambiguous rather than harmless -- the window-manager
-   trees and their portal configs. And retired configs kept as reference, which
-   are switched off on every host rather than per-host.
+   trees and their portal configs. Retired configs kept as reference, which
+   are switched off on every host rather than per-host. And configs tuned for
+   one machine's hardware, which would be wrong rather than inert elsewhere.
 
    mako is deliberately in neither list: it is the notification daemon on every
    host now that sway has moved off swaync, so it applies everywhere.
@@ -51,3 +52,12 @@
 .config/clipse
 .config/wlogout
 .config/wofi
+
+{{/*
+   Tuned for the void+sway laptop specifically, not portable rice: the prefs
+   trade features for CPU on a 4-core Silvermont (vaapi forced on, gpu process
+   off, processCount pinned, accessibility disabled, forced dark content). On
+   other hardware those are pessimisations, so the config stays in the repo but
+   only this combination links it.
+*/ -}}
+{{ if or (ne .chezmoi.osRelease.id "void") (ne .wm "sway") }}.config/firefox{{ end }}
