@@ -319,7 +319,10 @@ built-ins, and there is no way to hand it hex values. `htoprc` therefore sets
 scheme 0, the one that draws from the terminal's own 16-colour ANSI slots, which
 kitty and foot both map to the Lain palette. To recolour htop, change the
 terminal palette. Note htop rewrites `htoprc` on exit, so a sort or column change
-made in the UI lands in this repo through the symlink.
+made in the UI lands in this repo through the symlink. The rewrite also strips
+comments, which is why these notes live here and not in `htoprc`. If htop ever
+replaces the link with a real file, `htoprc` becomes live state and leaves
+chezmoi's control.
 
 ### Media
 
