@@ -179,12 +179,14 @@ bindswitch --reload --locked lid:off output eDP-1 enable
 #
     # mango switch_layout cycles its tiling layouts; this is the nearest sway has.
     bindsym $mod+n layout toggle split tabbed stacking
-    # mango binds Alt+Tab to its overview. sway has none, so this is just a
-    # second cycle key.
-    bindsym Alt+Tab focus next
+    # No Alt binds: VMs use Alt as the guest super key, and a host bind would
+    # swallow it before the guest sees it.
+    # mango binds $mod+Shift+Tab to its overview. sway has none, so this is just
+    # a second cycle key.
+    bindsym $mod+Shift+Tab focus next
 
     # mango scroller-layout binds have no sway equivalent at all:
-    #   $mod+Alt+e, Alt+x, $mod+Alt+Ctrl+{Left,Right,Up,Down}
+    #   $mod+Ctrl+e, $mod+x, $mod+Shift+{Left,Right,Up,Down}
 #
 # Workspaces (mango tags 1-9; it has no tag 10):
 #
@@ -253,18 +255,18 @@ bindswitch --reload --locked lid:off output eDP-1 enable
 #
 # Gaps:
 #
-    bindsym Alt+Shift+x gaps inner all plus 1
-    bindsym Alt+Shift+z gaps inner all minus 1
+    bindsym $mod+Shift+x gaps inner all plus 1
+    bindsym $mod+Shift+z gaps inner all minus 1
     # mango togglegaps flips gaps off and back; this resets to the defaults set
     # in the Appearance block above.
-    bindsym Alt+Shift+r gaps inner all set 6; gaps outer all set 4
+    bindsym $mod+Shift+r gaps inner all set 6; gaps outer all set 4
 #
 # Monitors:
 #
-    bindsym Alt+Shift+Left focus output left
-    bindsym Alt+Shift+Right focus output right
-    bindsym $mod+Alt+Left move container to output left
-    bindsym $mod+Alt+Right move container to output right
+    bindsym $mod+bracketleft focus output left
+    bindsym $mod+bracketright focus output right
+    bindsym $mod+Shift+bracketleft move container to output left
+    bindsym $mod+Shift+bracketright move container to output right
 #
 # Media and hardware:
 #
