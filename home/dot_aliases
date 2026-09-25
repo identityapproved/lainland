@@ -72,21 +72,25 @@ vpn() {
   local dir=/etc/wireguard
 # local tsnet=100.64.0.0/10 tstable=52 tsprio=5000   # pin tailnet out tailscale0, above Proton's rules
   local tsnet=100.64.0.0/10 tstable=52 tsprio=4990
-  local cur; cur=$(ip -o link show type wireguard 2>/dev/null | awk -F': ' 'NR==1{print $2}')
+  # Proton tunnels only. wghome carries the SPICE link to g33nto and is deliberately
+  # not named wg-*, so it must never become $cur: `up` tears $cur down before
+  # connecting (mid-session), `down` drops it instead of Proton, and `status` would
+  # report "up" while the only tunnel carries no VPN at all. Diagnosed 2026-09-25.
+  local cur; cur=$(ip -o link show type wireguard 2>/dev/null | awk -F': ' '$2 ~ /^wg-/ {print $2; exit}')
   case "${1:-status}" in
     list)
-      for f in "$dir"/*.conf(N); do print -r -- "${f:t:r}"; done
+      for f in "$dir"/wg-*.conf(N); do print -r -- "${f:t:r}"; done
       ;;
     up|upr)
       local name="${2:-}"
       if [ "$1" = upr ]; then
         local -a pool
-        pool=("$dir"/*${2:-}*.conf(N:t:r))
+        pool=("$dir"/wg-*${2:-}*.conf(N:t:r))
         (( $#pool )) || { echo "no server matches: ${2:-*}" >&2; return 1; }
         name=$pool[$((RANDOM % $#pool + 1))]
         echo "random: $name"
       elif [ -z "$name" ]; then
-        name=$(for f in "$dir"/*.conf(N); do print -r -- "${f:t:r}"; done \
+        name=$(for f in "$dir"/wg-*.conf(N); do print -r -- "${f:t:r}"; done \
           | fzf --prompt='proton > ' --header='enter: connect / esc: cancel')
       fi
       [ -n "$name" ] || return 0
