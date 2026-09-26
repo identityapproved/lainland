@@ -193,6 +193,45 @@ zkt() { zk edit --interactive --tag "${1:?tag}"; }      # pick within a tag
 zkn() { zk new --title "${*:?title}"; }                 # new note with title
 zkg() { zk edit --interactive --match "${*:?query}"; }  # full-text search, then pick
 
+# --- nb links (bookmarks: links notebook, <topic>/<sub-topic>.md) ---------
+# _nbl_files: links collections, newest first, relative to $NB_DIR.
+_nbl_files() {
+  (builtin cd -q "${NB_DIR:-$HOME/nb}" && find links -path '*/.*' -prune -o -type f \
+    -name '*.md' -printf '%T@ %P\n') | sort -rn | cut -d' ' -f2- | sed 's#^#links/#'
+}
+nble() {                                                                # pick a links collection, edit it
+  local dir=${NB_DIR:-$HOME/nb} f
+  f=$(_nbl_files | fzf --prompt='collection > ' --layout=reverse --query="$*" \
+        --preview="bat --color=always --style=plain ${(q)dir}/{}") || return
+  [[ -n "$f" ]] && nb edit "links:${f#links/}"
+}
+nbo() {                                                                 # pick a saved link, open it
+  local line
+  line=$(builtin cd -q "${NB_DIR:-$HOME/nb}/links" && {
+      grep -rHoE --include='*.md' --exclude-dir=.git '\[[^]]+\]\(https?://[^)]+\)' . \
+        | sed -E 's#^\./([^:]+):\[([^]]*)\]\((.*)\)$#\2\t\3\t\1#'
+      grep -rHoE --include='*.bookmark.md' --exclude-dir=.git '^<https?://[^>]+>' . \
+        | sed -E 's#^\./([^:]+):<(.*)>$#\1\t\2\t\1#'
+    } | fzf --delimiter='\t' --with-nth=1,3 --query="$*" --prompt='link > ' \
+          --layout=reverse) || return
+  xdg-open "$(cut -f2 <<<"$line")" >/dev/null 2>&1 &!
+}
+nbla() {                                                                # nbla <url> <title...>: add to a picked collection
+  local url=${1:?url} links=${NB_DIR:-$HOME/nb}/links dir=${NB_DIR:-$HOME/nb} f
+  shift
+  local title=${*:?title}
+  if grep -rqF --include='*.md' --exclude-dir=.git -e "$url" "$links"; then
+    print -u2 "nbla: already saved in:"
+    grep -rlF --include='*.md' --exclude-dir=.git -e "$url" "$links" | sed "s#^$links/#links:#" >&2
+    return 1
+  fi
+  f=$(_nbl_files | grep -v '\.bookmark\.md$' | fzf --prompt='add to > ' --layout=reverse \
+        --preview="bat --color=always --style=plain ${(q)dir}/{}") || return
+  [[ -n "$f" ]] && nb edit "links:${f#links/}" --content "- [$title]($url)"
+}
+alias nbs='nb sync --all'                                               # pull/push every notebook
+alias nbtd='nb todos open'                                              # open todos
+
 # --- pipewire: pick default sink ------------------------------------------
 wptui-default-sink() {
   local candidates=() line id selected
