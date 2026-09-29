@@ -31,6 +31,14 @@ export TERMINAL="$HOME/.config/scripts/term"
 export TMPDIR="$HOME/.cache/tmp"
 [ -d "$TMPDIR" ] || mkdir -p "$TMPDIR"
 
+# pixrupt's target tree alone is ~12G, which does not belong on a 107G root.
+# This laptop has a spare ext4 disk at /mnt/hgst; no other host has one. The
+# guard tests the directory, not the mountpoint: /mnt/hgst exists unmounted too,
+# and writing there would quietly fill / instead of sparing it. So this is inert
+# on gentoo and after an unmounted boot, where cargo falls back to each crate's
+# own target/.
+[ -d /mnt/hgst/cargo-target ] && export CARGO_TARGET_DIR=/mnt/hgst/cargo-target
+
 # zoxide's doctor false-positives in snapshot-restored shells (Claude Code and
 # friends re-source a dump of our *functions* into a fresh `zsh -c`, which brings
 # back zoxide's cd wrapper but not the chpwd_functions array it hooks into), so
