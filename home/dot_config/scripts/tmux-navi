@@ -1,0 +1,52 @@
+#!/bin/sh
+# tmux-navi -- navi's cheatsheet picker in a popup; the chosen snippet is pasted
+# into the pane it was opened from.
+#
+# Usage: tmux-navi PANE_ID
+#   prefix + C-g
+#
+# Runs inside a tmux display-popup started in the pane's directory (the bind
+# passes -d #{pane_current_path} and #{pane_id}). navi prompts for each
+# <placeholder> inside the popup; once a snippet is resolved the popup closes
+# and the text lands in PANE_ID.
+#
+# Pasting rather than running is the point of the tmux binding as opposed to the
+# zsh CTRL-G widget: the snippet arrives in whatever the pane is running -- a
+# shell, an ssh session on a box with no navi, psql, a REPL -- and nothing
+# executes until you press Enter.
+#
+# The popup's environment is the tmux server's, not zsh's, so what zsh exports
+# is set here instead, the same way tmux-pick does it:
+#   FZF_DEFAULT_OPTS_FILE  Lain colors and the preview keys (fzf/lain.fzfrc)
+#   COLORTERM=truecolor    tmux.conf sets this globally, but a server started
+#                          before that line was added has panes without it, and
+#                          without it fzf's hex --color values collapse onto the
+#                          256-colour cube
+# NAVI_CONFIG is deliberately absent: config.yaml sits at navi's default path,
+# so navi finds it with no environment at all. rc.d/45-navi.zsh exports it for
+# the zsh side only.
+
+set -u
+
+FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/lain.fzfrc"
+COLORTERM=truecolor
+export FZF_DEFAULT_OPTS_FILE COLORTERM
+
+pane=${1-}
+[ -n "$pane" ] || { echo "usage: tmux-navi PANE_ID" >&2; exit 2; }
+
+command -v navi >/dev/null 2>&1 || {
+    tmux display-message "navi is not installed on this host"
+    exit 0
+}
+
+# --print resolves the snippet and writes it to stdout instead of running it.
+# A non-zero exit is an abort (escape, or no cheats found) -- leave the pane be.
+snippet=$(navi --print) || exit 0
+[ -n "$snippet" ] || exit 0
+
+# -p is bracketed paste, so a multiline snippet arrives in the pane's line editor
+# as one block instead of being submitted a line at a time. -d drops the buffer
+# afterwards rather than leaving it on the stack.
+printf '%s' "$snippet" | tmux load-buffer -b navi -
+tmux paste-buffer -p -t "$pane" -b navi -d

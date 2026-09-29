@@ -45,6 +45,10 @@ pkg_for() {
         # Capitalised in the Void repo; a bare echo would look for "swayosd".
         swayosd-client|swayosd-server) echo SwayOSD ;;
 {{ end -}}
+        # navi is installed with `cargo install --locked navi` on every host --
+        # not from any distro repo -- so the marker is the same everywhere and
+        # sits outside the os-specific branches above.
+        navi)            echo 'navi(cargo install --locked navi)' ;;
         wl-copy)         echo wl-clipboard ;;
         wpctl)           echo wireplumber ;;
         rg)              echo ripgrep ;;
@@ -113,7 +117,7 @@ group bar      required  waybar
 group sensors  optional  sensors
 group screen   required  grim slurp swappy wl-copy notify-send
 group audio    required  wpctl playerctl
-group dev      optional  lazygit delta gh glow w3m
+group dev      optional  lazygit delta gh glow w3m navi
 # cava moved here from the bar group: waybar's custom/cava is parked, but rmpc
 # drives cava too, and it stays installed on both hosts.
 group media    optional  mpv zathura mpd rmpc cava
