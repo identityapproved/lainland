@@ -1,0 +1,52 @@
+# navi -- interactive cheatsheet picker. rc.d/45-navi.zsh exports NAVI_CONFIG to
+# point here explicitly, so the path does not depend on XDG_CONFIG_HOME being set
+# in whatever environment navi is invoked from (tmux popups, scripts).
+#
+# Deliberately holds no `cheats.paths`. navi's default data dir
+# ($XDG_DATA_HOME/navi/cheats) stays in charge, so cheats are added the normal
+# navi way -- `navi repo add <url>` -- and this file names no repositories. That
+# is on purpose: this repo is public, so nothing here should reveal which
+# cheatsheets a machine carries. Which repos have been added on a host is what
+# makes that host's picker differ, and that lives on the host, not here.
+#
+# Colors: navi parses crossterm color *names* only. Hex (#FFB1C3), rgb(...),
+# "r,g,b" and palette indices are each rejected at startup with a config parse
+# error -- all four tested against 2.24.0. So the palette here is ANSI 0-15,
+# which kitty/themes/lain-theme.conf (and foot.ini, which mirrors it) already
+# maps onto lain-colors.md. Resolving each name through that mapping:
+#
+#   dark_red  color1   #CE7688  foreprimary     "Body text (UI chrome)"
+#   cyan      color14  #B5A985  highsecondary   ochre content ramp
+#   grey      color7   #BABABA  backduodenary   neutral, CR 10.82 on black
+#
+# which follows the palette's pairing rule -- rose on black for chrome, ochre on
+# black for content -- with tags as the chrome label, the description in the
+# content ramp since that is the column you actually scan, and the snippet
+# neutral because it is literal code. `white` is avoided deliberately: color15 is
+# #FFFFFF, the one value in the ANSI set that is not a Lain token.
+#
+# Brightness ranks comment (8.98) over tag (6.57), and the snippet reads highest
+# at 10.82 since it is the thing you verify before pressing Enter.
+#
+# fzf's own chrome -- borders, prompt, pointer, preview frame -- is truecolor and
+# comes from ~/.config/fzf/lain.fzfrc via FZF_DEFAULT_OPTS_FILE.
+style:
+  tag:
+    color: dark_red
+    width_percentage: 26
+    min_width: 20
+  comment:
+    color: cyan
+    width_percentage: 42
+    min_width: 45
+  snippet:
+    color: grey
+
+finder:
+  command: fzf
+
+# Shell used to evaluate `$ var:` suggestion commands inside cheats. bash, not
+# zsh: community cheatsheets are written against bash and navi documents it as
+# the default. This does not affect the shell snippets are pasted into.
+shell:
+  command: bash
