@@ -205,7 +205,7 @@ hexes by eye.
 | `mango` | Border, focus, urgent and window-state colors |
 | `hypr` | Colors, borders, shadows, animations, window rules, scripts |
 | `sway` | Border colors, keybinds kept in step with mango, `start-sway` session launcher |
-| `waybar` | Full bar: workspaces, timewarrior, taskwarrior, nb, weather, storage; pomodoro/media/cava/power parked in the config |
+| `waybar` | Full bar: workspaces, taskwarrior, nb, weather, storage; pomodoro/media/cava/power parked in the config |
 | `walker` | Launcher; hand-written `themes/lain.{css,toml}` |
 | `mako` | Notification daemon on every host, per-urgency colors |
 | `swayosd` | Volume and brightness OSD (mango, sway); shared `style.css` |

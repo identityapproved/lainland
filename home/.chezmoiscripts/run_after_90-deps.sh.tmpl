@@ -54,7 +54,6 @@ pkg_for() {
         rg)              echo ripgrep ;;
         nvim)            echo neovim ;;
         gh)              echo github-cli ;;
-        timew)           echo timewarrior ;;
         swaymsg|swaynag) echo sway ;;
         hyprctl)         echo hyprland ;;
         *)               echo "$1" ;;
@@ -122,7 +121,7 @@ group dev      optional  lazygit delta gh glow w3m navi
 # drives cava too, and it stays installed on both hosts.
 group media    optional  mpv zathura mpd rmpc cava
 group monitor  required  btop htop
-group prod     optional  task timew calcurse nb zk taskwarrior-tui
+group prod     optional  task calcurse nb zk taskwarrior-tui
 group util     optional  tofi wg-quick gammastep
 
 # The terminal group is any-of, not all-of: .config/scripts/term resolves to

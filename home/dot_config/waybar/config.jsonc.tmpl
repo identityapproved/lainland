@@ -16,7 +16,6 @@
 
     "modules-left": [
         {{ if eq .wm "mango" }}"ext/workspaces"{{ else if eq .wm "hyprland" }}"hyprland/workspaces"{{ else }}"sway/workspaces"{{ end }},
-        "custom/timewarrior",
         "custom/tasks",
         "custom/nb"
         // Parked, not deleted: uncomment the name here and the definition
@@ -94,17 +93,6 @@
     //     "tooltip": true,
     //     "escape": true
     // },
-    "custom/timewarrior": {
-        "exec": "~/.config/waybar/modules/timewarrior.py",
-        "return-type": "json",
-        "format": "{}",
-        "interval": 5,
-        "on-click": "~/.config/waybar/modules/timewarrior.py toggle",
-        "on-click-middle": "kitty --title termfloat --override tab_bar_style=hidden -e ~/.config/waybar/modules/timewarrior.py prompt",
-        "on-click-right": "kitty --title termfloat --hold --override tab_bar_style=hidden -e ~/.config/waybar/modules/timewarrior.py dashboard",
-        "tooltip": true
-    },
-
     // Now playing via playerctl. Parked; modules/media.sh is untouched.
     // "custom/media": {
     //     "format": "{}",
