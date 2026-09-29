@@ -52,10 +52,6 @@
   min-width: 88px;
 }
 
-#custom-timewarrior {
-  min-width: 96px;
-}
-
 #custom-timer.disabled,
 #custom-timer.idle {
   color: @lain-fg-dim;
@@ -64,23 +60,6 @@
 #custom-timer.select,
 #custom-timer.pomo_msg {
   color: @lain-accent;
-}
-
-#custom-timewarrior.active {
-  color: @lain-accent;
-}
-
-#custom-timewarrior.idle {
-  color: @lain-fg;
-}
-
-#custom-timewarrior.empty,
-#custom-timewarrior.uninitialized {
-  color: @lain-fg-dim;
-}
-
-#custom-timewarrior.error {
-  color: #FFB1C3;
 }
 
 #custom-timer.running,
@@ -113,7 +92,6 @@
 #window,
 #custom-timer,
 #custom-media,
-#custom-timewarrior,
 #custom-spotify,
 #custom-weather,
 #custom-storage,
