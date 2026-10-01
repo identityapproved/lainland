@@ -1,8 +1,20 @@
-# fzf key-bindings: CTRL-R history, CTRL-T files, ALT-C cd.
+# fzf key-bindings: CTRL-R history, CTRL-T files, CTRL-O / ALT-C cd.
 # Deferred via zvm_after_init: zsh-vi-mode rebuilds the viins keymap on the
 # first prompt and would otherwise clobber fzf's insert-mode CTRL-R.
 # Completions (_fzf) come from /usr/share/zsh/site-functions via compinit.
 zvm_after_init_commands+=('source /usr/share/fzf/key-bindings.zsh')
+
+# The cd widget also on CTRL-O, so the pair is the same on every machine here:
+# ^G is navi (45-navi.zsh), ^O is fzf's cd. On the boxes whose WM takes Alt as
+# its mod key (dwm on bootxnix, i3/vxwm on pentoo) ALT-C never reaches the shell
+# at all; mango and sway use SUPER, so here ALT-C keeps working alongside it.
+# Appended after the source above, so the widget exists by the time this runs.
+_bind_fzf_cd() {
+  (( $+widgets[fzf-cd-widget] )) || return
+  bindkey -M viins '^O' fzf-cd-widget
+  bindkey -M vicmd '^O' fzf-cd-widget
+}
+zvm_after_init_commands+=('_bind_fzf_cd')
 
 # fzf colors and preview-scroll keys -- Lain -- live in ~/.config/fzf/lain.fzfrc,
 # shared with scripts/tmux-pick, whose popup never sees this shell's exports.
