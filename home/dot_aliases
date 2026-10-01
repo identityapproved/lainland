@@ -1,7 +1,3 @@
-alias zshconfig="nvim ~/.zshrc"
-alias aliasconfig="nvim ~/.aliases"
-alias tmuxconfig="nvim ~/.config/tmux/tmux.conf"
-
 alias q="exit"
 alias rf="rm -rf"
 alias cat="bat --paging=never"
@@ -39,19 +35,6 @@ alias svr='doas sv restart'
 
 # eix
 alias es='eix'
-alias esu='doas eix-update'
-
-# equery
-alias eqf='equery f'   # files owned by package
-alias eqb='equery b'   # which package owns a file
-alias eql='equery l'   # list installed matching pattern
-alias eqd='equery d'   # reverse deps
-alias equ='equery u'   # USE flags for package
-alias eqs='equery s'   # package size
-
-# gentoolkit
-alias rr='doas revdep-rebuild'
-alias eclean='doas eclean distfiles'
 
 alias v='nvim'
 alias vi='nvim'
@@ -119,8 +102,6 @@ vpn() {
   esac
 }
 
-alias mpvpl='find . -type d | fzf | xargs -I{} find "{}" -type f | sort -V | mpv --playlist=-'
-
 # --- fzf helpers (ported from fish) ---------------------------------------
 # pick a command from the completion table, then act on it
 fman() {
@@ -163,12 +144,9 @@ galias() { git config --get-regexp '^alias\.' | fzf; }
 # there is no foot equivalent, so only define it where kitty exists.
 command -v kitty >/dev/null 2>&1 && alias kssh="kitty +kitten ssh"
 alias cr="codex resume"
+alias nt="navi --tldr"   # nt ls -> tldr page as navi snippets
 alias virsh="virsh -c qemu:///system"
-alias lsblko="lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINT,MODEL"
-alias clipc="wl-copy </dev/null"
 alias make="make -j\$(nproc)"
-alias ninja="ninja -j\$(nproc)"
-alias n="ninja"
 
 # --- taskwarrior fuzzy search ---------------------------------------------
 tws() {
@@ -315,9 +293,6 @@ pz() {
 }
 
 # --- network --------------------------------------------------------------
-alias wifi='nmcli dev wifi list'
-alias ports='ss -tulpen'
-alias myip='ip -br a'
 alias route='ip route'   # deliberately shadows the deprecated net-tools route
 
 # --- syncthing ------------------------------------------------------------

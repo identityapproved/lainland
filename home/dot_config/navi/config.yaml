@@ -50,3 +50,14 @@ finder:
 # the default. This does not affect the shell snippets are pasted into.
 shell:
   command: bash
+
+# `navi --tldr <query>` shells out to the local tldr binary and parses its
+# output into snippets; it never fetches anything itself, so it works offline
+# against tealdeer's cache in $XDG_CACHE_HOME/tealdeer. Without this option navi
+# invokes `tldr <query> --markdown`, which tealdeer 1.8.1 rejects outright
+# ("unexpected argument '--markdown'") and navi reports as a hard error. The
+# flag it sends with tealdeer: true is `--raw`, which tealdeer does accept. The
+# option is named for the client because tldr-c-client -- Homebrew's default --
+# cannot do markdown at all, which is the case navi is guarding against.
+client:
+  tealdeer: true
