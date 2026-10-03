@@ -46,3 +46,43 @@ export TMPDIR="$HOME/.cache/tmp"
 # correct — see rc.d/50-tools.zsh. Silence it for non-interactive shells only, so
 # a genuine ordering regression still shows up in a real terminal.
 [[ -o interactive ]] || export _ZO_DOCTOR=0
+
+# Local LLM (ollama): offline FIM + chat for Neovim.
+# Runbook: ~/zettelnotes/adeg_local-llm-fim-and-chat-in-neovim.md
+#
+# Neovim reads the three LOCAL_* vars via lua/config/localllm.lua, which is the
+# only reason that config needs no host branches. Endpoint is loopback on every
+# host: the ollama API is unauthenticated, so the bind address is the whole
+# access control story.
+export LOCAL_LLM_URL="http://127.0.0.1:11434"
+
+# Model tier follows the host's capability, not its name -- same reasoning as
+# the CARGO_TARGET_DIR guard above. g33nto has headroom for 7B; voidbox is Bay
+# Trail with no AVX and 7.6G, so it gets 3B. FIM needs the -base tags: the
+# instruct variants answer in prose instead of completing.
+if [ -r /etc/gentoo-release ]; then
+  export LOCAL_FIM_MODEL="qwen2.5-coder:7b-base"
+  export LOCAL_CHAT_MODEL="qwen2.5-coder:7b-instruct"
+else
+  # 0.5B, not 3B: measured on voidbox, uncached prompt eval is 14.3 tok/s at
+  # 0.5B vs 1.6 at 3B, i.e. ~12s vs ~96s for a completion in a fresh spot, and
+  # 3B was no better on a FIM test. See the note's benchmark table.
+  export LOCAL_FIM_MODEL="qwen2.5-coder:0.5b-base"
+  export LOCAL_CHAT_MODEL="qwen2.5-coder:3b-instruct"
+fi
+
+# Already the upstream default, pinned so a future default change cannot
+# silently widen it. Also points the client at the container's published port
+# on hosts where ollama runs under podman.
+export OLLAMA_HOST="127.0.0.1:11434"
+# 0.34.x ships remote inference and web search. This is the offline fallback,
+# so both stay off and no prompt leaves the machine.
+export OLLAMA_NO_CLOUD=1
+
+# Server-side tuning; inert where ollama runs in a container, which takes these
+# from its compose environment instead. KEEP_ALIVE matters most on voidbox:
+# the 5m default means a cold multi-second model reload on most triggers.
+export OLLAMA_KEEP_ALIVE=30m
+export OLLAMA_MAX_LOADED_MODELS=1   # raise to 2 to keep FIM+chat both resident
+export OLLAMA_NUM_PARALLEL=1
+export OLLAMA_CONTEXT_LENGTH=4096
