@@ -53,8 +53,15 @@ alias himalaya='firejail himalaya-tui'
 #   vpn status      show the active interface/endpoint
 vpn() {
   local dir=/etc/wireguard
-# local tsnet=100.64.0.0/10 tstable=52 tsprio=5000   # pin tailnet out tailscale0, above Proton's rules
   local tsnet=100.64.0.0/10 tstable=52 tsprio=4990
+  # No tsprio value is safe on its own. wg-quick adds its two policy rules with
+  # no explicit priority (/usr/bin/wg-quick:223-224), so the kernel assigns
+  # (current lowest - 1) and it undercuts whatever the previous `vpn up` left at
+  # $tsprio. The first connect after boot worked; every later server switch put
+  # Proton ahead of the tailnet rule, routed 100.64.0.0/10 into the tunnel and
+  # cut Tailscale off from its coordination server. Pin wg-quick instead.
+  # Diagnosed 2026-10-03.
+  local wgtable=51820 wgprio=5300   # above Tailscale's 4990/5210/5230/5250/5270
   # Proton tunnels only. wghome carries the SPICE link to g33nto and is deliberately
   # not named wg-*, so it must never become $cur: `up` tears $cur down before
   # connecting (mid-session), `down` drops it instead of Proton, and `status` would
@@ -80,8 +87,20 @@ vpn() {
       [ -f "$dir/$name.conf" ] || { echo "unknown server: $name" >&2; return 1; }
       [ -n "$cur" ] && doas wg-quick down "$cur"
       doas wg-quick up "$name" || return
-      # keep the tailnet reachable while Proton owns the default route (re-add idempotently)
-      doas sh -c "ip rule del to $tsnet priority $tsprio 2>/dev/null; ip rule add to $tsnet lookup $tstable priority $tsprio"
+      # Re-pin both sides at explicit priorities instead of letting them race:
+      # wg-quick above every Tailscale rule, the tailnet below them all.
+      doas sh -c "
+        while ip -4 rule del table $wgtable 2>/dev/null; do :; done
+        while ip -4 rule del table main suppress_prefixlength 0 2>/dev/null; do :; done
+        while ip -6 rule del table $wgtable 2>/dev/null; do :; done
+        while ip -6 rule del table main suppress_prefixlength 0 2>/dev/null; do :; done
+        ip -4 rule add table main suppress_prefixlength 0 priority $wgprio
+        ip -4 rule add not fwmark $wgtable table $wgtable priority $((wgprio + 1))
+        ip -6 rule add table main suppress_prefixlength 0 priority $wgprio
+        ip -6 rule add not fwmark $wgtable table $wgtable priority $((wgprio + 1))
+        ip -4 rule del to $tsnet priority $tsprio 2>/dev/null
+        ip -4 rule add to $tsnet lookup $tstable priority $tsprio
+      "
       ;;
     down)
       if [ -n "$cur" ]; then
