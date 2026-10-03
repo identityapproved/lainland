@@ -376,3 +376,47 @@ def() {
         ' "$f"
     done | bat --paging=always --language=txt
 }
+
+# --- rust book (rustup ships it; ansicat previews, offpunk reads) ---------
+# rbook picks a chapter by title, rbookf searches the text of the whole book.
+# ansicat 2.8 crashes on a positional file, so pages go in on stdin; --url is
+# what makes it resolve the page's relative links. grep here is ugrep, which
+# walks files in parallel and returns them unordered, hence the explicit sort.
+_rbook_dir() {
+  command -v rustup >/dev/null || { echo "rbook requires rustup" >&2; return 1; }
+  # not `local path`: in zsh that shadows the PATH-tied array and empties PATH.
+  local index
+  index=$(rustup doc --book --path) && [[ -n "$index" ]] && dirname "$index"
+}
+
+rbook() {
+  local book pick
+  book=$(_rbook_dir) || return 1
+  local -x RUSTBOOK=$book
+  pick=$(
+    { grep -m1 -oH '<title>[^<]*' "$book"/ch*.html | sort
+      grep -m1 -oH '<title>[^<]*' "$book"/appendix-*.html | sort
+    } | sed "s|^$book/||; s|\.html:<title>|\t|; s| - The Rust Programming Language$||" \
+      | fzf --delimiter='\t' --with-nth=2 --no-sort --query="$*" \
+            --height 80% --layout=reverse --border --header="The Rust Programming Language" \
+            --preview='ansicat --format html --url "file://$RUSTBOOK/{1}.html" < "$RUSTBOOK/{1}.html"' \
+            --preview-window='right,65%,wrap' \
+      | cut -f1
+  ) || return
+  [[ -n "$pick" ]] && offpunk "$book/$pick.html"
+}
+
+rbookf() {
+  local book pick
+  [[ -n "$1" ]] || { echo "usage: rbookf <pattern>" >&2; return 2; }
+  book=$(_rbook_dir) || return 1
+  local -x RUSTBOOK=$book
+  pick=$(
+    rg -l -i -- "$1" "$book"/ch*.html "$book"/appendix-*.html \
+      | sed "s|^$book/||; s|\.html$||" | sort \
+      | fzf --no-sort --height 80% --layout=reverse --border --header="book: $1" \
+            --preview="ansicat --format html --url \"file://\$RUSTBOOK/{}.html\" < \"\$RUSTBOOK/{}.html\" | rg --color=always -i -C2 -- '$1'" \
+            --preview-window='right,65%,wrap'
+  ) || return
+  [[ -n "$pick" ]] && offpunk "$book/$pick.html"
+}
