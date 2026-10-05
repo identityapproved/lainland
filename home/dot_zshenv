@@ -63,12 +63,20 @@ export LOCAL_LLM_URL="http://127.0.0.1:11434"
 if [ -r /etc/gentoo-release ]; then
   export LOCAL_FIM_MODEL="qwen2.5-coder:7b-base"
   export LOCAL_CHAT_MODEL="qwen2.5-coder:7b-instruct"
+  # minuet fires this many independent requests, not one request for N samples,
+  # so it must not exceed the server's OLLAMA_NUM_PARALLEL or they queue. The
+  # compose here publishes 2 slots. Below 2 there is nothing for <A-;> to cycle.
+  export LOCAL_FIM_COMPLETIONS=2
 else
   # 0.5B, not 3B: measured on voidbox, uncached prompt eval is 14.3 tok/s at
   # 0.5B vs 1.6 at 3B, i.e. ~12s vs ~96s for a completion in a fresh spot, and
   # 3B was no better on a FIM test. See the note's benchmark table.
   export LOCAL_FIM_MODEL="qwen2.5-coder:0.5b-base"
   export LOCAL_CHAT_MODEL="qwen2.5-coder:3b-instruct"
+  # One, deliberately: the native server runs a single slot, so a second
+  # completion would serialise behind the first and double a latency that is
+  # already this host's whole problem.
+  export LOCAL_FIM_COMPLETIONS=1
 fi
 
 # Already the upstream default, pinned so a future default change cannot
