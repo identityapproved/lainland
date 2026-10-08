@@ -32,7 +32,8 @@ pdf = [
 	{ run = "zathura %s", desc = "Zathura", for = "unix", orphan = true },
 ]
 image = [
-	{ run = "imv %s", desc = "imv", for = "unix", orphan = true },
+	# Openers run under sh, so the sibling name expands inline; swappy writes PNG only.
+	{ run = 'f=%s1; swappy -f "$f" -o "${f%.*}_annotated.png"', desc = "Draw (swappy)", for = "unix", orphan = true },
 ]
 video = [
 	{ run = "mpv %s", desc = "mpv", for = "unix", orphan = true },
