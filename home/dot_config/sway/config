@@ -47,6 +47,11 @@ exec --no-startup-id waybar
 # restarted over a live one does not leave two instances fighting over the
 # gamma ramp.
 exec --no-startup-id sh -c 'pgrep -x gammastep >/dev/null || gammastep &'
+# Boot the tmux server with no client attached. continuum restores the saved
+# sessions in the background as the server starts, so they exist, detached,
+# before Mod+Return attaches to one. exit-empty off in tmux/tmux.conf keeps the
+# server up while it has no sessions.
+exec --no-startup-id tmux start-server
 
 exec_always --no-startup-id "$HOME/.config/sway/scripts/set-wallpaper.sh"
 
@@ -126,9 +131,10 @@ bindswitch --reload --locked lid:off output eDP-1 enable
 #
 # Terminal:
 #
-    # Mod+Return is tmux and Mod+Shift+Return is a bare shell. mango and hypr
-    # were flipped to match this, so all three now agree.
-    bindsym $mod+Return exec $term -e tmux
+    # Mod+Return attaches to the tmux server started at login, which already
+    # holds the restored sessions. tmux attach with no target picks the most
+    # recently used unattached session. Mod+Shift+Return is a bare shell.
+    bindsym $mod+Return exec $term -e tmux attach
     bindsym $mod+Shift+Return exec $term
     bindsym $mod+Ctrl+Return exec $term --float
     # $mod+c is free: clipse is retired on every host, so mango has no SUPER+c
