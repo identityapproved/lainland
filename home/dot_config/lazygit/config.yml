@@ -1,3 +1,10 @@
+os:
+  # xdg-open ignores Terminal=true (xdg-utils 1.2.1, generic DE), so the default
+  # `o` execs nvim into lazygit's own tty and both freeze. Open where prefix+f
+  # opens: a window after this one. $PWD is lazygit's repo root, which is what
+  # {{filename}} is relative to.
+  open: 'tmux new-window -a -c "$PWD" nvim -- {{filename}}'
+
 git:
   diffRenderers:
     - colorArg: always
