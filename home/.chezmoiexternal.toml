@@ -64,3 +64,8 @@
     url = "https://github.com/tmux-plugins/tmux-continuum.git"
     refreshPeriod = "168h"
 
+[".tmux/plugins/tmux-fzf"]
+    type = "git-repo"
+    url = "https://github.com/sainnhe/tmux-fzf.git"
+    refreshPeriod = "168h"
+
