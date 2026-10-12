@@ -328,7 +328,7 @@ chezmoi's control.
 
 | Tool | Notes |
 |---|---|
-| `rmpc` | MPD client; `themes/lain.ron` |
+| `rmpc` | MPD client; `themes/lain.ron`. **Needs >= 0.11.0** — the config sets `root_tag` on every Browser pane and uses no `Library()` border sets, both of which older builds reject outright |
 | `mpd` | Music daemon behind rmpc |
 | `ncmpcpp` | **Tracked, not linked** — superseded by rmpc on every host |
 | `mpv` | Media player |
