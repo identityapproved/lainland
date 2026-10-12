@@ -73,3 +73,30 @@ hwdec=auto
 # video-sync=display-resample
 # interpolation=no
 # scale=bilinear
+{{ if and (eq .chezmoi.osRelease.id "void") (eq .wm "sway") }}
+### Bay Trail overrides (void+sway laptop: Pentium N3540, Gen7 iGPU, 1366x768)
+# Same gate as .config/firefox in .chezmoiignore, and the same trade: this
+# machine has no GPU headroom for the scalers above. Measured by rendering 6s of
+# 1080p h264 to the 1366x768 panel with --untimed, so lower is faster:
+#
+#   ewa_lanczossharp (the settings above)   12953 ms   0.46x realtime
+#   cscale=bilinear alone                    5151 ms
+#   + dscale=bilinear                        3591 ms   1.67x realtime
+#
+# cscale is the whole cost: chroma is upscaled on every frame regardless of
+# direction, so an EWA/polar kernel there runs always. scale and dither measured
+# as free at 1080p -- scale never runs when downscaling -- but scale does run on
+# 720p sources (1280x720 -> 1366x768 is an upscale), where all-EWA is 7071 ms,
+# still under realtime, so it is pinned to bilinear too rather than left above.
+scale=bilinear
+cscale=bilinear
+dscale=bilinear
+
+# hwdec=auto above does land on vaapi-copy, but only after probing cuda (no
+# libcuda here) and plain vaapi. Plain vaapi cannot work on this host: i965 is
+# EOL and its Wayland path fails on mesa 26 with an undefined wl_drm_interface
+# in libEGL_mesa, so mpv silently falls back to software decoding. The DRM path
+# the -copy variant uses is fine, and i965 decodes h264/MPEG2/VC1/JPEG -- but
+# not HEVC, VP9 or AV1, which stay on the CPU.
+hwdec=vaapi-copy
+{{ end -}}
