@@ -253,7 +253,7 @@ and `hypr/configs/envars.conf` both set.
 | `kitty` | Primary terminal, full 16-color ANSI mapping |
 | `foot` | Terminal on the sway host, same 16-color mapping |
 | `scripts/term` | Resolves whichever terminal is installed — see The WM switch |
-| `tmux` | Multiplexer; `lain.tmux` status line, plus resurrect/continuum/tmux-fzf via TPM |
+| `tmux` | Multiplexer; `lain.tmux` status line, plus resurrect/continuum via TPM |
 | `zsh` | Thin `.zshrc` loader over `~/.config/zsh/rc.d/*.zsh`; Lain fzf colors |
 | `fish` | Kept for other machines; colorscheme now on-palette |
 | `starship` | Powerline gradient down the Fore ramp |
@@ -266,9 +266,6 @@ current pane's directory, open what you choose next to the pane:
 |---|---|---|
 | prefix + `g` | file(s), tab to mark several | nvim |
 | prefix + `G` | a directory | a shell |
-
-prefix + `f` is tmux-fzf: one fuzzy menu over sessions, windows, panes,
-commands, keybindings, clipboard and processes, in the same Lain fzf colors.
 
 In the popup, enter opens a new window, ctrl-v a pane to the right and ctrl-s a
 pane below; ctrl-p, ctrl-h and ctrl-n switch the list between the pane's
