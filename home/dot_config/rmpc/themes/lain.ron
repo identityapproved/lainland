@@ -302,8 +302,11 @@
         "header_element_4": Split(direction: Horizontal, panes: [
             (size: "100%", pane: Pane(Property(content: [
                 (kind: Text("[ "),style: (fg: "#C1B48E", modifiers: "Bold")),
-                (kind: Property(Song(Bits())),default: (kind: Text(" "), style: (fg: "#CE7688")), style: (fg: "#CE7688")),
+                (kind: Property(Status(Bits())),default: (kind: Text(" "), style: (fg: "#CE7688")), style: (fg: "#CE7688")),
                 (kind: Text(" bit"),style: (fg: "#C1B48E")),
+                (kind: Text(" | "),style: (fg: "#C1B48E", modifiers: "Bold")),
+                (kind: Property(Status(SampleRate())),default: (kind: Text(" "), style: (fg: "#CE7688")),style: (fg: "#CE7688")),
+                (kind: Text(" Hz"),style: (fg: "#C1B48E")),
                 (kind: Text(" | "),style: (fg: "#C1B48E", modifiers: "Bold")),
                 (kind: Property(Status(Bitrate)),default: (kind: Text(" "), style: (fg: "#CE7688")),style: (fg: "#CE7688")),
                 (kind: Text(" kbps"),style: (fg: "#C1B48E")),
