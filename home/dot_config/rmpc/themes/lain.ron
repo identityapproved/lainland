@@ -180,7 +180,7 @@
                     (size: "100%", borders: "NONE", pane: Component("header_tab_bar")),
                 ])
             ),
-            (size: "5", borders: "ALL", border_symbols: Library("collapsed_top"),
+            (size: "5", borders: "ALL", border_symbols: Inherited(parent: Plain, top_left: "├", top_right: "┤"),
                 border_title: [
                     (kind: Text("─"), style: (fg: "#C1B48E")),
                     (kind: Transform(Replace(content: (kind: Sticker("rating")), replacements: [
