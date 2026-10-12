@@ -2,8 +2,8 @@
 # tmux-pick -- fzf a file or a directory and open it next to the current pane.
 #
 # Usage: tmux-pick file|dir PANE_ID
-#   prefix + f   file(s)   -> nvim
-#   prefix + F   directory -> shell
+#   prefix + g   file(s)   -> nvim
+#   prefix + G   directory -> shell
 #
 # Runs inside a tmux display-popup started in the pane's directory (the binds
 # pass -d #{pane_current_path} and #{pane_id}). Once a pick is made the popup
