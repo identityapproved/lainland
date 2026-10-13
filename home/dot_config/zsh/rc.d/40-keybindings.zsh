@@ -16,6 +16,15 @@ _bind_fzf_cd() {
 }
 zvm_after_init_commands+=('_bind_fzf_cd')
 
+# Deferred for the same zsh-vi-mode keymap rebuild as the fzf bindings above.
+_bind_edit_command_line() {
+  autoload -Uz edit-command-line
+  zle -N edit-command-line
+  bindkey -M viins '^E' edit-command-line
+  bindkey -M vicmd '^E' edit-command-line
+}
+zvm_after_init_commands+=('_bind_edit_command_line')
+
 # fzf colors and preview-scroll keys -- Lain -- live in ~/.config/fzf/lain.fzfrc,
 # shared with scripts/tmux-pick, whose popup never sees this shell's exports.
 # fzf reads that file first, then the options below.
