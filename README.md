@@ -41,6 +41,7 @@ home/                   chezmoi source root
   dot_icons/lainicons/  -> ~/.icons/lainicons  icon + cursor theme
   dot_zshrc  dot_zshenv  dot_zprofile.tmpl  dot_aliases  dot_gtkrc-2.0
 scripts/                GSettings helpers (gtk theme, liferea); dconf is not a file
+grub/lain/              GRUB theme; installed by hand into /boot, not by chezmoi
 assets/                 README screenshots
 ```
 
@@ -374,6 +375,25 @@ archives into `~/.local/share/fonts/` by hand and running `fc-cache -f`.
 The deps report checks all four families with `fc-list` and flags them as
 required, not optional, because a missing one silently changes every bar,
 launcher and terminal at once.
+
+### GRUB
+
+`grub/lain/` sits outside the chezmoi root because its target is `/boot`. The
+Gentoo logo is pixelated onto pure black in the rose ramp, the menu is rose on
+`backsecondary`, and the selected entry is black on `highprimary`, its right
+end dithering out over 128px in 4px pixels, like yazi's `▓▒░`. Fonts are `grub-mkfont` builds of IosevkaTerm Nerd Font Mono
+(16 and 24, regular and bold), so they match the terminals. The background is
+laid out for 1920x1080. The same logo in both ramps ships as
+`gentoo_lain_rose.png` and `gentoo_lain_ochre.png` in the wallpaper set.
+
+```bash
+mountpoint -q /boot || doas mount /boot
+doas rsync -rt --delete grub/lain/ /boot/grub/themes/lain/
+# /etc/default/grub:
+#   GRUB_THEME="/boot/grub/themes/lain/theme.txt"
+#   GRUB_GFXMODE=1920x1080
+doas grub-mkconfig -o /boot/grub/grub.cfg
+```
 
 ---
 
