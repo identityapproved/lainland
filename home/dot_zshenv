@@ -9,9 +9,6 @@ export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
 export GOPATH="$HOME/go"
 export XDG_DATA_HOME="$HOME/.local/share"
-export AGENTSDOTS_ROOT="$HOME/github/agentsdots"
-export ZK_NOTEBOOK_DIR="$HOME/zettelnotes"
-export ZETTEL_DIR="$HOME/zettelnotes"
 export BAT_THEME="Lain"   # used by bat, the cat= alias, and fzf previews
 
 # VISUAL, not EDITOR, is what git, lazygit and aerc reach for first.
@@ -31,14 +28,6 @@ export TERMINAL="$HOME/.config/scripts/term"
 export TMPDIR="$HOME/.cache/tmp"
 [ -d "$TMPDIR" ] || mkdir -p "$TMPDIR"
 
-# pixrupt's target tree alone is ~12G, which does not belong on a 107G root.
-# This laptop has a spare ext4 disk at /mnt/hgst; no other host has one. The
-# guard tests the directory, not the mountpoint: /mnt/hgst exists unmounted too,
-# and writing there would quietly fill / instead of sparing it. So this is inert
-# on gentoo and after an unmounted boot, where cargo falls back to each crate's
-# own target/.
-[ -d /mnt/hgst/cargo-target ] && export CARGO_TARGET_DIR=/mnt/hgst/cargo-target
-
 # zoxide's doctor false-positives in snapshot-restored shells (Claude Code and
 # friends re-source a dump of our *functions* into a fresh `zsh -c`, which brings
 # back zoxide's cd wrapper but not the chpwd_functions array it hooks into), so
@@ -47,50 +36,12 @@ export TMPDIR="$HOME/.cache/tmp"
 # a genuine ordering regression still shows up in a real terminal.
 [[ -o interactive ]] || export _ZO_DOCTOR=0
 
-# Local LLM (ollama): offline FIM + chat for Neovim.
-# Runbook: ~/zettelnotes/adeg_local-llm-fim-and-chat-in-neovim.md
-#
-# Neovim reads the three LOCAL_* vars via lua/config/localllm.lua, which is the
-# only reason that config needs no host branches. Endpoint is loopback on every
-# host: the ollama API is unauthenticated, so the bind address is the whole
-# access control story.
-export LOCAL_LLM_URL="http://127.0.0.1:11434"
-
-# Model tier follows the host's capability, not its name -- same reasoning as
-# the CARGO_TARGET_DIR guard above. g33nto has headroom for 7B; voidbox is Bay
-# Trail with no AVX and 7.6G, so it gets 3B. FIM needs the -base tags: the
-# instruct variants answer in prose instead of completing.
-if [ -r /etc/gentoo-release ]; then
-  export LOCAL_FIM_MODEL="qwen2.5-coder:7b-base"
-  export LOCAL_CHAT_MODEL="qwen2.5-coder:7b-instruct"
-  # minuet fires this many independent requests, not one request for N samples,
-  # so it must not exceed the server's OLLAMA_NUM_PARALLEL or they queue. The
-  # compose here publishes 2 slots. Below 2 there is nothing for <A-;> to cycle.
-  export LOCAL_FIM_COMPLETIONS=2
-else
-  # 0.5B, not 3B: measured on voidbox, uncached prompt eval is 14.3 tok/s at
-  # 0.5B vs 1.6 at 3B, i.e. ~12s vs ~96s for a completion in a fresh spot, and
-  # 3B was no better on a FIM test. See the note's benchmark table.
-  export LOCAL_FIM_MODEL="qwen2.5-coder:0.5b-base"
-  export LOCAL_CHAT_MODEL="qwen2.5-coder:3b-instruct"
-  # One, deliberately: the native server runs a single slot, so a second
-  # completion would serialise behind the first and double a latency that is
-  # already this host's whole problem.
-  export LOCAL_FIM_COMPLETIONS=1
-fi
-
-# Already the upstream default, pinned so a future default change cannot
-# silently widen it. Also points the client at the container's published port
-# on hosts where ollama runs under podman.
-export OLLAMA_HOST="127.0.0.1:11434"
-# 0.34.x ships remote inference and web search. This is the offline fallback,
-# so both stay off and no prompt leaves the machine.
-export OLLAMA_NO_CLOUD=1
-
-# Server-side tuning; inert where ollama runs in a container, which takes these
-# from its compose environment instead. KEEP_ALIVE matters most on voidbox:
-# the 5m default means a cold multi-second model reload on most triggers.
-export OLLAMA_KEEP_ALIVE=30m
-export OLLAMA_MAX_LOADED_MODELS=1   # raise to 2 to keep FIM+chat both resident
-export OLLAMA_NUM_PARALLEL=1
-export OLLAMA_CONTEXT_LENGTH=4096
+# Drop-ins from other repos: local paths from lainland-private (zsh/env.d/,
+# linked by hand, see its README) and LLM/agent settings from agentsdots
+# (shell/env.zsh, linked by its bootstrap.sh). Same pattern as rc.d/ in
+# .zshrc: extend by adding a NN-name.zsh, no edit here needed.
+_envd="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/env.d"
+for _f in "$_envd"/*.zsh(N); do
+  source "$_f"
+done
+unset _envd _f
