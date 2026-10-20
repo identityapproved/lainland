@@ -1,0 +1,18 @@
+#!/bin/sh
+# tuigreet in the lain palette; colors from lain-colors.md.
+# The VT has 16 colors only, so load them into this tty's palette and theme
+# tuigreet by ANSI name. Slots mirror kitty/themes/lain-theme.conf, except 7:
+# the console has no separate foreground slot, so 7 takes kitty's foreground.
+
+for slot in \
+    0000000 1CE7688 2968C6E 3FFDCB9 48A8A8A 5BA6A7B 6A49978 7C1B48E \
+    87A7A7A 9FFB1C3 AB5A985 BFFDCB9 C9A9A9A DCE7688 EB5A985 FFFFFFF
+do
+    printf '\033]P%s' "$slot"
+done
+printf '\033[2J\033[H'
+
+exec tuigreet \
+    --time --remember --remember-session --asterisks \
+    --theme 'container=black;border=red;title=red;greet=gray;text=gray;time=cyan;prompt=red;input=gray;action=magenta;button=red' \
+    "$@"

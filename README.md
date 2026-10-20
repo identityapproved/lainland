@@ -42,6 +42,7 @@ home/                   chezmoi source root
   dot_zshrc  dot_zshenv  dot_zprofile.tmpl  dot_aliases  dot_gtkrc-2.0
 scripts/                GSettings helpers (gtk theme, liferea); dconf is not a file
 grub/lain/              GRUB theme; installed by hand into /boot, not by chezmoi
+greetd/lain-greet       tuigreet wrapper; installed by hand into /etc/greetd
 assets/                 README screenshots
 ```
 
@@ -393,6 +394,17 @@ doas rsync -rt --delete grub/lain/ /boot/grub/themes/lain/
 #   GRUB_THEME="/boot/grub/themes/lain/theme.txt"
 #   GRUB_GFXMODE=1920x1080
 doas grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+### greetd
+
+`greetd/lain-greet` runs tuigreet on the Linux console, which only has 16 colors, and truecolor gets snapped to the console's defaults. So the script loads the kitty 16-slot mapping into the greeter's VT palette (slot 7 takes kitty's foreground, `highprimary`, since the console has no separate foreground slot), then themes tuigreet by ANSI name. Rose for border, title and prompt, ochre for greeting, text and input, `hightertiary` for the clock. It sits outside the chezmoi root because its target is `/etc/greetd`. The session command differs per host and is passed through as `--cmd`.
+
+```bash
+doas install -m 755 greetd/lain-greet /etc/greetd/lain-greet
+# /etc/greetd/config.toml, [default_session]:
+#   command = "/etc/greetd/lain-greet --cmd 'dbus-run-session mango'"     # mango
+#   command = "/etc/greetd/lain-greet --cmd /home/<user>/.config/sway/start-sway"  # sway
 ```
 
 ---
