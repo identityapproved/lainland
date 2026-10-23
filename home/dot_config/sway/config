@@ -316,6 +316,12 @@ input type:touchpad {
 for_window [app_id="termfloat"] floating enable
 for_window [title="termfloat"] floating enable
 
+# Steam client on 7, games on 8. Proton games get class steam_app_<id>;
+# native games keep their own class or app_id, so each needs a line here.
+assign [class="^steam$"] workspace 7
+assign [class="^steam_app_"] workspace 8
+assign [app_id="^hackmud_lin\.x86_64$"] workspace 8
+
 include /etc/sway/config.d/*
 # Machine-local overrides (outputs, lid switch); not managed by this repo.
 include ~/.config/sway/config.d/*
