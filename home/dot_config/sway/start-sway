@@ -2,8 +2,6 @@
 # Session launcher for Sway. Sets up the D-Bus session and the Wayland
 # environment that environment.d would provide on a systemd box.
 
-export PATH="$HOME/.local/bin:$PATH"
-
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
     exec dbus-run-session "$0" "$@"
 fi
