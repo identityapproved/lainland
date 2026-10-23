@@ -5,7 +5,7 @@
 # The colors are the ones nvim's fzf-lua pickers get from lain.nvim
 # (fzf_colors = true maps each fzf color to an FzfLuaFzf* highlight group), read
 # back from fzf-lua's generated command line, so a shell or tmux picker looks
-# like the nvim one. The values themselves are lain-colors.md steps:
+# like the nvim one. The values themselves are Lain palette steps:
 #   text, query, selected text     highprimary    #C1B48E
 #   match                          accent         #FFB1C3
 #   prompt                         accent         #FFB1C3

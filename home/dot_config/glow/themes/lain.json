@@ -1,5 +1,5 @@
 {
-  "_comment": "Lain glamour style for glow. Colors from lain-colors.md; see the role map there before changing a value. Chroma block mirrors bat/themes/Lain.tmTheme.",
+  "_comment": "Lain glamour style for glow. Chroma block mirrors bat/themes/Lain.tmTheme.",
 
   "document": {
     "block_prefix": "\n",

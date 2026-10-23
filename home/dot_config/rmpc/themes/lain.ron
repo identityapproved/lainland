@@ -1,7 +1,7 @@
 // rmpc — Lain.
 //
 // Derived from the upstream tokyonight-night theme, recolored through the
-// palette's Semantic Role Map. Roles that Tokyo Night spreads over six hues
+// palette's roles. Roles that Tokyo Night spreads over six hues
 // collapse onto two ramps here: rose (Fore) carries text and chrome, ochre
 // (High) carries selection and emphasis. Error text uses `accent` rather than
 // `error-bg` #930006 -- that value is a fill, and fails contrast as text.

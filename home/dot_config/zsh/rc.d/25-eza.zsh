@@ -12,7 +12,7 @@ if command -v eza >/dev/null 2>&1; then
   # Colour. 15-dircolors.zsh already set LS_COLORS from the repo's indexed Lain
   # profile, and eza reads LS_COLORS first; EZA_COLORS then overrides the keys
   # below with the truecolor hexes, which the 256-colour cube cannot express.
-  # Roles resolved through the Semantic Role Map in lain-colors.md:
+  # Palette roles:
   #
   #   ur/gr/tr  read bits    hightertiary  #A49978
   #   uw/gw/tw  write bits   foreprimary   #CE7688

@@ -1,5 +1,4 @@
 # Lain theme for btop
-# Colors resolved through the Semantic Role Map in lain-colors.md.
 # Rose (fore*) for chrome, ochre (high*) for content and accents, grey (back*)
 # for surfaces. The three-stop gradients walk a ramp from dark to bright so
 # rising load reads as rising saturation rather than a hue change.

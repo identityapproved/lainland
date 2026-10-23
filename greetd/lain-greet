@@ -1,5 +1,5 @@
 #!/bin/sh
-# tuigreet in the lain palette; colors from lain-colors.md.
+# tuigreet in the lain palette.
 # The VT has 16 colors only, so load them into this tty's palette and theme
 # tuigreet by ANSI name. Slots mirror kitty/themes/lain-theme.conf, except 7:
 # the console has no separate foreground slot, so 7 takes kitty's foreground.

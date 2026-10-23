@@ -1,5 +1,5 @@
 # Lain theme for GRUB 2, gentoo host.
-# Colors from lain-colors.md: rose on black for chrome, black on ochre for selection.
+# Colors: rose on black for chrome, black on ochre for selection.
 # GRUB reads only 8-bit RGB/RGBA PNGs; the menu panel is baked into background.png.
 
 title-text: ""

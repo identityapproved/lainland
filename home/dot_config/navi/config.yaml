@@ -13,7 +13,7 @@
 # "r,g,b" and palette indices are each rejected at startup with a config parse
 # error -- all four tested against 2.24.0. So the palette here is ANSI 0-15,
 # which kitty/themes/lain-theme.conf (and foot.ini, which mirrors it) already
-# maps onto lain-colors.md. Resolving each name through that mapping:
+# maps onto the Lain palette. Resolving each name through that mapping:
 #
 #   dark_red  color1   #CE7688  foreprimary     "Body text (UI chrome)"
 #   cyan      color14  #B5A985  highsecondary   ochre content ramp
