@@ -20,9 +20,6 @@ if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
 
-# uv / cargo shims (adds ~/.local/bin to PATH; guarded, harmless re-run).
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
-
 # OpenCode shell completion.
 if command -v opencode >/dev/null 2>&1; then
   eval "$(opencode completion zsh)"

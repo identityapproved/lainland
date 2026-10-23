@@ -14,6 +14,3 @@ for _f in "$_rcd"/*.zsh(N); do
   source "$_f"
 done
 unset _rcd _f
-
-# opencode
-export PATH=$HOME/.opencode/bin:$PATH

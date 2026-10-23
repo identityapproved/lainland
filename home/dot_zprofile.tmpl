@@ -3,6 +3,7 @@
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"  # `go install` binaries (catnip, …)
+export PATH="$HOME/.opencode/bin:$PATH"  # opencode's own installer location
 
 # Language servers shared with the agent harnesses. Neovim, OpenCode and Claude
 # Code all resolve LSP binaries from PATH, so appending these three dirs lets
@@ -33,10 +34,9 @@ if [[ -x "$HOME/.local/share/nvim/mason/bin/basedpyright-langserver" \
         "$HOME/.local/bin/pyright-langserver"
 fi
 
-# Flatpak exports must be on XDG_DATA_DIRS before the compositor starts, so launchers
-# that inherit mango's env (walker) can index flatpak .desktop files. Single source of
-# truth — do not also set XDG_DATA_DIRS in mango/config.conf (it would clobber this).
-export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+# Flatpak exports reach XDG_DATA_DIRS via /etc/profile.d/flatpak.sh (sourced by greetd
+# and /etc/zsh/zprofile) before the compositor starts; setting them here duplicated them.
+# Do not set XDG_DATA_DIRS in mango/config.conf either (it would clobber this).
 
 # GPU OpenCL: enable Rusticl on radeonsi (RX 580) for darktable et al.
 export RUSTICL_ENABLE=radeonsi
