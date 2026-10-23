@@ -27,9 +27,10 @@ zvm_after_init_commands+=('_bind_edit_command_line')
 
 # fzf colors and preview-scroll keys -- Lain -- live in ~/.config/fzf/lain.fzfrc,
 # shared with scripts/tmux-pick, whose popup never sees this shell's exports.
-# fzf reads that file first, then the options below.
+# fzf reads that file first, then the options below. No default --preview: it
+# reaches every script's fzf, where {} is a menu row, not a file.
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/lain.fzfrc"
-export FZF_DEFAULT_OPTS='--reverse --preview="bat {}" --info=inline'
+export FZF_DEFAULT_OPTS='--reverse --info=inline'
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :100 {}'"
 export FZF_ALT_C_OPTS="--preview 'ls -1 {}'"
 
