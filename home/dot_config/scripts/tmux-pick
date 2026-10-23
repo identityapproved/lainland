@@ -16,7 +16,7 @@
 #
 #   ctrl-p  list from the pane's directory (the start)
 #   ctrl-h  list from ~ (files 5 levels deep, directories 4)
-#   ctrl-n  list the notes: ~/kioku, ~/zettelnotes, ~/taskwarrior/tasks
+#   ctrl-r  list from / (same depths; /proc, /sys, /dev, /run skipped)
 #   ctrl-z  zoxide's frecent directories (directory mode only)
 #
 #   ctrl-f / ctrl-b  preview half a page   alt-j / alt-k  a line
@@ -59,14 +59,13 @@ BAT_THEME=${BAT_THEME:-Lain}
 export FZF_DEFAULT_OPTS_FILE COLORTERM BAT_THEME
 
 self=$0
-notes="$HOME/kioku $HOME/zettelnotes $HOME/taskwarrior/tasks"
 
 usage() {
     echo "usage: tmux-pick file|dir PANE_ID" >&2
     exit 2
 }
 
-# list file|dir here|home|notes|zoxide
+# list file|dir here|home|root|zoxide
 list() {
     t=f
     depth=5
@@ -77,11 +76,8 @@ list() {
     case $2 in
         here) fd --type "$t" --hidden --exclude .git . "$TMUX_PICK_HERE" ;;
         home) fd --type "$t" --hidden --exclude .git --max-depth "$depth" . "$HOME" ;;
-        notes)
-            for d in $notes; do
-                [ -d "$d" ] && fd --type "$t" --hidden --exclude .git . "$d"
-            done
-            ;;
+        root) fd --type "$t" --hidden --exclude .git --exclude /proc --exclude /sys \
+                --exclude /dev --exclude /run --max-depth "$depth" . / ;;
         zoxide) zoxide query --list ;;
     esac | sed "s|^$HOME|~|" | decorate "$1"
 }
@@ -229,10 +225,10 @@ here_prompt="$(printf '%s' "$PWD" | sed "s|^$HOME|~|")/"
 scroll='^f/^b M-j/M-k scroll  f4 preview'
 if [ "$mode" = file ]; then
     set -- --multi --list-label ' Files ' \
-        --header "$(printf 'enter window  ^v right  ^s below  tab mark\n^p here  ^h ~  ^n notes  %s' "$scroll")"
+        --header "$(printf 'enter window  ^v right  ^s below  tab mark\n^p here  ^h ~  ^r /  %s' "$scroll")"
 else
     set -- --no-multi --list-label ' Dirs ' \
-        --header "$(printf 'enter window  ^v right  ^s below\n^p here  ^h ~  ^n notes  ^z zoxide  %s' "$scroll")" \
+        --header "$(printf 'enter window  ^v right  ^s below\n^p here  ^h ~  ^r /  ^z zoxide  %s' "$scroll")" \
         --bind "ctrl-z:change-prompt[zoxide/]+reload[\"$self\" --list dir zoxide]"
 fi
 
@@ -256,7 +252,7 @@ out=$(list "$mode" here | fzf "$@" \
     --bind 'focus:transform-preview-label:echo " $(basename {2}) "' \
     --bind "ctrl-p:change-prompt[$here_prompt]+reload[\"$self\" --list $mode here]" \
     --bind "ctrl-h:change-prompt[~/]+reload[\"$self\" --list $mode home]" \
-    --bind "ctrl-n:change-prompt[notes/]+reload[\"$self\" --list $mode notes]") || exit 0
+    --bind "ctrl-r:change-prompt[/]+reload[\"$self\" --list $mode root]") || exit 0
 
 # --expect puts the key on the first line (empty for enter), picks after it.
 key=$(printf '%s\n' "$out" | sed -n 1p)
