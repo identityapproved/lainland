@@ -102,17 +102,19 @@ chezmoi init --source ~/github/lainland \
   --promptString "Short host name=$(hostname)"
 ```
 
-`chezmoi init` asks two questions once and stores the answers in
+`chezmoi init` asks these once and stores the answers in
 `~/.config/chezmoi/chezmoi.toml`:
 
 | Prompt | Values | Effect |
 |---|---|---|
 | `wm` | `mango`, `hyprland`, `sway` | selects which WM tree is applied |
 | `host` | short hostname | reserved for per-host rules |
+| `musicDir` | path, default `~/Music` | mpd `music_directory` and rmpc `lyrics_dir` |
+| `lat` / `lon` | decimal degrees, or empty | gammastep's manual location; empty leaves it to gammastep |
 
 Everything else is applied on every machine. Configs for tools that are not
 installed are inert, and are there ready for the machine that does have them —
-the same "one branch, true on every host" model as `agentsdots`. Only the three
+one branch, true on every host. Only the three
 window-manager trees are mutually exclusive, so only they are switched.
 
 chezmoi runs in **symlink mode**: it links managed *files* back into this repo,
@@ -126,10 +128,33 @@ so editing `~/.config/mango/config.conf` edits the repo. Two consequences:
 - Templates cannot be symlinked. `waybar/config.jsonc.tmpl` is written out as a
   real file — edit the `.tmpl` in the repo and `chezmoi apply`.
 
-Package installation is not part of this repo. Host package lists, installers
-and system config (`/etc`, udev, services) live in a separate private repo; the
-rice only reports what it needs, via `.chezmoiscripts/run_after_90-deps.sh.tmpl`
-on every apply.
+Package installation and system config (`/etc`, udev, services) are not part
+of this repo; the rice only reports what it needs, via
+`.chezmoiscripts/run_after_90-deps.sh.tmpl` on every apply.
+
+### Local overrides
+
+Machine-specific settings stay out of this repo. These hooks are read if
+present and never managed by it:
+
+| Path | Read by | For |
+|---|---|---|
+| `~/.config/zsh/env.d/*.zsh` | `~/.zshenv` | exports for every zsh (e.g. `XDG_PICTURES_DIR`) |
+| `~/.config/zsh/profile.d/*.zsh` | `~/.zprofile` | PATH additions; env.d runs too early on Gentoo |
+| `~/.aliases.local` | `~/.aliases` | personal aliases and functions |
+| `~/.config/sway/config.d/*` | `sway/config` | outputs, lid switch |
+| `~/.local/share/task/local.taskrc` | `task/taskrc` | `data.location`, `sync.*`, secrets; created empty once |
+
+Screenshots go to `$XDG_PICTURES_DIR/screenshots` (default `~/Pictures`).
+
+To keep these in git too, use a second chezmoi source with its own config, so
+its state never mixes with this one's. Give it only files this repo does not
+manage, or the two applies will fight:
+
+```bash
+chezmoi -c ~/.config/chezmoi-private/chezmoi.toml init --source <path>
+chezmoi -c ~/.config/chezmoi-private/chezmoi.toml apply
+```
 
 ---
 
@@ -196,9 +221,8 @@ installed.
 
 ## Themed Tools (Lain palette)
 
-The palette reference is symlinked in and not tracked here. Every themed
-config resolves its colors through its Semantic Role Map rather than picking
-hexes by eye.
+Every themed config resolves its colors through one palette (rose and ochre
+ramps on black) and its semantic roles rather than picking hexes by eye.
 
 ### WM / desktop
 
@@ -270,8 +294,8 @@ current pane's directory, open what you choose next to the pane:
 | prefix + `G` | a directory | a shell |
 
 In the popup, enter opens a new window, ctrl-v a pane to the right and ctrl-s a
-pane below; ctrl-p, ctrl-h and ctrl-n switch the list between the pane's
-directory, `~` and the notes (kioku, zettelnotes, taskwarrior tasks), and ctrl-z
+pane below; ctrl-p, ctrl-h and ctrl-r switch the list between the pane's
+directory, `~` and `/`, and ctrl-z
 lists zoxide's directories in the directory picker. The preview renders markdown
 through glow, other files through bat and directories as an eza tree. The popup
 is drawn like nvim's fzf-lua: a Files box with key hints and a preview box, same
