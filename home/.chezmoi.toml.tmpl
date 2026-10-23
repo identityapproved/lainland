@@ -6,6 +6,9 @@
 */ -}}
 {{- $wm := promptStringOnce . "wm" "Window manager (mango/hyprland/sway)" -}}
 {{- $host := promptStringOnce . "host" "Short host name" -}}
+{{- $musicDir := promptStringOnce . "musicDir" "Music directory (mpd, rmpc)" "~/Music" -}}
+{{- $lat := promptStringOnce . "lat" "Latitude for gammastep (empty to skip)" "" -}}
+{{- $lon := promptStringOnce . "lon" "Longitude for gammastep (empty to skip)" "" -}}
 
 
 # Where the source tree actually lives. Without this chezmoi looks in
@@ -23,3 +26,6 @@ mode = "symlink"
 [data]
 wm = {{ $wm | quote }}
 host = {{ $host | quote }}
+musicDir = {{ $musicDir | quote }}
+lat = {{ $lat | quote }}
+lon = {{ $lon | quote }}

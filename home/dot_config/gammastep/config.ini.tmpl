@@ -23,16 +23,22 @@ brightness-night=1.0
 # untouched ramp.
 gamma=1.0
 
-# Solar transitions from a fixed location. geoclue2 is avoided deliberately:
-# it is a D-Bus service that reaches the network, and the location does not
-# move enough to matter.
+# Solar transitions from a fixed location, set as `lat`/`lon` at `chezmoi init`
+# and kept only in ~/.config/chezmoi/chezmoi.toml. geoclue2 is avoided
+# deliberately: it is a D-Bus service that reaches the network. With no location
+# set, gammastep falls back to its own provider list.
+{{- $lat := "" }}{{ if hasKey . "lat" }}{{ $lat = .lat }}{{ end }}
+{{- $lon := "" }}{{ if hasKey . "lon" }}{{ $lon = .lon }}{{ end }}
+{{- if and $lat $lon }}
 location-provider=manual
+{{- end }}
 
 # wlroots gamma control. The redshift-inherited randr/vidmode methods are X11
 # and would fail under XWayland-less sessions.
 adjustment-method=wayland
+{{- if and $lat $lon }}
 
 [manual]
-# Kyiv, matching /etc/localtime (Europe/Kyiv).
-lat=50.45
-lon=30.52
+lat={{ $lat }}
+lon={{ $lon }}
+{{- end }}

@@ -6,7 +6,7 @@
     password: None,
     theme: "lain",
     cache_dir: "~/.cache/rmpc",
-    lyrics_dir: "/mnt/music",
+    lyrics_dir: "{{ if hasKey . "musicDir" }}{{ .musicDir }}{{ else }}~/Music{{ end }}",
     on_song_change: ["~/.config/rmpc/lyrics.sh"],
     volume_step: 5,
     max_fps: 30,

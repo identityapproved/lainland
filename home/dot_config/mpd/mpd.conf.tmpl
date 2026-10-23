@@ -2,8 +2,9 @@
 # Runtime/state lives outside the repo (see ~/.cache/mpd, ~/.local/share/mpd)
 # so nothing mutable lands in git.
 
-# Music location (temporary — currently on the gigabyte drive)
-music_directory     "/mnt/music"
+# Music location: `musicDir` from chezmoi init (default ~/Music), shared with
+# rmpc's lyrics_dir.
+music_directory     "{{ if hasKey . "musicDir" }}{{ .musicDir }}{{ else }}~/Music{{ end }}"
 
 # Playlists are user data, keep them out of the repo
 playlist_directory  "~/.local/share/mpd/playlists"
