@@ -1,6 +1,6 @@
-### lainsway — Sway config for a Void Linux laptop (single output eDP-1)
+### lainsway — Sway config of the Lain rice
 #
-# Palette: lain-colors.md. Font: IosevkaTerm Nerd Font Mono.
+# Font: IosevkaTerm Nerd Font Mono.
 # Read `man 5 sway` for a complete reference.
 
 ### Variables
@@ -82,14 +82,11 @@ gaps outer 4
 
 ### Output configuration
 #
-# Names come from `swaymsg -t get_outputs`. This machine has eDP-1 built in,
-# plus HDMI-A-1 / DP-1 / VGA-1 available for docking.
-output eDP-1 scale 1
-
-# Docking examples — uncomment and adjust as needed:
-# output HDMI-A-1 resolution 1920x1080 position 1366,0
-# output DP-1 resolution 1920x1080 position 1366,0
-# output VGA-1 resolution 1680x1050 position 1366,0
+# Names come from `swaymsg -t get_outputs`. Outputs are machine-specific, so
+# they go in ~/.config/sway/config.d/ (included at the end), e.g.:
+#   output eDP-1 scale 1
+#   output HDMI-A-1 resolution 1920x1080 position 1366,0
+output * scale 1
 
 ### Input configuration
 #
@@ -115,9 +112,10 @@ input type:touchpad {
     natural_scroll enabled
 }
 
-# Close the lid, turn the panel off.
-bindswitch --reload --locked lid:on output eDP-1 disable
-bindswitch --reload --locked lid:off output eDP-1 enable
+# Close the lid, turn the panel off. Laptop-only, so set it in config.d/ with
+# the panel's real name:
+#   bindswitch --reload --locked lid:on output eDP-1 disable
+#   bindswitch --reload --locked lid:off output eDP-1 enable
 
 ### Key bindings
 #
@@ -319,3 +317,5 @@ for_window [app_id="termfloat"] floating enable
 for_window [title="termfloat"] floating enable
 
 include /etc/sway/config.d/*
+# Machine-local overrides (outputs, lid switch); not managed by this repo.
+include ~/.config/sway/config.d/*

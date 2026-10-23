@@ -36,12 +36,11 @@ export TMPDIR="$HOME/.cache/tmp"
 # a genuine ordering regression still shows up in a real terminal.
 [[ -o interactive ]] || export _ZO_DOCTOR=0
 
-# Drop-ins from other repos: local paths from lainland-private (zsh/env.d/,
-# linked by hand, see its README) and LLM/agent settings from agentsdots
-# (shell/env.zsh, linked by its bootstrap.sh). Same pattern as rc.d/ in
-# .zshrc: extend by adding a NN-name.zsh, no edit here needed.
+# Machine-local environment, not managed by this repo: drop NN-name.zsh files
+# into ~/.config/zsh/env.d/. Exports only -- this runs for every zsh, scripts
+# included. -r skips dangling links left by a moved source.
 _envd="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/env.d"
 for _f in "$_envd"/*.zsh(N); do
-  source "$_f"
+  [[ -r "$_f" ]] && source "$_f"
 done
 unset _envd _f

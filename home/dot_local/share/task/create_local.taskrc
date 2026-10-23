@@ -1,0 +1,3 @@
+# Machine-local taskwarrior settings, included at the end of ~/.config/task/taskrc.
+# chezmoi creates this file once and never touches it again, so it is the place
+# for data.location, sync.* and secrets such as sync.encryption_secret.

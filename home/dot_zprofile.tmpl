@@ -3,43 +3,18 @@
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"  # `go install` binaries (catnip, …)
-export PATH="$HOME/.opencode/bin:$PATH"  # opencode's own installer location
 
-# Language servers shared with the agent harnesses. Neovim, OpenCode and Claude
-# Code all resolve LSP binaries from PATH, so appending these three dirs lets
-# all three run one set of servers with nothing installed system-wide:
-#   mason/bin          — the primary source: rust-analyzer, ruff, clangd,
-#                        lua-language-server, marksman, zls, taplo, …
-#   opencode/bin       — release binaries OpenCode downloaded itself
-#   opencode/node_…    — npm-only servers OpenCode installed with its embedded
-#                        Bun (bash-language-server, typescript-language-server).
-#                        Note this one lives under .config, not .cache.
-# Appended, not prepended, so real system packages (e.g. the portage clangd)
-# still win over Mason's copies. Same reasoning as nvim's lua/config/options.lua.
-export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"
-export PATH="$PATH:$HOME/.cache/opencode/bin"
-export PATH="$PATH:$HOME/.config/opencode/node_modules/.bin"
-
-# One Python language server for all three tools. Neovim starts Mason's
-# basedpyright directly; OpenCode and Claude Code both look for the name
-# `pyright-langserver`. basedpyright is a pyright fork -- its dist file is
-# literally pyright-langserver.js -- and installs via pip rather than npm, so
-# it works on a host with no node. Pointing the expected name at it keeps one
-# server everywhere and stops OpenCode fetching a second copy.
-# Idempotent, and self-heals on a machine where Mason has just installed it.
-if [[ -x "$HOME/.local/share/nvim/mason/bin/basedpyright-langserver" \
-   && ! -e "$HOME/.local/bin/pyright-langserver" ]]; then
-  mkdir -p "$HOME/.local/bin"
-  ln -s "$HOME/.local/share/nvim/mason/bin/basedpyright-langserver" \
-        "$HOME/.local/bin/pyright-langserver"
-fi
+# Machine-local login setup, not managed by this repo: NN-name.zsh files in
+# ~/.config/zsh/profile.d/. PATH additions go here rather than env.d/, which
+# runs from .zshenv before Gentoo's zprofile resets PATH.
+for _f in "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/profile.d/*.zsh(N); do
+  [[ -r "$_f" ]] && source "$_f"
+done
+unset _f
 
 # Flatpak exports reach XDG_DATA_DIRS via /etc/profile.d/flatpak.sh (sourced by greetd
 # and /etc/zsh/zprofile) before the compositor starts; setting them here duplicated them.
 # Do not set XDG_DATA_DIRS in mango/config.conf either (it would clobber this).
-
-# GPU OpenCL: enable Rusticl on radeonsi (RX 580) for darktable et al.
-export RUSTICL_ENABLE=radeonsi
 
 # nb notebooks. Set before the mango exec below so everything the compositor
 # spawns (waybar's nb module, terminals) sees the same notebook dir.

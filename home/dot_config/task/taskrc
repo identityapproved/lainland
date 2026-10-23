@@ -1,17 +1,9 @@
-# Taskwarrior config (from hyprarchdots, adapted for this host).
+# Taskwarrior config.
 # Lives in the repo and is symlinked to ~/.config/task (XDG location task 3.x reads).
-data.location=~/taskwarrior/task
 news.version=3.4.2
 
 pager=bat --paging=always
 editor=nvim -f
-
-# Sync. The git backend pushes the TaskChampion replica at data.location as an
-# encrypted operation log to a bare repo on stora. It covers the task database
-# only -- the annotated notes under ~/taskwarrior/tasks are Syncthing's job.
-sync.git.local_path=~/.local/share/task-sync
-sync.git.branch=taskchampion
-sync.git.remote=stora:/data/git/taskwarrior-sync.git
 
 include ~/.config/task/themes/lain-256.theme
 

@@ -3,16 +3,12 @@ alias rf="rm -rf"
 alias cat="bat --paging=never"
 alias c="clear"
 
-# eix
-alias es='eix'
-
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 alias yz='yazi'
 alias lz='lazygit'
 alias tl='task list'
-alias himalaya='firejail himalaya-tui'
 
 # --- fzf helpers (ported from fish) ---------------------------------------
 # pick a command from the completion table, then act on it
@@ -55,12 +51,10 @@ galias() { git config --get-regexp '^alias\.' | fzf; }
 # `kitten ssh` is a kitty-only feature (it ships terminfo to the remote host);
 # there is no foot equivalent, so only define it where kitty exists.
 command -v kitty >/dev/null 2>&1 && alias kssh="kitty +kitten ssh"
-alias cr="codex resume"
 alias nt="navi --tldr"   # nt ls -> tldr page as navi snippets
-alias virsh="virsh -c qemu:///system"
 alias make="make -j\$(nproc)"
 
-# --- zk + fzf (picker look lives in ~/zettelnotes/.zk/config.toml) --------
+# --- zk + fzf (picker look lives in the notebook's .zk/config.toml) -------
 alias zke='zk edit --interactive'                       # fuzzy pick note(s), open in nvim
 alias zkr='zk recent'                                   # pick among last two weeks
 alias zkl='zk editlast'                                 # open last modified note
@@ -69,10 +63,11 @@ zkn() { zk new --title "${*:?title}"; }                 # new note with title
 zkg() { zk edit --interactive --match "${*:?query}"; }  # full-text search, then pick
 
 # --- nb -------------------------------------------------------------------
-# Bookmarks moved to __nb_links (one picker, four verbs); these two are one
-# word each and stay.
 alias nbs='nb sync --all'   # pull/push every notebook
 alias nbtd='nb todos open'  # open todos
 
 # --- network --------------------------------------------------------------
 alias route='ip route'   # deliberately shadows the deprecated net-tools route
+
+# Machine-local aliases; not managed by this repo.
+[ -f "$HOME/.aliases.local" ] && source "$HOME/.aliases.local"
