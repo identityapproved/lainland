@@ -2,11 +2,11 @@
 # Random wallpaper picker/cycler for awww.
 #   randomize.sh [dir]              -> set ONE random wallpaper, then exit (buttons/keybinds)
 #   randomize.sh loop [dir] [secs]  -> cycle forever; singleton, re-launch is a no-op (autostart)
-# The Lain set ships with this repo and lands at the XDG data path; ~/pics is
-# the unmanaged catch-all (149 other-palette images) and is only the fallback,
-# so a fresh machine cycles Lain wallpapers without any extra setup.
+# The Lain set ships with this repo and lands at the XDG data path, so a fresh
+# machine cycles Lain wallpapers without any extra setup; the pictures dir is
+# only the fallback.
 DEFAULT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/wallpapers"
-[ -d "$DEFAULT_DIR" ] || DEFAULT_DIR="$HOME/pics/wallpapers"
+[ -d "$DEFAULT_DIR" ] || DEFAULT_DIR="${XDG_PICTURES_DIR:-$HOME/Pictures}/wallpapers"
 
 export AWWW_TRANSITION_FPS="${AWWW_TRANSITION_FPS:-60}"
 export AWWW_TRANSITION_STEP="${AWWW_TRANSITION_STEP:-2}"

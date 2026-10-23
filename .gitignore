@@ -1,11 +1,3 @@
-lain-colors.md
-
-# Agent scratch
-AGENTS.md
-agents/
-DONT_FORGET.md
-yay
-
 # tmux plugins are no longer used; this guards a stale ~/.config/tmux/plugins.
 home/dot_config/tmux/plugins
 home/dot_config/tmux/tmux_old.conf

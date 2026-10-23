@@ -15,7 +15,6 @@ end
 # end
 # To include configuration only for interactive shells, use
 # if status is-interactive
-set -gx CODEX_HOME "$HOME/.codex"
 
 #   ...
 # end
@@ -33,8 +32,6 @@ if status is-interactive
 
     set -gx VISUAL nvim
     set -gx EDITOR nvim
-
-    set -gx ZK_NOTEBOOK_DIR $HOME/zettelnotes
 
     # SSH agent setup
     set -l ssh_env $HOME/.ssh/environment
@@ -166,7 +163,6 @@ if status is-interactive
         trans uk:en $argv
     end
 
-    alias cr="codex resume"
     alias kssh="kitty +kitten ssh"
     alias obsrec="nice -n -5 obs"
 

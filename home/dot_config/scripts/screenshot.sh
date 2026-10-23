@@ -3,7 +3,7 @@ set -euo pipefail
 
 mode="${1:-region}"
 
-dir="$(eval echo "${SWAPPY_DIR:-$HOME/pics/screenshots}")"
+dir="$(eval echo "${SWAPPY_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}/screenshots}")"
 mkdir -p "$dir"
 tag="$(date +%m-%d-%Y)-$(printf "%s" "$(date +%s%N)" | sha1sum | cut -c1-7)"
 outfile=""

@@ -1,18 +1,13 @@
 # OpenCode themes
 
 `lain.json` puts OpenCode's TUI on the same Lain palette as the rest of this
-repo. Colors resolve through the palette's Semantic Role Map rather than being
-picked by eye; the palette reference itself is symlinked in and not tracked
-here.
+repo. Colors resolve through the palette's semantic roles rather than being
+picked by eye.
 
 Installed by chezmoi to `~/.config/opencode/themes/lain.json`. Selecting it is
-the other repo's job: [agentsdots](https://github.com/identityapproved/agentsdots)
-sets `"theme": "lain"` in `config/tui.json`, which it links to
-`~/.config/opencode/tui.json`. That split is deliberate — colors live with the
-rice, agent behaviour lives with the agent config.
-
-`~/.config/opencode` therefore ends up a real directory holding links from both
-repos. They never touch the same path.
+left to your OpenCode config: set `"theme": "lain"` in
+`~/.config/opencode/tui.json`. This repo manages only the theme file, so
+`~/.config/opencode` stays a real directory and your own config is untouched.
 
 ## Where the shape came from
 
