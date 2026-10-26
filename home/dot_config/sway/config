@@ -47,8 +47,8 @@ exec --no-startup-id waybar
 # restarted over a live one does not leave two instances fighting over the
 # gamma ramp.
 exec --no-startup-id sh -c 'pgrep -x gammastep >/dev/null || gammastep &'
-# Boot the tmux server with no client attached. continuum restores the saved
-# sessions in the background as the server starts, so they exist, detached,
+# Boot the tmux server with no client attached. tmux/tmux.conf restores the
+# saved sessions as the server starts, so they exist, detached,
 # before Mod+Return attaches to one. exit-empty off in tmux/tmux.conf keeps the
 # server up while it has no sessions.
 exec --no-startup-id tmux start-server
