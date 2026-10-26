@@ -370,6 +370,7 @@ chezmoi's control.
 | `sioyek` | PDF reader (other machines) |
 | `aerc` | **Tracked, not linked** — retired; config kept for whenever mail comes back |
 | `liferea` | RSS reader; WebKit item view plus a GTK transparency plugin |
+| `newsboat` | Terminal RSS reader; vim motions, lain 256-color palette, tag folders. Links open via `open` (offpunk, mpv, GUI browser, chafa images). `urls` (subscriptions) comes from lainland-private |
 
 ### Communication
 

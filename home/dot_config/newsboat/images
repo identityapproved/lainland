@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Show images with chafa (kitty, sixel or symbols, auto-detected): URLs as args, or a newsboat article on stdin.
+set -euo pipefail
+
+tty=/dev/tty
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/newsboat-images.XXXXXX")"
+trap 'rm -rf "$tmp"' EXIT
+
+if [ "$#" -gt 0 ]; then
+  urls=("$@")
+else
+  mapfile -t urls < <(sed -n 's/^\[[0-9]*\]: \(.*\) (image)$/\1/p')
+fi
+
+pause() {
+  printf '\n%s' "$1" >"$tty"
+  read -rsn1 key <"$tty" || key=q
+}
+
+if [ "${#urls[@]}" -eq 0 ]; then
+  pause "no images in this article - any key"
+  exit 0
+fi
+
+read -r rows cols < <(stty size <"$tty")
+n=0
+for url in "${urls[@]}"; do
+  n=$((n + 1))
+  clear >"$tty"
+  # article HTML is untrusted: plain http(s) only, bounded size and time
+  if curl -fsSL --proto '=http,https' --max-time 20 --max-filesize 20000000 -o "$tmp/$n" "$url"; then
+    chafa --size "${cols}x$((rows - 2))" "$tmp/$n" >"$tty" 2>/dev/null || printf 'cannot render: %s\n' "$url" >"$tty"
+  else
+    printf 'download failed: %s\n' "$url" >"$tty"
+  fi
+  pause "[$n/${#urls[@]}] q quits, any key next"
+  if [ "$key" = q ]; then
+    break
+  fi
+done

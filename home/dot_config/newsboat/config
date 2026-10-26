@@ -1,0 +1,66 @@
+# newsboat - vim motions, lain palette (lain-colors.md, xterm 256 indices).
+# Subscriptions (urls) come from lainland-private.
+
+# no background or startup fetches: r reloads the selected feed, R all feeds
+auto-reload no
+refresh-on-startup no
+reload-threads 4
+confirm-exit yes
+show-read-feeds yes
+show-read-articles yes
+text-width 100
+# offpunk blocks github/youtube/reddit/x (offpunkrc); B opens in the GUI browser instead.
+# Every open goes through "open", which exits 0 so the swap-and-restore binds below always restore.
+browser "~/.config/newsboat/open offpunk %u"
+player "mpv"
+
+# Liferea-style folders: each tag's "== Name ==" query feed heads its group.
+# firsttag-desc is A-Z in newsboat; read feeds stay visible so the headers do too
+feed-sort-order firsttag-desc
+feedlist-format "%?T?%-14T&              ? %n %11u  %t"
+articlelist-format "%4i %f %D  %?T?%-18T  ?%t"
+feedlist-title-format "lain :: feeds (%u unread, %t total)%?T? - %T&?"
+articlelist-title-format "lain :: %T (%u unread, %t total)"
+itemview-title-format "lain :: %T"
+
+# g/G override the default sort/rev-sort keys
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit articlelist
+bind-key h quit article
+bind-key g home
+bind-key G end
+bind-key ^D pagedown
+bind-key ^U pageup
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist
+bind-key n next-unread
+bind-key N prev-unread
+bind-key a toggle-article-read
+
+bind v articlelist,article,urlview set browser "~/.config/newsboat/open mpv %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "play in mpv"
+bind B feedlist,articlelist,article,urlview set browser "~/.config/newsboat/open gui %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "open in GUI browser"
+bind i article pipe-to "~/.config/newsboat/images" -- "show article images"
+bind i urlview set browser "~/.config/newsboat/open image %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "view image"
+
+# rose chrome, ochre content, black-on-ochre selection
+color background          color174 default
+color listnormal          color131 default
+color listnormal_unread   color174 default bold
+color listfocus           color16  color180 bold
+color listfocus_unread    color16  color180 bold
+color title               color174 color234 bold
+color info                color174 color234
+color hint-key            color217 color234 bold
+color hint-keys-delimiter color240 color234
+color hint-separator      color240 color234
+color hint-description    color131 color234
+color article             color180 default
+color end-of-text-marker  color238 default
+
+highlight feedlist "== [A-Za-z ]+ ==" color217 color234 bold
+highlight feedlist "^[a-z-]+ " color240 default
+highlight article "^(Feed|Title|Author|Link|Date|Podcast Download URL):" color174 default bold
+highlight article "https?://[^ ]+" color180 default underline
+highlight article "\\[[0-9]+\\]" color217 default bold

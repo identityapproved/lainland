@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# newsboat browser: open <offpunk|mpv|gui|image> <url>.
+# Always exits 0: newsboat aborts a bind chain on a failed open, which would leave the swapped-in browser set.
+set -uo pipefail
+
+mode="$1"
+url="$2"
+tty=/dev/tty
+
+case "$mode" in
+  offpunk) offpunk "$url" ;;
+  mpv) mpv "$url" ;;
+  gui) xdg-open "$url" >/dev/null 2>&1 ;;
+  image) "$(dirname "$(readlink -f "$0")")/images" "$url" </dev/null ;;
+  *) false ;;
+esac
+rc=$?
+
+if [ "$rc" -ne 0 ]; then
+  printf '\n%s could not open %s (exit %d) - any key\n' "$mode" "$url" "$rc" >"$tty"
+  read -rsn1 _ <"$tty" || true
+fi
+exit 0
