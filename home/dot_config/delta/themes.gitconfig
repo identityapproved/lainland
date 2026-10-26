@@ -43,9 +43,12 @@
 [delta "lain-lazygit-compact"]
     features = lain
     side-by-side = false
-    line-numbers = false
+    line-numbers = true
+    keep-plus-minus-markers = true
+    line-numbers-left-format = "{nm:>3} "
+    line-numbers-right-format = "{np:>3} "
 
-    # Ultra-minimal single-column diff for lazygit.
+    # Minimal single-column diff for lazygit.
     plus-style = "#C1B48E"
     plus-emph-style = "bold #C1B48E"
     minus-style = "#A05969"
