@@ -67,6 +67,7 @@ alias nbs='nb sync --all'   # pull/push every notebook
 alias nbtd='nb todos open'  # open todos
 
 # --- network --------------------------------------------------------------
+alias ip='ip -color=auto'
 alias route='ip route'   # deliberately shadows the deprecated net-tools route
 
 # Machine-local aliases; not managed by this repo.
