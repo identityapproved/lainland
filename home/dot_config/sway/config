@@ -41,7 +41,6 @@ exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1
 exec --no-startup-id mako
 # On-screen display for volume and brightness, as on mango.
 exec --no-startup-id swayosd-server
-exec --no-startup-id waybar
 # Night colour temperature. Reads ~/.config/gammastep/config.ini, so mango and
 # sway share one set of values. Guarded like the daemons above so a session
 # restarted over a live one does not leave two instances fighting over the
@@ -160,7 +159,8 @@ input type:touchpad {
 #
 # Bar:
 #
-    bindsym $mod+b exec pkill -SIGUSR1 waybar
+    # Not started at login: the first press launches it, later presses toggle it.
+    bindsym $mod+b exec 'pkill -SIGUSR1 -x waybar || waybar'
     bindsym $mod+Shift+b exec pkill -SIGUSR2 waybar
 #
 # Focus and movement:
