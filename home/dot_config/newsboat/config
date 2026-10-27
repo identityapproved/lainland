@@ -44,23 +44,23 @@ bind B feedlist,articlelist,article,urlview set browser "~/.config/newsboat/open
 bind i article pipe-to "~/.config/newsboat/images" -- "show article images"
 bind i urlview set browser "~/.config/newsboat/open image %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "view image"
 
-# rose chrome, ochre content, black-on-ochre selection
-color background          color174 default
-color listnormal          color131 default
-color listnormal_unread   color174 default bold
-color listfocus           color16  color180 bold
-color listfocus_unread    color16  color180 bold
-color title               color174 color234 bold
-color info                color174 color234
-color hint-key            color217 color234 bold
+# terminal fg (C1B48E) as main, dim khaki for read, rose (color1/9) for accents and the selected line
+color background          default  default
+color listnormal          color2   default
+color listnormal_unread   default  default bold
+color listfocus           color0   color1 bold
+color listfocus_unread    color0   color1 bold
+color title               default  color234 bold
+color info                default  color234
+color hint-key            color1   color234 bold
 color hint-keys-delimiter color240 color234
 color hint-separator      color240 color234
-color hint-description    color131 color234
-color article             color180 default
+color hint-description    color2   color234
+color article             default  default
 color end-of-text-marker  color238 default
 
-highlight feedlist "== [A-Za-z ]+ ==" color217 color234 bold
-highlight feedlist "^[a-z-]+ " color240 default
-highlight article "^(Feed|Title|Author|Link|Date|Podcast Download URL):" color174 default bold
-highlight article "https?://[^ ]+" color180 default underline
-highlight article "\\[[0-9]+\\]" color217 default bold
+highlight feedlist "== [A-Za-z ]+ ==" color1 color234 bold
+highlight feedlist " [a-z-]+ *$" color240 default
+highlight article "^(Feed|Title|Author|Link|Date|Podcast Download URL):" color1 default bold
+highlight article "https?://[^ ]+" color6 default underline
+highlight article "\\[[0-9]+\\]" color9 default bold
