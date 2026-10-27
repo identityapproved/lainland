@@ -1,4 +1,4 @@
-# newsboat - vim motions, lain palette (lain-colors.md, xterm 256 indices).
+# newsboat - vim motions, lain palette (terminal colors 0-15 from foot/kitty, plus xterm 234-240 grays).
 # Subscriptions (urls) come from lainland-private.
 
 # no background or startup fetches: r reloads the selected feed, R all feeds
@@ -17,7 +17,7 @@ player "mpv"
 # Liferea-style folders: each tag's "== Name ==" query feed heads its group.
 # firsttag-desc is A-Z in newsboat; read feeds stay visible so the headers do too
 feed-sort-order firsttag-desc
-feedlist-format "%?T?%-14T&              ? %n %11u  %t"
+feedlist-format "%-32t %11u %n  %T"
 articlelist-format "%4i %f %D  %?T?%-18T  ?%t"
 feedlist-title-format "lain :: feeds (%u unread, %t total)%?T? - %T&?"
 articlelist-title-format "lain :: %T (%u unread, %t total)"
