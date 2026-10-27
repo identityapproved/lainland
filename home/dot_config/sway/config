@@ -190,7 +190,7 @@ input type:touchpad {
     bindsym $mod+n layout toggle split tabbed stacking
     # No Alt binds: VMs use Alt as the guest super key, and a host bind would
     # swallow it before the guest sees it.
-    # mango binds $mod+Shift+Tab to its overview. sway has none, so this is just
+    # mango binds $mod+backslash to its overview; sway has none. This is just
     # a second cycle key.
     bindsym $mod+Shift+Tab focus next
 
