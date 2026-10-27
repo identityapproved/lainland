@@ -43,6 +43,7 @@ home/                   chezmoi source root
 scripts/                GSettings helpers (gtk theme, liferea); dconf is not a file
 grub/lain/              GRUB theme; installed by hand into /boot, not by chezmoi
 greetd/lain-greet       tuigreet wrapper; installed by hand into /etc/greetd
+greetd/mango-session    mango session with output in a log; same target
 assets/                 README screenshots
 ```
 
@@ -425,10 +426,13 @@ doas grub-mkconfig -o /boot/grub/grub.cfg
 
 `greetd/lain-greet` runs tuigreet on the Linux console, which only has 16 colors, and truecolor gets snapped to the console's defaults. So the script loads the kitty 16-slot mapping into the greeter's VT palette (slot 7 takes kitty's foreground, `highprimary`, since the console has no separate foreground slot), then themes tuigreet by ANSI name. Rose for border, title and prompt, ochre for greeting, text and input, `hightertiary` for the clock. It sits outside the chezmoi root because its target is `/etc/greetd`. The session command differs per host and is passed through as `--cmd`.
 
+`greetd/mango-session` is a debugging aid. Under greetd, a session's stdout and stderr land on the greeter's VT, and at poweroff the stopped session dumps all of it on screen. The script sends mango's output to `~/.local/state/mango.log` instead and keeps the previous session's log as `mango.log.old`. Drop it and point `--cmd` back at `'dbus-run-session mango'` once the log is not needed.
+
 ```bash
 doas install -m 755 greetd/lain-greet /etc/greetd/lain-greet
+doas install -m 755 greetd/mango-session /etc/greetd/mango-session
 # /etc/greetd/config.toml, [default_session]:
-#   command = "/etc/greetd/lain-greet --cmd 'dbus-run-session mango'"     # mango
+#   command = "/etc/greetd/lain-greet --cmd /etc/greetd/mango-session"   # mango
 #   command = "/etc/greetd/lain-greet --cmd /home/<user>/.config/sway/start-sway"  # sway
 ```
 

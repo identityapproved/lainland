@@ -1,0 +1,11 @@
+#!/bin/sh
+# greetd session for mango with its output in a log instead of the greeter's VT.
+# Debug aid: keeps the previous session's log as mango.log.old.
+
+log="$HOME/.local/state/mango.log"
+mkdir -p "${log%/*}"
+[ -f "$log" ] && mv -f "$log" "$log.old"
+
+# Login zsh: PATH, NB_DIR and profile.d live in ~/.zprofile, which only a login
+# shell reads. Its tty1 autostart does not fire here (this runs on the greeter's VT).
+exec zsh -l -c 'exec dbus-run-session mango' >"$log" 2>&1
