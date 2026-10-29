@@ -126,6 +126,8 @@ group media    optional  mpv zathura mpd rmpc cava
 group monitor  required  btop htop
 group prod     optional  task calcurse nb zk taskwarrior-tui
 group util     optional  tofi wg-quick gammastep
+{{ if eq .chezmoi.osRelease.id "void" -}}
+# qutebrowser is the browser on void only; gentoo runs Zen and Brave, outside this repo.
 group browser  optional  qutebrowser
 
 # A python module, not a binary. qutebrowser's content.blocking.method "both"
@@ -138,6 +140,7 @@ if have qutebrowser; then
         miss_opt="$miss_opt adblock"
     fi
 fi
+{{ end -}}
 
 # Also a plugin, not a binary. Every WM here is Wayland, and without it Qt 6
 # apps (qutebrowser, qt6ct-themed tools) quietly fall back to xcb.

@@ -385,7 +385,7 @@ chezmoi's control.
 | `gammastep` | Night colour temperature; started by mango and sway, toggled from the waybar module |
 | `tofi` / `wofi` | Launchers kept for other machines |
 | `fontconfig` | Generic families aliased to Iosevka |
-| `qutebrowser` | Default `$BROWSER`; Lain chrome, forced-dark pages, adblock + hosts blocking, balanced hardening (no 3rd-party cookies, WebRTC IP leak off, permissions denied). Filter lists need the python `adblock` module (`python3-adblock` / `dev-python/adblock`); refresh with `:adblock-update` |
+| `qutebrowser` | `$BROWSER` on void (set only where it is installed); gentoo uses Zen and Brave, set per host; Lain chrome, forced-dark pages, adblock + hosts blocking, balanced hardening (no 3rd-party cookies, WebRTC IP leak off, permissions denied). Filter lists need the python `adblock` module (`python3-adblock` / `dev-python/adblock`); refresh with `:adblock-update` |
 
 Fonts are Iosevka throughout, and the **same set on every host** — no per-host
 family, no templated `fonts.conf`. `IosevkaTerm Nerd Font Mono` for terminals and
