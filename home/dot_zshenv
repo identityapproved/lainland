@@ -14,7 +14,7 @@ export BAT_THEME="Lain"   # used by bat, the cat= alias, and fzf previews
 # VISUAL, not EDITOR, is what git, lazygit and aerc reach for first.
 export VISUAL="nvim"
 export PAGER="less"
-export BROWSER="firefox"
+export BROWSER="qutebrowser"
 export CARGO_HOME="$HOME/.cargo"
 export RUSTUP_HOME="$HOME/.rustup"
 

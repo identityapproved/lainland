@@ -38,12 +38,15 @@ pkg_for() {
         mako|makoctl)    echo gui-apps/mako ;;
         mango|mmsg)      echo mangowm ;;
         swayosd-client|swayosd-server) echo gui-apps/swayosd ;;
+        adblock)         echo dev-python/adblock ;;
+        qt6-wayland)     echo dev-qt/qtwayland ;;
 {{ else -}}
         sensors)         echo lm_sensors ;;
         makoctl)         echo mako ;;
         mmsg)            echo mango ;;
         # Capitalised in the Void repo; a bare echo would look for "swayosd".
         swayosd-client|swayosd-server) echo SwayOSD ;;
+        adblock)         echo python3-adblock ;;
 {{ end -}}
         # navi is installed with `cargo install --locked navi` on every host --
         # not from any distro repo -- so the marker is the same everywhere and
@@ -123,6 +126,31 @@ group media    optional  mpv zathura mpd rmpc cava
 group monitor  required  btop htop
 group prod     optional  task calcurse nb zk taskwarrior-tui
 group util     optional  tofi wg-quick gammastep
+group browser  optional  qutebrowser
+
+# A python module, not a binary. qutebrowser's content.blocking.method "both"
+# needs it and silently drops to hosts-only blocking without it.
+if have qutebrowser; then
+    if python3 -c 'import adblock' 2>/dev/null; then
+        printf '  %-14s ok\n' adblock
+    else
+        printf '  %-14s missing: python adblock module\n' adblock
+        miss_opt="$miss_opt adblock"
+    fi
+fi
+
+# Also a plugin, not a binary. Every WM here is Wayland, and without it Qt 6
+# apps (qutebrowser, qt6ct-themed tools) quietly fall back to xcb.
+qt_wayland=""
+for p in /usr/lib/qt6/plugins/platforms/libqwayland*.so /usr/lib64/qt6/plugins/platforms/libqwayland*.so; do
+    [ -e "$p" ] && { qt_wayland=$p; break; }
+done
+if [ -n "$qt_wayland" ]; then
+    printf '  %-14s ok\n' qt-wayland
+else
+    printf '  %-14s missing: Qt 6 wayland platform plugin\n' qt-wayland
+    miss_opt="$miss_opt qt6-wayland"
+fi
 
 # The terminal group is any-of, not all-of: .config/scripts/term resolves to
 # whichever of these is installed, so one is a pass.
