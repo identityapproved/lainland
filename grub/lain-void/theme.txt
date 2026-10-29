@@ -1,0 +1,62 @@
+# Lain theme for GRUB 2, void host (1366x768). Layout identical to ../lain;
+# only background.png differs: Void logo, drawn natively at this panel size.
+# Colors: rose on black for chrome, black on ochre for selection.
+# GRUB reads only 8-bit RGB/RGBA PNGs; the menu panel is baked into background.png.
+
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#000000"
+terminal-font: "IosevkaTerm NFM Regular 16"
+terminal-box: "menu_*.png"
+
++ label {
+  left = 3%
+  top = 4%
+  width = 50%
+  height = 30
+  text = "present day, present time"
+  font = "IosevkaTerm NFM Regular 16"
+  color = "#804654"
+}
+
++ boot_menu {
+  left = 46%
+  top = 30%
+  width = 44%
+  height = 44%
+  item_font = "IosevkaTerm NFM Regular 24"
+  item_color = "#CE7688"
+  selected_item_font = "IosevkaTerm NFM Bold 24"
+  selected_item_color = "#000000"
+  selected_item_pixmap_style = "select_*.png"
+  item_height = 40
+  item_padding = 12
+  item_spacing = 6
+  icon_width = 0
+  icon_height = 0
+  item_icon_space = 0
+  scrollbar = false
+}
+
++ progress_bar {
+  id = "__timeout__"
+  left = 46%
+  top = 76%
+  width = 44%
+  height = 4
+  show_text = false
+  bg_color = "#1A1A1A"
+  fg_color = "#CE7688"
+  border_color = "#000000"
+}
+
++ label {
+  id = "__timeout__"
+  left = 46%
+  top = 78%
+  width = 44%
+  align = "left"
+  text = "booting in %d s"
+  font = "IosevkaTerm NFM Regular 16"
+  color = "#A05969"
+}

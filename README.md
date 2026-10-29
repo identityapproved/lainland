@@ -422,6 +422,32 @@ doas rsync -rt --delete grub/lain/ /boot/grub/themes/lain/
 doas grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
+`grub/lain-void/` is the Void laptop's variant: same `theme.txt` layout, fonts
+and pixmaps, with a 1366x768 `background.png` drawn natively for the eDP panel
+rather than stretched. The Void logo (from `void-artwork`) is cut to 48x48,
+its light and dark greens split to `foreprimary` and `foretertiary`, and
+scaled up x6 in hard pixels. Rebuild it with:
+
+```bash
+magick /usr/share/icons/hicolor/512x512/apps/void-logo-notext.png -resize 48x48 \
+  \( -clone 0 -alpha extract -threshold 50% \) \
+  \( -clone 0 -alpha off -colorspace gray -threshold 58% -colorspace sRGB \
+     -fill '#CE7688' -opaque white -fill '#A05969' -opaque black \) \
+  -delete 0 +swap -alpha off -compose CopyOpacity -composite \
+  -filter point -resize 600% /tmp/void-logo.png
+magick -size 1366x768 xc:'#000000' -fill '#1A1A1A' -draw 'rectangle 628,230 1228,567' \
+  /tmp/void-logo.png -geometry +198+240 -compose over -composite \
+  -alpha off -depth 8 -define png:color-type=2 -strip grub/lain-void/background.png
+```
+
+```bash
+doas rsync -rt --delete grub/lain-void/ /boot/grub/themes/lain-void/
+# /etc/default/grub (tracked in lainland-private void/etc/default/grub):
+#   GRUB_THEME="/boot/grub/themes/lain-void/theme.txt"
+#   GRUB_GFXMODE=1366x768,auto
+doas grub-mkconfig -o /boot/grub/grub.cfg
+```
+
 ### greetd
 
 `greetd/lain-greet` runs tuigreet on the Linux console, which only has 16 colors, and truecolor gets snapped to the console's defaults. So the script loads the kitty 16-slot mapping into the greeter's VT palette (slot 7 takes kitty's foreground, `highprimary`, since the console has no separate foreground slot), then themes tuigreet by ANSI name. Rose for border, title and prompt, ochre for greeting, text and input, `hightertiary` for the clock. It sits outside the chezmoi root because its target is `/etc/greetd`. The session command differs per host and is passed through as `--cmd`.
