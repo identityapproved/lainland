@@ -5,7 +5,6 @@
     address: "127.0.0.1:6600",
     password: None,
     theme: "lain",
-    cache_dir: "~/.cache/rmpc",
     lyrics_dir: "{{ if hasKey . "musicDir" }}{{ .musicDir }}{{ else }}~/Music{{ end }}",
     on_song_change: ["~/.config/rmpc/lyrics.sh"],
     volume_step: 5,

@@ -191,6 +191,6 @@ c.url.searchengines = {
     "r": "https://old.reddit.com/search?q={}",
 }
 
-# Reddit and YouTube video through mpv, which hands the URL to yt-dlp.
+# Direct media links through mpv.
 config.bind(",m", "spawn mpv {url}")
 config.bind(",M", "hint links spawn mpv {hint-url}")
