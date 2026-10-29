@@ -52,12 +52,3 @@
 .config/clipse
 .config/wlogout
 .config/wofi
-
-{{/*
-   Tuned for the void+sway laptop specifically, not portable rice: the prefs
-   trade features for CPU on a 4-core Silvermont (vaapi forced on, gpu process
-   off, processCount pinned, accessibility disabled, forced dark content). On
-   other hardware those are pessimisations, so the config stays in the repo but
-   only this combination links it.
-*/ -}}
-{{ if or (ne .chezmoi.osRelease.id "void") (ne .wm "sway") }}.config/firefox{{ end }}
