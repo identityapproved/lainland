@@ -320,7 +320,6 @@ for_window [title="termfloat"] floating enable
 # native games keep their own class or app_id, so each needs a line here.
 assign [class="^steam$"] workspace 7
 assign [class="^steam_app_"] workspace 8
-assign [app_id="^hackmud_lin\.x86_64$"] workspace 8
 
 # mpv on its own workspace so playback never splits the current one.
 assign [app_id="^mpv$"] workspace 9
