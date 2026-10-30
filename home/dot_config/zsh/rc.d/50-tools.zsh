@@ -1,17 +1,11 @@
 # External tool init and long-lived agents. zoxide lives in 99-zoxide.zsh so it
 # always initializes last, whatever gets dropped into rc.d after this file.
 
-# SSH agent — start once, persist env to ~/.ssh/environment, reuse across shells.
-SSH_ENV="$HOME/.ssh/environment"
-_start_ssh_agent() {
-  ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
-  chmod 600 "$SSH_ENV"
-  source "$SSH_ENV" >/dev/null
-}
-[ -f "$SSH_ENV" ] && source "$SSH_ENV" >/dev/null
-if ! ps -p "${SSH_AGENT_PID:-0}" >/dev/null 2>&1; then
-  _start_ssh_agent
-fi
+# SSH agent — one per session on a fixed socket; sway's start-sway usually starts it
+# first. Exit 2 from ssh-add means no agent is reachable, so a live one is never replaced.
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.socket"
+ssh-add -l >/dev/null 2>&1
+[ $? -eq 2 ] && rm -f "$SSH_AUTH_SOCK" && ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
 
 # Starship prompt (Lain palette) — must come after OMZ so it wins the prompt.
 # Guarded on the binary, same as zoxide in 99: an unguarded eval here aborts the

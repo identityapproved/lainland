@@ -24,4 +24,9 @@ export ELECTRON_OZONE_PLATFORM_HINT=wayland
 export OZONE_PLATFORM=wayland
 export XDG_DATA_DIRS="$HOME/.local/share:/usr/local/share:/usr/share"
 
+# One agent per session on a fixed socket, inherited by sway, launchers and KeePassXC.
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.socket"
+ssh-add -l >/dev/null 2>&1
+[ $? -eq 2 ] && rm -f "$SSH_AUTH_SOCK" && ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
+
 exec sway "$@"
