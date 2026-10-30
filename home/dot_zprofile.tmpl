@@ -20,6 +20,12 @@ unset _f
 # spawns (waybar's nb module, terminals) sees the same notebook dir.
 export NB_DIR="$HOME/nb"
 
+# One ssh-agent per session on a fixed socket, before the compositor exec, so
+# launchers and KeePassXC inherit it (greetd's mango session never reads .zshrc).
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.socket"
+ssh-add -l >/dev/null 2>&1
+[ $? -eq 2 ] && rm -f "$SSH_AUTH_SOCK" && ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
+
 # Auto-start the compositor on tty1. The only templated part of this file --
 # the exec is mutually exclusive by definition, so it cannot be a runtime check.
 #
