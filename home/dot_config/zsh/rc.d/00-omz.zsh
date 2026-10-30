@@ -49,7 +49,7 @@ SAVEHIST=50000
 setopt HIST_IGNORE_ALL_DUPS   # not just consecutive duplicates
 setopt HIST_REDUCE_BLANKS
 setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY     # write as each command runs, not on exit
+setopt HIST_FCNTL_LOCK        # fcntl locking so concurrent shells don't corrupt HISTFILE
 
 # Completion functions shipped with the rice (_nb). They go on fpath
 # here, before oh-my-zsh.sh runs compinit: a directory added after compinit is
