@@ -191,6 +191,11 @@ c.url.searchengines = {
     "r": "https://old.reddit.com/search?q={}",
 }
 
+# Scrolling sends fake keys to the focused element, so an autofocused input
+# eats j/k; Escape also blurs it.
+config.bind("<Escape>", "mode-leave ;; jseval -q document.activeElement.blur()", mode="insert")
+config.bind("<Escape>", "clear-keychain ;; search ;; fullscreen --leave ;; jseval -q document.activeElement.blur()")
+
 # Direct media links through mpv.
 config.bind(",m", "spawn mpv {url}")
 config.bind(",M", "hint links spawn mpv {hint-url}")
