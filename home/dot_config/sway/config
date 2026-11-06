@@ -336,8 +336,17 @@ for_window [app_id="^console$"] floating enable, \
 assign [class="^steam$"] workspace 7
 assign [class="^steam_app_"] workspace 8
 
+# Firefox on 2. Newer builds report the reverse-DNS app_id.
+assign [app_id="^(firefox|org\.mozilla\.firefox)$"] workspace 2
+
 # mpv on its own workspace so playback never splits the current one.
 assign [app_id="^mpv$"] workspace 9
+assign [app_id="^org\.keepassxc\.KeePassXC$"] workspace 9
+
+# assign only places a window; focusing every new one follows it there.
+for_window [all] focus
+# Activation requests (a link opened into a running Firefox) switch too.
+focus_on_window_activation focus
 
 include /etc/sway/config.d/*
 # Machine-local overrides (outputs, lid switch); not managed by this repo.
