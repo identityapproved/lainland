@@ -98,6 +98,11 @@ input type:keyboard {
     xkb_options grp:sclk_toggle,caps:swapescape
 }
 
+# Cursor shows only while the pointer is in use: hidden after 1s idle and as
+# soon as a key is typed.
+seat * hide_cursor 1000
+seat * hide_cursor when-typing enable
+
 # Mice
 input type:pointer {
     accel_profile flat
