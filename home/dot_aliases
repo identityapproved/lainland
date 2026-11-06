@@ -9,6 +9,7 @@ alias vim='nvim'
 alias yz='yazi'
 alias lz='lazygit'
 alias tl='task list'
+alias clr="claude --resume"
 
 # --- fzf helpers (ported from fish) ---------------------------------------
 # pick a command from the completion table, then act on it
