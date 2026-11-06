@@ -1,5 +1,5 @@
 #!/bin/sh
-# Quake-style drop-down console, launched by SUPER+` (toggle_named_scratchpad
+# Quake-style drop-down console, launched by SUPER+t (toggle_named_scratchpad
 # in config.conf). mango only runs this script when no console window
 # exists yet; every later press is handled by the compositor's own show/hide,
 # which preserves the window's geometry. So the pinning below runs exactly
@@ -14,7 +14,7 @@
 #
 # The console is a plain tmux session -- run whatever you want in it, from
 # wherever you want. Being a session rather than a bare shell is what makes it
-# survive the window being closed (or mango being restarted): the next SUPER+`
+# survive the window being closed (or mango being restarted): the next SUPER+t
 # attaches straight back to whatever was left running. `new-session -A` creates
 # the session only if it is not already there. Override the session name with
 # CONSOLE_SESSION; `exec $SHELL` is the fallback if tmux will not start.

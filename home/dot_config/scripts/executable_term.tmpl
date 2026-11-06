@@ -17,6 +17,7 @@
 #   term                 interactive shell
 #   term -e CMD [ARG...] run a command
 #   term --float [-e ..] scratch window, tagged termfloat
+#   term --id NAME [-e ..] window tagged NAME (sway's drop-down console)
 #
 # The --float case is why this is a script and not just $TERMINAL. Each
 # compositor matches its float rule on a different property, because each
@@ -37,23 +38,23 @@ if [ -z "$TERM_BIN" ]; then
     exit 127
 fi
 
-float=0
-if [ "${1-}" = "--float" ]; then
-    float=1
-    shift
-fi
+id=
+case "${1-}" in
+    --float) id=termfloat; shift ;;
+    --id) id=${2:?term: --id needs a name}; shift 2 ;;
+esac
 
 case "$TERM_BIN" in
     kitty)
-        [ "$float" -eq 1 ] && set -- --title termfloat --class termfloat "$@"
+        [ -n "$id" ] && set -- --title "$id" --class "$id" "$@"
         ;;
     foot)
         # foot spells it --app-id and takes -e without a separator, same as kitty.
-        [ "$float" -eq 1 ] && set -- --app-id=termfloat --title=termfloat "$@"
+        [ -n "$id" ] && set -- --app-id="$id" --title="$id" "$@"
         ;;
     alacritty)
         # alacritty wants -e as its LAST option; --class takes general,instance.
-        [ "$float" -eq 1 ] && set -- --class termfloat,termfloat --title termfloat "$@"
+        [ -n "$id" ] && set -- --class "$id,$id" --title "$id" "$@"
         ;;
 esac
 

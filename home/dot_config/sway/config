@@ -153,7 +153,6 @@ input type:touchpad {
     #   $mod+Shift+f  mango togglefakefullscreen
     #   $mod+a        mango togglemaximizescreen
     #   $mod+o        mango toggleoverlay
-    #   $mod+grave    mango drop-down console (not wanted here)
     # No screen locking on this laptop; swaylock and wlogout are not installed.
     #   $mod+F12 / $mod+Shift+F12
 #
@@ -243,6 +242,13 @@ input type:touchpad {
     # so either reflex works.
     bindsym $mod+i move scratchpad
     bindsym $mod+Shift+i scratchpad show
+    # mango named scratchpad: drop-down console. show toggles it once it is in
+    # the scratchpad; a fresh console is not, so show fails and move hides it;
+    # with no console both fail and one spawns. tmux keeps it across closes.
+    bindsym $mod+t exec swaymsg '[app_id="^console$"] scratchpad show' \
+        || swaymsg '[app_id="^console$"] move scratchpad' \
+        || $term --id console -e sh -c \
+        'tmux new-session -A -s console || exec ${SHELL:-zsh}'
 #
 # Resize (mango resizewin, +/-50px):
 #
@@ -315,6 +321,10 @@ input type:touchpad {
 # Match both so the rule holds whichever terminal is installed.
 for_window [app_id="termfloat"] floating enable
 for_window [title="termfloat"] floating enable
+# Drop-down console ($mod+t): park it top-center. It maps visible; the key
+# hands it to the scratchpad on the next press.
+for_window [app_id="^console$"] floating enable, \
+    resize set width 90 ppt height 55 ppt, move position 5 ppt 0 ppt
 
 # Steam client on 7, games on 8. Proton games get class steam_app_<id>;
 # native games keep their own class or app_id, so each needs a line here.
