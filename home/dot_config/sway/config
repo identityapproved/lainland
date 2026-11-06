@@ -339,8 +339,9 @@ assign [class="^steam_app_"] workspace 8
 # Firefox on 2. Newer builds report the reverse-DNS app_id.
 assign [app_id="^(firefox|org\.mozilla\.firefox)$"] workspace 2
 
-# mpv on its own workspace so playback never splits the current one.
-assign [app_id="^mpv$"] workspace 9
+# mpv floats centered on the current workspace so playback never splits it.
+for_window [app_id="^mpv$"] floating enable, resize set 60 ppt 60 ppt, move position center
+
 assign [app_id="^org\.keepassxc\.KeePassXC$"] workspace 9
 
 # assign only places a window; focusing every new one follows it there.
