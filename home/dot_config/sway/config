@@ -134,9 +134,9 @@ input type:touchpad {
 # Terminal:
 #
     # Mod+Return attaches to the tmux server started at login, which already
-    # holds the restored sessions. tmux attach with no target picks the most
-    # recently used unattached session. Mod+Shift+Return is a bare shell.
-    bindsym $mod+Return exec $term -e tmux attach
+    # holds the restored sessions. Target "main" by name: a bare attach grabs
+    # whichever session is newest, often console. Mod+Shift+Return: bare shell.
+    bindsym $mod+Return exec $term -e tmux new-session -A -s main
     bindsym $mod+Shift+Return exec $term
     bindsym $mod+Ctrl+Return exec $term --float
     # $mod+c is free: clipse is retired on every host, so mango has no SUPER+c
