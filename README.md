@@ -42,8 +42,8 @@ home/                   chezmoi source root
   dot_zshrc  dot_zshenv  dot_zprofile.tmpl  dot_aliases  dot_gtkrc-2.0
 scripts/                GSettings helpers (gtk theme, liferea); dconf is not a file
 grub/lain/              GRUB theme; installed by hand into /boot, not by chezmoi
-greetd/lain-greet       tuigreet wrapper; installed by hand into /etc/greetd
-greetd/mango-session    mango session with output in a log; same target
+greetd/lain-greet       tuigreet wrapper (unused: no host runs greetd, see below)
+greetd/mango-session    mango session with output in a log (unused, same)
 assets/                 README screenshots
 ```
 
@@ -449,6 +449,8 @@ doas grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ### greetd
+
+Not in use. Since 2026-11-18 no host runs a display manager: both log in on tty1 and `dot_zprofile.tmpl` execs the compositor. The two scripts stay here for reference only.
 
 `greetd/lain-greet` runs tuigreet on the Linux console, which only has 16 colors, and truecolor gets snapped to the console's defaults. So the script loads the kitty 16-slot mapping into the greeter's VT palette (slot 7 takes kitty's foreground, `highprimary`, since the console has no separate foreground slot), then themes tuigreet by ANSI name. Rose for border, title and prompt, ochre for greeting, text and input, `hightertiary` for the clock. It sits outside the chezmoi root because its target is `/etc/greetd`. The session command differs per host and is passed through as `--cmd`.
 

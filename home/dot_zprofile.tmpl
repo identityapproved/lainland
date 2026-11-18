@@ -12,8 +12,8 @@ for _f in "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/profile.d/*.zsh(N); do
 done
 unset _f
 
-# Flatpak exports reach XDG_DATA_DIRS via /etc/profile.d/flatpak.sh (sourced by greetd
-# and /etc/zsh/zprofile) before the compositor starts; setting them here duplicated them.
+# Flatpak exports reach XDG_DATA_DIRS via /etc/profile.d/flatpak.sh (sourced by
+# /etc/zsh/zprofile) before the compositor starts; setting them here duplicated them.
 # Do not set XDG_DATA_DIRS in mango/config.conf either (it would clobber this).
 
 # nb notebooks. Set before the mango exec below so everything the compositor
@@ -21,7 +21,7 @@ unset _f
 export NB_DIR="$HOME/nb"
 
 # One ssh-agent per session on a fixed socket, before the compositor exec, so
-# launchers and KeePassXC inherit it (greetd's mango session never reads .zshrc).
+# launchers and KeePassXC inherit it (the compositor exec below never reads .zshrc).
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.socket"
 ssh-add -l >/dev/null 2>&1
 [ $? -eq 2 ] && rm -f "$SSH_AUTH_SOCK" && ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
@@ -36,8 +36,10 @@ ssh-add -l >/dev/null 2>&1
 # matches it against UseIn= in wlr.portal) and too late for the Electron/Qt/
 # Firefox Wayland hints. start-sway is the sway analogue of those env blocks.
 #
-# No logging by default. To debug a session that will not start, swap the exec
-# below for the commented line, `chezmoi apply`, and retry.
+# mango and everything it spawns inherit this tty as stdout/stderr, so their
+# startup noise would land on tty1; it goes to ~/.local/state/mango.log instead
+# (previous session kept as mango.log.old). sway and Hyprland do not log by
+# default: to debug one, swap its exec for the commented line and retry.
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
 {{- if eq .wm "sway" }}
     # exec "$HOME/.config/sway/start-sway" >>"$HOME/.local/state/sway.log" 2>&1
@@ -45,6 +47,9 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
 {{- else if eq .wm "hyprland" }}
     exec dbus-run-session Hyprland
 {{- else }}
-    exec dbus-run-session mango
+    _log="$HOME/.local/state/mango.log"
+    mkdir -p "${_log%/*}"
+    [ -f "$_log" ] && mv -f "$_log" "$_log.old"
+    exec dbus-run-session mango >"$_log" 2>&1
 {{- end }}
 fi
