@@ -382,6 +382,9 @@ for_window [app_id="^mpv$"] floating enable, resize set 60 ppt 60 ppt, move posi
 
 assign [app_id="^org\.keepassxc\.KeePassXC$"] workspace 9
 
+# xfreerdp runs under XWayland; its WM_CLASS is xfreerdp (or /wm-class).
+assign [class="^xfreerdp"] workspace 5
+
 # assign only places a window; focusing every new one follows it there.
 for_window [all] focus
 # Activation requests (a link opened into a running Firefox) switch too.
