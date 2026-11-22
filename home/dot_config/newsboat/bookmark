@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# newsboat bookmark-cmd: bookmark <url> <title> <description> <feed title>.
+# Hands off to an executable bookmark.local beside this script when present,
+# else appends "title<TAB>url" to $XDG_DATA_HOME/newsboat/bookmarks.tsv.
+# newsboat reads any stdout as the error, so success prints nothing and
+# failure prints one line.
+set -uo pipefail
+
+hook="$HOME/.config/newsboat/bookmark.local"
+
+if [ -x "$hook" ]; then
+  out="$("$hook" "$@" 2>&1)"
+else
+  dir="${XDG_DATA_HOME:-$HOME/.local/share}/newsboat"
+  out="$(mkdir -p "$dir" 2>&1 &&
+    printf '%s\t%s\n' "${2:-}" "$1" 2>&1 >>"$dir/bookmarks.tsv")"
+fi
+rc=$?
+
+if [ "$rc" -ne 0 ]; then
+  printf 'bookmark failed: %s\n' "$(printf '%s' "${out:-exit $rc}" | tr '\n' ' ')"
+fi
+exit 0

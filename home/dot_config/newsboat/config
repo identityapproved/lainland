@@ -9,6 +9,10 @@ confirm-exit yes
 show-read-feeds yes
 show-read-articles yes
 text-width 100
+# s bookmarks via "bookmark" with the article's title, no prompts;
+# it hands off to bookmark.local when that exists
+bookmark-cmd "~/.config/newsboat/bookmark"
+bookmark-autopilot yes
 # offpunk blocks github/youtube/reddit/x (offpunkrc); B opens in the GUI browser instead.
 # Every open goes through "open", which exits 0 so the swap-and-restore binds below always restore.
 browser "~/.config/newsboat/open offpunk %u"
@@ -38,6 +42,7 @@ bind-key K prev-feed articlelist
 bind-key n next-unread
 bind-key N prev-unread
 bind-key a toggle-article-read
+bind-key s bookmark
 
 bind v articlelist,article,urlview set browser "~/.config/newsboat/open mpv %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "play in mpv"
 bind B feedlist,articlelist,article,urlview set browser "~/.config/newsboat/open gui %u" ; open-in-browser ; set browser "~/.config/newsboat/open offpunk %u" -- "open in GUI browser"
