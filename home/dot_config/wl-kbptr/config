@@ -1,0 +1,52 @@
+# wl-kbptr -- Lain. Keyboard pointer for sway ($mod+semicolon).
+# Colors are #RRGGBBAA from the Lain palette (hypr/configs/colors.conf):
+# back #000000/#1A1A1A, fore #CE7688..#965363, high #C1B48E..#A49978.
+# `wl-kbptr --help-config` lists every key.
+
+[general]
+modes=tile,bisect
+
+[mode_tile]
+label_color=#C1B48Eff
+label_select_color=#CE7688ff
+unselectable_bg_color=#00000099
+selectable_bg_color=#1A1A1A44
+selectable_border_color=#96536388
+label_font_family=Iosevka Nerd Font Propo
+label_font_size=8 50% 100
+
+[mode_floating]
+source=stdin
+label_color=#C1B48Eff
+label_select_color=#CE7688ff
+unselectable_bg_color=#00000099
+selectable_bg_color=#1A1A1A88
+selectable_border_color=#965363cc
+label_font_family=Iosevka Nerd Font Propo
+label_font_size=12 50% 100
+
+[mode_bisect]
+label_color=#C1B48Eff
+label_font_size=20
+label_font_family=Iosevka Nerd Font Propo
+label_padding=12
+pointer_size=20
+pointer_color=#CE7688ee
+unselectable_bg_color=#00000099
+even_area_bg_color=#96536322
+even_area_border_color=#96536388
+odd_area_bg_color=#C1B48E1a
+odd_area_border_color=#A4997888
+history_border_color=#5D333C99
+
+[mode_split]
+pointer_size=20
+pointer_color=#CE7688ee
+bg_color=#00000099
+area_bg_color=#1A1A1A88
+vertical_color=#CE7688cc
+horizontal_color=#C1B48Ecc
+history_border_color=#5D333C99
+
+[mode_click]
+button=left

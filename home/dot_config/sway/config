@@ -318,6 +318,44 @@ input type:touchpad {
     bindsym $mod+Shift+Print exec ~/.config/scripts/screenshot.sh region
     # Xbox Series Share button (xpad emits KEY_RECORD).
     bindsym XF86AudioRecord exec ~/.config/scripts/screenshot.sh game
+#
+# Keyboard pointer:
+#
+# Sway only; mango has no counterpart yet. wl-kbptr picks a spot by label
+# (tile, then bisect). In bisect Enter/Space only move; g/h/b click
+# left/right/middle. Shift detects clickable areas and clicks the pick.
+#
+    bindsym $mod+semicolon exec wl-kbptr
+    bindsym $mod+Shift+semicolon exec \
+        wl-kbptr -o modes=floating','click -o mode_floating.source=detect
+    # Mouse mode: hjkl move, s/d/f hold left/middle/right, e/r scroll,
+    # a jumps by label. Typing would hide the pointer, so that is off inside.
+    bindsym $mod+Ctrl+semicolon mode mouse, \
+        seat * hide_cursor when-typing disable
+    mode mouse {
+        bindsym a mode default, exec 'wl-kbptr; swaymsg mode mouse'
+
+        bindsym h seat seat0 cursor move -15 0
+        bindsym j seat seat0 cursor move 0 15
+        bindsym k seat seat0 cursor move 0 -15
+        bindsym l seat seat0 cursor move 15 0
+        bindsym Shift+h seat seat0 cursor move -60 0
+        bindsym Shift+j seat seat0 cursor move 0 60
+        bindsym Shift+k seat seat0 cursor move 0 -60
+        bindsym Shift+l seat seat0 cursor move 60 0
+
+        bindsym s seat seat0 cursor press button1
+        bindsym --release s seat seat0 cursor release button1
+        bindsym d seat seat0 cursor press button2
+        bindsym --release d seat seat0 cursor release button2
+        bindsym f seat seat0 cursor press button3
+        bindsym --release f seat seat0 cursor release button3
+
+        bindsym e exec wlrctl pointer scroll -10 0
+        bindsym r exec wlrctl pointer scroll 10 0
+
+        bindsym Escape mode default, seat * hide_cursor when-typing enable
+    }
 
 ### Window rules
 #
