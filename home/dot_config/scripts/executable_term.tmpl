@@ -1,5 +1,5 @@
 {{- $term := "" -}}
-{{- range list "kitty" "ghostty" "foot" "alacritty" -}}
+{{- range list "foot" "kitty" "ghostty" "alacritty" -}}
   {{- if and (eq $term "") (lookPath .) }}{{ $term = . }}{{ end -}}
 {{- end -}}
 #!/bin/sh
@@ -11,7 +11,7 @@
 # hypr/configs/defaults.conf, mango/config.conf and tofi/config, foot in
 # sway/config -- so a host without that one binary had a rice with no terminal.
 # The compositor configs now all call this instead, and chezmoi picks the first
-# installed of kitty/ghostty/foot/alacritty at apply time.
+# installed of foot/kitty/ghostty/alacritty at apply time.
 #
 # Usage:
 #   term                 interactive shell
@@ -34,7 +34,7 @@ set -eu
 TERM_BIN="{{ $term }}"
 
 if [ -z "$TERM_BIN" ]; then
-    echo "term: no terminal found (looked for kitty, ghostty, foot, alacritty)" >&2
+    echo "term: no terminal found (looked for foot, kitty, ghostty, alacritty)" >&2
     exit 127
 fi
 
@@ -56,6 +56,11 @@ case "$TERM_BIN" in
     foot)
         # foot spells it --app-id and takes -e without a separator, same as kitty.
         [ -n "$id" ] && set -- --app-id="$id" --title="$id" "$@"
+        # sway starts `foot --server`: footclient reuses its loaded fonts and
+        # glyph cache. Without the socket (mango, hypr) plain foot runs.
+        sock="${XDG_RUNTIME_DIR:-/tmp}/foot-${WAYLAND_DISPLAY:-wayland-0}.sock"
+        [ -S "$sock" ] && command -v footclient >/dev/null 2>&1 \
+            && exec footclient "$@"
         ;;
     alacritty)
         # alacritty wants -e as its LAST option; --class takes general,instance.

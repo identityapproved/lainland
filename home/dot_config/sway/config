@@ -14,7 +14,7 @@ set $up k
 set $right l
 # Preferred terminal emulator. Resolved at chezmoi apply time by
 # ~/.config/scripts/term, which picks the first installed of
-# kitty/ghostty/foot/alacritty and normalises the per-emulator flag
+# foot/kitty/ghostty/alacritty and normalises the per-emulator flag
 # spelling. Same indirection as hypr/configs/defaults.conf and
 # mango/config.conf.
 set $term ~/.config/scripts/term
@@ -52,6 +52,8 @@ exec --no-startup-id sh -c 'pgrep -x gammastep >/dev/null || gammastep &'
 # before Mod+Return attaches to one. exit-empty off in tmux/tmux.conf keeps the
 # server up while it has no sessions.
 exec --no-startup-id tmux start-server
+# Warm foot server: scripts/term opens footclient windows against it.
+exec --no-startup-id foot --server
 
 exec_always --no-startup-id "$HOME/.config/sway/scripts/set-wallpaper.sh"
 

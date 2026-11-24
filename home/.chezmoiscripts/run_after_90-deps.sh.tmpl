@@ -158,14 +158,14 @@ fi
 # The terminal group is any-of, not all-of: .config/scripts/term resolves to
 # whichever of these is installed, so one is a pass.
 term_found=""
-for t in kitty ghostty foot alacritty; do
+for t in foot kitty ghostty alacritty; do
     have "$t" && { term_found=$t; break; }
 done
 if [ -n "$term_found" ]; then
     printf '  %-14s ok (%s)\n' terminal "$term_found"
 else
-    printf '  %-14s missing: none of kitty/ghostty/foot/alacritty\n' terminal
-    miss_req="$miss_req kitty-or-ghostty-or-foot-or-alacritty"
+    printf '  %-14s missing: none of foot/kitty/ghostty/alacritty\n' terminal
+    miss_req="$miss_req foot-or-kitty-or-ghostty-or-alacritty"
 fi
 
 # Fonts are the same set on every host -- see the Fonts section in the README.
