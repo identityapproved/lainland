@@ -7,6 +7,12 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.socket"
 ssh-add -l >/dev/null 2>&1
 [ $? -eq 2 ] && rm -f "$SSH_AUTH_SOCK" && ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
 
+# Bare kitty only: kitten ssh ships xterm-kitty terminfo to the remote. Inside
+# tmux TERM is tmux-256color, which remotes already know.
+if [ "$TERM" = xterm-kitty ] && command -v kitten >/dev/null 2>&1; then
+  alias ssh='kitten ssh'
+fi
+
 # Starship prompt (Lain palette) — must come after OMZ so it wins the prompt.
 # Guarded on the binary, same as zoxide in 99: an unguarded eval here aborts the
 # rest of rc.d on a host where starship is not installed yet.
