@@ -36,8 +36,9 @@ export FZF_ALT_C_OPTS="--preview 'ls -1 {}'"
 
 # Cursor shape per vi mode: beam in insert, block in command. zsh-vi-mode's own
 # version is disabled in 00-omz.zsh (ZVM_CURSOR_STYLE_ENABLED=false) in favour of
-# this one, for the tmux branch below: inside a pane the escape has to be wrapped
-# in a DCS passthrough or tmux swallows it and the shape never changes.
+# this one. Inside tmux the escape is sent plain, not via DCS passthrough: tmux
+# (cstyle feature, tmux.conf) then keeps the shape per pane and restores it on
+# pane switch, where passthrough leaked one pane's shape into the others.
 #
 # echoti is avoided deliberately -- terminfo has no Ss/Se capability on either
 # terminal here, so the sequence is written raw.
@@ -47,8 +48,7 @@ _zsh_vi_cursor() {
     vicmd)      shape=2 ;;  # block
     viins|main) shape=6 ;;  # beam
   esac
-  [[ -n $TMUX ]] && printf '\ePtmux;\e\e[%d q\e\\' "$shape" \
-                 || printf '\e[%d q' "$shape"
+  printf '\e[%d q' "$shape"
 }
 
 zle -N zle-keymap-select _zsh_vi_cursor
