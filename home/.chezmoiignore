@@ -52,3 +52,9 @@
 .config/clipse
 .config/wlogout
 .config/wofi
+
+{{/*
+   qutebrowser is linked only where it is installed: removing it deletes its
+   config dir, and chezmoi then refuses to relink it without --force.
+*/ -}}
+{{ if not (lookPath "qutebrowser") }}.config/qutebrowser{{ end }}
