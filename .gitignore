@@ -4,7 +4,6 @@ home/dot_config/tmux/tmux_old.conf
 
 # Not themed yet (keep local until the Lain pass reaches them)
 home/dot_config/alacritty/
-home/dot_config/ghostty/
 home/dot_config/cmus/
 home/dot_config/translate-shell/
 home/dot_config/wpaperd/

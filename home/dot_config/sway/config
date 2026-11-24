@@ -13,9 +13,10 @@ set $down j
 set $up k
 set $right l
 # Preferred terminal emulator. Resolved at chezmoi apply time by
-# ~/.config/scripts/term, which picks the first installed of kitty/foot/alacritty
-# and normalises the per-emulator flag spelling. Same indirection as
-# hypr/configs/defaults.conf and mango/config.conf.
+# ~/.config/scripts/term, which picks the first installed of
+# kitty/ghostty/foot/alacritty and normalises the per-emulator flag
+# spelling. Same indirection as hypr/configs/defaults.conf and
+# mango/config.conf.
 set $term ~/.config/scripts/term
 # Application launcher (lain colors)
 # Launcher is tofi; see .config/tofi/config. wmenu was retired with $mod+d.
@@ -250,8 +251,8 @@ input type:touchpad {
     # mango named scratchpad: drop-down console. show toggles it once it is in
     # the scratchpad; a fresh console is not, so show fails and move hides it;
     # with no console both fail and one spawns. tmux keeps it across closes.
-    bindsym $mod+t exec swaymsg '[app_id="^console$"] scratchpad show' \
-        || swaymsg '[app_id="^console$"] move scratchpad' \
+    bindsym $mod+t exec swaymsg '[app_id="(^|[.])console$"] scratchpad show' \
+        || swaymsg '[app_id="(^|[.])console$"] move scratchpad' \
         || $term --id console -e sh -c \
         'tmux new-session -A -s console || exec ${SHELL:-zsh}'
 #
@@ -360,13 +361,14 @@ input type:touchpad {
 ### Window rules
 #
 # scripts/term tags float windows with BOTH an app_id and a title, because the
-# flag differs per emulator (foot --app-id, kitty/alacritty --class + --title).
+# flag differs per emulator (foot --app-id, kitty/alacritty --class + --title,
+# ghostty --class lain.<id>, since GTK app IDs need a dot).
 # Match both so the rule holds whichever terminal is installed.
 for_window [app_id="termfloat"] floating enable
 for_window [title="termfloat"] floating enable
 # Drop-down console ($mod+t): park it top-center. It maps visible; the key
 # hands it to the scratchpad on the next press.
-for_window [app_id="^console$"] floating enable, \
+for_window [app_id="(^|[.])console$"] floating enable, \
     resize set width 90 ppt height 55 ppt, move position 5 ppt 0 ppt
 
 # Steam client on 7, games on 8. Proton games get class steam_app_<id>;

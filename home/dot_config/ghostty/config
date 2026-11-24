@@ -1,0 +1,51 @@
+# Ghostty config of the Lain rice. See `ghostty +show-config --default --docs`.
+#
+# Mirrors foot/foot.ini and kitty/themes/lain-theme.conf; change them together.
+
+font-family = IosevkaTerm Nerd Font Mono
+font-size = 10
+
+window-decoration = false
+window-padding-x = 0
+window-padding-y = 0
+# Same as foot's `pad=0x0 center`: split sway's sub-cell remainder evenly.
+window-padding-balance = true
+background-opacity = 0.85
+
+cursor-style = block
+cursor-style-blink = false
+# Shell integration would otherwise turn the cursor into a bar at the prompt.
+shell-integration-features = no-cursor
+
+mouse-hide-while-typing = true
+confirm-close-surface = false
+# Bytes, not lines.
+scrollback-limit = 10000000
+
+# Off for the same reason as foot's bold-text-in-bright=no.
+bold-is-bright = false
+
+# Lain palette.
+background = 000000
+foreground = C1B48E
+cursor-color = C1B48E
+cursor-text = 000000
+selection-background = C1B48E
+selection-foreground = 000000
+
+palette = 0=#000000
+palette = 1=#CE7688
+palette = 2=#968C6E
+palette = 3=#FFDCB9
+palette = 4=#8A8A8A
+palette = 5=#BA6A7B
+palette = 6=#A49978
+palette = 7=#BABABA
+palette = 8=#7A7A7A
+palette = 9=#FFB1C3
+palette = 10=#B5A985
+palette = 11=#FFDCB9
+palette = 12=#9A9A9A
+palette = 13=#CE7688
+palette = 14=#B5A985
+palette = 15=#FFFFFF
