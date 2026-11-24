@@ -25,9 +25,9 @@ runtime.apps = {
     fileManager = "kitty -e yazi",
     menu = "tofi-drun",
     locker = "hyprlock",
-    captureFull = "$HOME/.config/hypr/scripts/screenshot_swappy.sh full",
-    captureOutput = "$HOME/.config/hypr/scripts/screenshot_swappy.sh output",
-    capturing = "$HOME/.config/hypr/scripts/screenshot_swappy.sh region",
+    captureFull = "$HOME/.config/scripts/screenshot.sh full",
+    captureOutput = "$HOME/.config/scripts/screenshot.sh output",
+    capturing = "$HOME/.config/scripts/screenshot.sh region",
 }
 
 function runtime.window_rule(name, match, props)

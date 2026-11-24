@@ -18,18 +18,21 @@ notify_result() {
   if [[ -f "$outfile" ]]; then
     notify "Screenshot saved" "$outfile"
   else
-    # swappy may be closed without saving the edited image.
+    # The editor may be closed without saving the edited image.
     notify "Screenshot closed" "No file saved"
   fi
 }
 
-have_swappy() { command -v swappy >/dev/null 2>&1; }
+have() { command -v "$1" >/dev/null 2>&1; }
 
 # capture <mode> <grim geometry args...>
-# Routes grim through swappy when available, otherwise saves directly.
+# Routes grim through satty, else swappy, else saves directly.
 capture() {
   local mode="$1"; shift
-  if have_swappy; then
+  if have satty; then
+    # ppm skips png encoding on the pipe; satty writes the png.
+    grim -t ppm "$@" - | satty -f - --output-filename "$outfile"
+  elif have swappy; then
     grim "$@" - | swappy -f - -o "$outfile"
   else
     grim "$@" "$outfile"
@@ -64,7 +67,7 @@ capture_region() {
 }
 
 capture_game() {
-  # Silent capture for fullscreen games: never routes through swappy, so
+  # Silent capture for fullscreen games: never routes through an editor, so
   # nothing steals focus from the game.
   if grim "$outfile"; then
     notify_result

@@ -309,7 +309,7 @@ input type:touchpad {
 #
 # Screenshots:
 #
-# One script for all three compositors -- it only calls grim/slurp/swappy, so
+# One script for all three compositors -- it only calls grim/slurp/satty, so
 # nothing in it is compositor-specific. Lives in the shared scripts/ dir because
 # .chezmoiignore drops .config/mango on this host.
 #

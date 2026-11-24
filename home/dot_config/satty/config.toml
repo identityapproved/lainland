@@ -1,0 +1,13 @@
+# Keys limited to what satty 0.21 understands (the void package version).
+[general]
+floating-hack = true
+no-window-decoration = true
+initial-tool = "arrow"
+copy-command = "wl-copy"
+# screenshot.sh sends its own notification once the file exists.
+disable-notifications = true
+early-exit = false
+actions-on-enter = ["save-to-clipboard", "save-to-file", "exit"]
+actions-on-escape = ["exit"]
+# Fallback only: screenshot.sh and yazi always pass --output-filename.
+output-filename = "~/Pictures/screenshots/satty_%Y%m%d_%H%M%S.png"
