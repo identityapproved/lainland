@@ -169,14 +169,42 @@ else
 fi
 
 # Fonts are the same set on every host -- see the Fonts section in the README.
+# Noto Color Emoji is required: foot.ini names it as a fallback, and without it
+# every emoji sends fcft through the whole fontconfig list.
 if have fc-list; then
     font_missing=""
-    for f in "IosevkaTerm Nerd Font Mono" "Iosevka Nerd Font Propo" "Iosevka Nerd Font" "Symbols Nerd Font"; do
+    font_pkgs=""
+    for f in "IosevkaTerm Nerd Font Mono" "Iosevka Nerd Font Propo" "Iosevka Nerd Font"; do
         fc-list | grep -qF "$f" || font_missing="$font_missing '$f'"
     done
+{{ if eq .chezmoi.osRelease.id "gentoo" -}}
+    [ -n "$font_missing" ] && font_pkgs="media-fonts/nerdfonts"
+{{ end -}}
+    if ! fc-list | grep -qF "Symbols Nerd Font"; then
+        font_missing="$font_missing 'Symbols Nerd Font'"
+{{ if eq .chezmoi.osRelease.id "void" -}}
+        font_pkgs="$font_pkgs nerd-fonts-symbols-ttf"
+{{ else if eq .chezmoi.osRelease.id "gentoo" -}}
+        font_pkgs="$font_pkgs media-fonts/nerdfonts"
+{{ end -}}
+    fi
+    if ! fc-list | grep -qF "Noto Color Emoji"; then
+        font_missing="$font_missing 'Noto Color Emoji'"
+{{ if eq .chezmoi.osRelease.id "void" -}}
+        font_pkgs="$font_pkgs noto-fonts-emoji"
+{{ else if eq .chezmoi.osRelease.id "gentoo" -}}
+        font_pkgs="$font_pkgs media-fonts/noto-emoji"
+{{ end -}}
+    fi
     if [ -n "$font_missing" ]; then
         printf '  %-14s missing:%s\n' fonts "$font_missing"
-        miss_req="$miss_req nerd-fonts"
+        miss_req="$miss_req $font_pkgs"
+{{ if eq .chezmoi.osRelease.id "void" -}}
+        # Void packages Iosevka only inside the 8.6 GB nerd-fonts set.
+        case "$font_missing" in *Iosevka*)
+            printf '  %-14s Iosevka: release zips into ~/.local/share/fonts\n' "" ;;
+        esac
+{{ end -}}
     else
         printf '  %-14s ok\n' fonts
     fi

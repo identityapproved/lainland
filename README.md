@@ -210,13 +210,20 @@ The terminal used to be hardcoded seven times over — `kitty` in
 `sway/config` — so a host without that one binary had a rice with no terminal.
 They all now call `~/.config/scripts/term`, a small generated script that
 chezmoi resolves at apply time with `lookPath`, picking the first installed of
-kitty, foot, alacritty.
+foot, kitty, ghostty, alacritty.
+
+On sway, foot runs as a server: `sway/config` starts `foot --server` and `term`
+opens `footclient` windows against its socket, so fonts and fallback glyphs
+load once per session rather than per window. Without the socket (mango,
+hyprland) `term` runs plain `foot`.
 
 It also normalises the float flag, which each terminal spells differently
 (`--app-id`, `--class`) and each compositor matches differently (hypr and mango
 on `title:termfloat`, sway on `app_id="termfloat"`). `term --float` sets *both*
 identities, so one window rule per compositor holds whichever terminal is
-installed.
+installed. ghostty is the exception: its `--class` must be a GTK application ID,
+which needs a dot, so it gets `lain.termfloat` and sway's rules match the
+suffix.
 
 ---
 
@@ -277,8 +284,9 @@ and `hypr/configs/envars.conf` both set.
 
 | Tool | Notes |
 |---|---|
-| `kitty` | Primary terminal, full 16-color ANSI mapping |
-| `foot` | Terminal on the sway host, same 16-color mapping |
+| `foot` | Primary terminal, full 16-color ANSI mapping; server mode on sway, explicit font fallbacks |
+| `kitty` | Second choice, same 16-color mapping |
+| `ghostty` | Third choice, same mapping; kept for trying newer releases |
 | `scripts/term` | Resolves whichever terminal is installed — see The WM switch |
 | `tmux` | Multiplexer; `lain.tmux` status line, plus resurrect/continuum via TPM |
 | `zsh` | Thin `.zshrc` loader over `~/.config/zsh/rc.d/*.zsh`; Lain fzf colors |
@@ -389,19 +397,44 @@ chezmoi's control.
 
 Fonts are Iosevka throughout, and the **same set on every host** — no per-host
 family, no templated `fonts.conf`. `IosevkaTerm Nerd Font Mono` for terminals and
-code, `Iosevka Nerd Font Propo` for UI chrome, `Iosevka Nerd Font` for prose, with
-`Symbols Nerd Font` as the glyph fallback.
+code, `Iosevka Nerd Font Propo` for UI chrome, `Iosevka Nerd Font` for prose.
+Behind them sit two fallbacks: `Symbols Nerd Font Mono` for icons the patched
+cuts lack, and `Noto Color Emoji` for emoji.
+
+Each consumer names its fallbacks explicitly rather than leaving them to a
+fontconfig search:
+
+| Where | Fallback chain |
+|---|---|
+| `foot/foot.ini` | `font=` IosevkaTerm, then Symbols Nerd Font Mono, then Noto Color Emoji |
+| `kitty/kitty.conf` | `symbol_map` pins the private-use range to Symbols Nerd Font |
+| `fontconfig/fonts.conf` | the `monospace` alias prefers IosevkaTerm, then Symbols Nerd Font Mono |
+
+That matters for foot. A glyph missing from every font it names sends fcft
+down fontconfig's sorted list, opening font files one by one until one has it.
+With thousands of fonts installed and no emoji font, an emoji or an unusual
+symbol froze foot for seconds, and every new window paid it again.
 
 On Gentoo that is `media-fonts/nerdfonts` with the `iosevka` and `iosevkaterm`
-USE flags. Void has no per-family packages — only `nerd-fonts`, a meta package
-pulling `nerd-fonts-ttf` (7.4 GB installed) and `nerd-fonts-otf` (968 MB), so
-roughly 8.4 GB to obtain three families. There is no cheaper packaged route;
-the alternative is dropping the `Iosevka.zip` and `IosevkaTerm.zip` release
-archives into `~/.local/share/fonts/` by hand and running `fc-cache -f`.
+USE flags (and whichever flag provides Symbols Nerd Font), plus
+`media-fonts/noto-emoji`. On Void, use the release
+zips: Void packages Iosevka only inside `nerd-fonts`, a meta package pulling
+`nerd-fonts-ttf` (7.4 GB) and `nerd-fonts-otf` (968 MB). That is roughly 2,250
+font files for three families, and that file count is what made foot stall.
+So drop the `Iosevka.zip` and `IosevkaTerm.zip` release archives into
+`~/.local/share/fonts/` by hand, take the two fallbacks from xbps, and leave
+the meta package out:
 
-The deps report checks all four families with `fc-list` and flags them as
+```bash
+doas xbps-install nerd-fonts-symbols-ttf noto-fonts-emoji
+fc-cache -f
+```
+
+The deps report checks all five families with `fc-list` and flags them as
 required, not optional, because a missing one silently changes every bar,
-launcher and terminal at once.
+launcher and terminal at once, or brings back the foot stalls. It names the
+package for each missing fallback, and on Void points at the release zips for
+Iosevka.
 
 ### GRUB
 
